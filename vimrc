@@ -6,6 +6,11 @@
 	:set autoindent
 	:set smartindent
 	:colorscheme elflord
+
+	:command! W w
+	:command! Wq wq
+	:command! WQ wq
+	:command! Q q
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -34,11 +39,6 @@
 	:noremap _ ddkP
 	
 
-	"delete to beginning or ending of line g
-	:nnoremap <leader>dL d$
-	:nnoremap <leader>dH d^
-	
-
 	" edit and reload vimrc g
 	:nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 	:nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -49,8 +49,8 @@
 	
 
 	" add an empty line right above or below current line g
-	:nnoremap <leader>o o<esc>k
-	:nnoremap <leader>O O<esc>j
+	:nnoremap <leader>o o<esc>
+	:nnoremap <leader>O O<esc>
 	
 
 	" capitalize and lowercase a word g
@@ -146,4 +146,8 @@
 
 	" _____ current word
 	:onoremap  cw :<c-u>normal! viw<cr>
+	
+	" end an beginning of line
+	:onoremap L $
+	:onoremap H ^
 "}}}
