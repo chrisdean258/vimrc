@@ -1,12 +1,15 @@
 " UNIVERSAL SETTINGS {{{
 "_______________________________________________________________________________________________________
 	execute pathogen#infect()
+	:syntax on
 	:set nocompatible
 	:set nowrap
 	:set nonumber
 	:set autoindent
 	:set smartindent
 	:colorscheme elflord
+
+	:set hlsearch incsearch
 
 	:command! W w
 	:command! Wq wq
@@ -21,7 +24,11 @@
 	:let mapleader = " "
 	:let maplocalleader = "/"
 	
-
+	" For magic vim regex
+	:nnoremap / /\v
+	:vnoremap / /\v
+	:cnoremap s/ s/\v
+	
 	" key mappings g
 	:nnoremap H ^
 	:nnoremap L $
@@ -99,11 +106,15 @@
 "_______________________________________________________________________________________________________
 
 	" C style formatting {{{ :augroup c_style
+	:augroup c_style
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <buffer> <localleader>/ I//<esc>
 	:  autocmd FileType c,cpp,javascript,java,perl vnoremap <buffer> <localleader>/ <esc>`<i/*<esc>`>a*/<esc> 
 	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev <buffer> iff if()<left>
 	:  autocmd FileType c,cpp,javascript,java,perl :set cindent
+	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
+	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
+	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
 	:augroup END
 	"}}}
 
@@ -121,6 +132,8 @@
 	:  autocmd!
 	:  autocmd FileType python,matlab nnoremap <buffer> <localleader>/ I# <esc>
 	:  autocmd FileType python :iabbrev <buffer> iff if:<left>
+	:  autocmd FileType python :setlocal foldmethod=syntax
+	:  autocmd FileType python :normal! zR
 	:augroup END
 	"}}}
 
@@ -158,3 +171,5 @@
 	:onoremap L $
 	:onoremap H ^
 "}}}
+
+
