@@ -172,7 +172,7 @@
 	:onoremap fn :<C-U>normal! 0f(hviw<CR>
 
 	" _____ current word
-	:onoremap  w :<c-u>normal! viw<cr>
+	:onoremap  cw :<c-u>normal! viw<cr>
 	
 	" end an beginning of line
 	:onoremap L $
