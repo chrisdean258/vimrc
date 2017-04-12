@@ -23,6 +23,9 @@
 	"mapleaders
 	:let mapleader = " "
 	:let maplocalleader = "/"
+
+	" replace a single char 
+        :nnoremap s :exec "normal! i".nr2char(getchar())."<esc>"<CR>
 	
 	" For magic vim regex
 	:nnoremap / /\v
@@ -117,6 +120,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
+	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <c-n>
 	:augroup END
 	"}}}
 
@@ -136,6 +140,7 @@
 	:  autocmd FileType python :iabbrev <buffer> iff if:<left>
 	:  autocmd FileType python :setlocal foldmethod=syntax
 	:  autocmd FileType python :normal! zR
+	:  autocmd FileType python inoremap <buffer><tab> <c-n>
 	:augroup END
 	"}}}
 
