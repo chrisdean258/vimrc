@@ -1,6 +1,7 @@
 " UNIVERSAL SETTINGS {{{
 "_______________________________________________________________________________________________________
 	execute pathogen#infect()
+	:set nocompatible
 	:set nowrap
 	:set nonumber
 	:set autoindent
@@ -76,6 +77,12 @@
 
 	" mapping for ease of {} use g
 	:inoremap {} {<cr>}<esc>ko
+
+	" For external clipboard use
+	"may not work if you arent on vim-gnome
+	:nnoremap <c-x> "+dd
+	:nnoremap <c-c> "+yy
+	:nnoremap <c-v> "+p
 	
 " }}}
 
@@ -85,13 +92,13 @@
 	" Signatures
 	:iabbrev utsign Chris Dean<cr>cdean16@vols.utk.edu
 	:iabbrev gsign Chris Dean<cr>chrisdean258@gmail.com
+	:iabbrev cSign /**<cr><bs>* Chris Dean<cr>* <cr>* <cr>*/<up><up>
 "}}}
 
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
 
-	" C style formatting {{{
-	:augroup c_style
+	" C style formatting {{{ :augroup c_style
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <buffer> <localleader>/ I//<esc>
 	:  autocmd FileType c,cpp,javascript,java,perl vnoremap <buffer> <localleader>/ <esc>`<i/*<esc>`>a*/<esc> 
