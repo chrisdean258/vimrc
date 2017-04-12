@@ -20,7 +20,7 @@
 " UNVIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
 
-	"mapleaders g
+	"mapleaders
 	:let mapleader = " "
 	:let maplocalleader = "/"
 	
@@ -29,7 +29,7 @@
 	:vnoremap / /\v
 	:cnoremap s/ s/\v
 	
-	" key mappings g
+	" key mappings
 	:nnoremap H ^
 	:nnoremap L $
 	:inoremap jk <esc>l
@@ -42,33 +42,33 @@
 	:noremap ) <nop>
 	
  
-	" move lines up and down  g
+	" move lines up and down 
 	:noremap - ddp
 	:noremap _ ddkP
 	
 
-	" edit and reload vimrc g
+	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 	:nnoremap <leader>sv :source $MYVIMRC<cr>
 	
 
-	" clear a line g
+	" clear a line
 	:nnoremap <leader>c ddO
 	
 
-	" add an empty line right above or below current line g
+	" add an empty line right above or below current line
 	:nnoremap <leader>o o<esc>
 	:nnoremap <leader>O O<esc>
 	
 
-	" capitalize and lowercase a word g
+	" capitalize and lowercase a word
 	:nnoremap <c-u> viwU
 	:inoremap <c-u> <esc>viwUi
 	:nnoremap <c-l> viwu
 	:inoremap <c-l> <esc>viwui
 	
 
-	" add quotes around a word g
+	" add quotes around a word 
 	:nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
 	:vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>`<lv`>l
 
@@ -82,7 +82,7 @@
 	:vnoremap <leader>> <esc>`>a><esc>`<i<<esc>`<lv`>l
 	
 
-	" mapping for ease of {} use g
+	" mapping for ease of {} use 
 	:inoremap {} {<cr>}<esc>ko
 
 	" For external clipboard use
@@ -90,7 +90,9 @@
 	:nnoremap <c-x> "+dd
 	:nnoremap <c-c> "+yy
 	:nnoremap <c-v> "+p
-	
+
+	" clear higlighting from search
+	:nnoremap <silent> noh :nohlsearch<cr>	
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
