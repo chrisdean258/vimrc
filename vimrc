@@ -19,7 +19,7 @@
 
 " UNVIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
-:nnoremap <expr>cv :normal! echo "v:count<cr>"
+:nnoremap <expr>cv :normal! echo "v:count<<CR>>"
 
 	"mapleaders
 	:let mapleader = " "
@@ -37,6 +37,8 @@
 	" key mappings
 	:nnoremap H ^
 	:nnoremap L $
+	:nnoremap j gj
+	:nnoremap k gk
 	:inoremap jk <esc>l
 	:inoremap <esc> <nop>
 	:noremap <Up> <nop>
@@ -115,6 +117,9 @@
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
 
+	"AutoRun on buffload
+	:augroup auto_run
+	:  autocmd BufRead * :normal! zz <CR>
 	" C style formatting {{{ :augroup c_style
 	:augroup c_style
 	:  autocmd!
@@ -125,7 +130,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
 	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <c-p>
-	:  autocmd FileType c,cpp,javascript,java,perl inoremap c_sign /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <cr>*/<up>
+	:  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
 	:augroup END
 	"}}}
 
@@ -146,6 +151,9 @@
 	:  autocmd FileType python :setlocal foldmethod=indent
 	:  autocmd FileType python :normal! zR
 	:  autocmd FileType python inoremap <buffer><tab> <c-p>
+	:  autocmd FileType python :set tabstop=4
+	:  autocmd FileType python :set softtabstop=4
+	:  autocmd FileType python :set expandtab
 	:augroup END
 	"}}}
 
