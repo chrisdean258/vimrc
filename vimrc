@@ -19,6 +19,7 @@
 
 " UNVIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
+:nnoremap <expr>cv :normal! echo "v:count<cr>"
 
 	"mapleaders
 	:let mapleader = " "
@@ -94,9 +95,12 @@
 	:nnoremap <c-x> "+dd
 	:nnoremap <c-c> "+yy
 	:nnoremap <c-v> "+p
+	:inoremap <c-x> <esc>"+ddi
+	:inoremap <c-c> <esc>"+yyi
+	:inoremap <c-v> <esc>"+pi
 
 	" clear higlighting from search
-	:nnoremap <silent> noh :nohlsearch<CR>	
+	:nnoremap <silent>noh :nohlsearch<CR>	
 
 " }}}
 
@@ -106,7 +110,6 @@
 	" Signatures
 	:iabbrev utsign Chris Dean<CR>cdean16@vols.utk.edu
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
-	:iabbrev cSign /**<CR><bs>* Chris Dean<CR>* <CR>* <CR>*/<up><up>
 "}}}
 
 " AUTOCMD GROUPS  {{{
@@ -115,13 +118,14 @@
 	" C style formatting {{{ :augroup c_style
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <silent><buffer><localleader>/ :call C_comment()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <silent><buffer><localleader>/ :call CommentBL('\/\/')<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl vnoremap <buffer><localleader>/ <esc>`<i/*<esc>`>a*/<esc> 
 	:  autocmd FileType c,cpp,javascript,java,perl :set cindent
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <c-n>
+	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <c-p>
+	:  autocmd FileType c,cpp,javascript,java,perl inoremap c_sign /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <cr>*/<up>
 	:augroup END
 	"}}}
 
@@ -137,18 +141,18 @@
 	" Python formatting {{{
 	:augroup python_
 	:  autocmd!
-	:  autocmd FileType python,matlab,sh nnoremap <silent><buffer><localleader>/ :call Hash_comment()<CR>:nohlsearch<CR> 
+	:  autocmd FileType python,matlab,sh nnoremap <silent><buffer><localleader>/ :call CommentBL('#')<CR>
 	:  autocmd FileType python vnoremap <buffer><localleader>/ <esc>`<i"""<esc>`>a"""<esc> 
 	:  autocmd FileType python :setlocal foldmethod=indent
 	:  autocmd FileType python :normal! zR
-	:  autocmd FileType python inoremap <buffer><tab> <c-n>
+	:  autocmd FileType python inoremap <buffer><tab> <c-p>
 	:augroup END
 	"}}}
 
 	" Vim files {{{
 	:augroup vim_
 	:  autocmd!
-	:  autocmd FileType vim nnoremap <silent><buffer><localleader>/ :call Quote_comment()<CR>:nohlsearch<CR> 
+	:  autocmd FileType vim nnoremap <buffer><localleader>/ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim setlocal foldmethod=marker
 	:augroup END
 	"}}}
@@ -157,47 +161,26 @@
 " Operator Depedent mappings  {{{
 "_______________________________________________________________________________________________________
 
-	" in ____ parentheses
-	:onoremap in( :<c-u>normal! f)vi(<CR>
-	:onoremap il( :<c-u>normal! F)vi(<CR>
-
-	" in ____ braces 
-	:onoremap in{ :<c-u>normal! f{vi{<CR>
-	:onoremap il{ :<c-u>normal! F}vi{<CR>
-
-	" in ____ brackets 
-	:onoremap in[ :<c-u>normal! f[vi[<CR>
-	:onoremap il[ :<c-u>normal! F]vi[<CR>
-
 	" _____ word before ()
 	:onoremap fn :<C-U>normal! 0f(hviw<CR>
-
-	" _____ current word
-	:onoremap  cw :<c-u>normal! viw<CR>
 	
-	" end an beginning of line
+	" end and beginning of line
 	:onoremap L $
-	:onoremap H ^
+	:onoremap h ^
+
+	" whole line
+	:onoremap il :<c-u>normal! Vl
 "}}}
 
 " Commenting Functions {{{ 
 "_______________________________________________________________________________________________________
 
-	" C++ Commenting
-	:function! C_comment()
-	:  s/^\s*/&\/\//e
-	:  s/\v^(\s*)\/\/\/\//\1/e
-	:endfunction
-
-	" # commenting
-	:function! Hash_comment()
-	:  s/^\s*/&#/e
-	:  s/\v^(\s*)##/\1/e
-	:endfunction
-
-	" quote commenting
-	:function! Quote_comment()
-	:  s/^\s*/&" /e
-	:  s/\v^(\s*)" " /\1/e
+	" accepts as string uses that as a beginning of the line comment
+	:function! CommentBL(in) range
+	:  kq
+	:  execute a:firstline.",".a:lastline.'s/^\s*/&'.a:in.'/e'
+	:  execute a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
+	:  'q
+	:  nohlsearch
 	:endfunction
 " }}}
