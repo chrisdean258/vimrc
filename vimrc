@@ -4,7 +4,8 @@
 	:syntax on
 	:set nocompatible
 	:set nowrap
-	:set nonumber
+	:set number
+	:set relativenumber
 	:set autoindent
 	:set smartindent
 	:colorscheme elflord
@@ -26,8 +27,10 @@
 	:let maplocalleader = "/"
 
 	" insert a single char 
-	:nnoremap <silent>s :exec "normal! i".nr2char(getchar())."\e"<CR>
-	:nnoremap <silent>S :exec "normal! a".nr2char(getchar())."\e"<CR>
+	" :nnoremap <silent>s :exec "normal! i".nr2char(getchar())."\e"<CR>
+	" :nnoremap <silent>S :exec "normal! a".nr2char(getchar())."\e"<CR>
+	:nnoremap s i <esc>r
+	:nnoremap S a <esc>r
 
 	" For magic vim regex
 	:nnoremap / /\v
@@ -46,7 +49,6 @@
 	:noremap <Left> <nop>
 	:noremap <Right> <nop>
 	:noremap <space> <nop>
-	:noremap ) <nop>
 	
  
 	" move lines up and down 
@@ -57,11 +59,7 @@
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 	:nnoremap <leader>sv :source $MYVIMRC<CR>
-	
 
-	" clear a line
-	:nnoremap <leader>c ddO
-	
 
 	" add an empty line right above or below current line
 	:nnoremap <leader>o o<esc>
@@ -117,10 +115,9 @@
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
 
-	"AutoRun on buffload
-	:augroup auto_run
-	:  autocmd BufRead * :normal! zz <CR>
-	" C style formatting {{{ :augroup c_style
+
+	" C style formatting
+	"{{{
 	:augroup c_style
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <silent><buffer><localleader>/ :call CommentBL('\/\/')<CR>
@@ -134,16 +131,24 @@
 	:augroup END
 	"}}}
 
-	" C/cpp specific {{{
+	" C/cpp specific 
+	"{{{
 	:augroup c_cpp
 	:  autocmd!
 	:  autocmd FileType cpp :iabbrev <buffer> nstd using namespace std;<CR>
 	:  autocmd FileType c,cpp :iabbrev <buffer> #i #include
 	:  autocmd FileType cpp :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
+	:  autocmd FileType cpp :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
+	:  autocmd filetype cpp :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<cr>w"cyw/public<cr>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<cr><esc>"wp^wh"cpa::<esc>o{<cr>return <esc>"vpa;<cr>}<esc>gg=g`q:noh<cr>
+	:  autocmd filetype cpp :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
+	:  autocmd filetype cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
+	:  autocmd filetype cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
+	:augroup END
 	"}}}}
 
-	" Python formatting {{{
+	" Python formatting
+	"{{{
 	:augroup python_
 	:  autocmd!
 	:  autocmd FileType python,matlab,sh nnoremap <silent><buffer><localleader>/ :call CommentBL('#')<CR>
@@ -157,13 +162,15 @@
 	:augroup END
 	"}}}
 
-	" Vim files {{{
+	" Vim files
+	"{{{
 	:augroup vim_
 	:  autocmd!
 	:  autocmd FileType vim nnoremap <buffer><localleader>/ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim setlocal foldmethod=marker
 	:augroup END
 	"}}}
+
 "}}}
 
 " Operator Depedent mappings  {{{
@@ -180,15 +187,63 @@
 	:onoremap il :<c-u>normal! Vl
 "}}}
 
-" Commenting Functions {{{ 
+" Functions {{{ 
 "_______________________________________________________________________________________________________
 
 	" accepts as string uses that as a beginning of the line comment
 	:function! CommentBL(in) range
-	:  kq
+	:  normal! mq
 	:  execute a:firstline.",".a:lastline.'s/^\s*/&'.a:in.'/e'
 	:  execute a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
-	:  'q
+	:  normal! `q
 	:  nohlsearch
 	:endfunction
+
+	" Creates getter and setter functions 
+
+	:function! MakeSetter_Cpp()
+	"{{{
+	:  let hold=@"
+	:  normal! mq
+	:  normal! ^yt 
+	:  let type=@"
+	:  normal! t llyt;
+	:  let var=@"
+	:  execute "normal! ?class\<CR>W"
+	:  normal! yW
+	:  let class=@"
+	:  execute "normal! /public\<CR>"
+	:  execute "normal! ovoid set_".var."(".type." ".var."_);"
+	:  normal! Go
+	:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
+	:  execute "normal! o{\<CR>".var." = ".var."_;\<CR>}"
+	:  normal gg=G
+	:  let @"=hold
+	:  normal! `q
+	:endfunction
+	"}}}
+	
+	
+	:function! MakeGetter_Cpp()
+	"{{{
+	:  let hold=@"
+	:  normal! mq
+	:  normal! ^yt 
+	:  let type=@"
+	:  normal! t llyt;
+	:  let var=@"
+	:  execute "normal! ?class\<CR>W"
+	:  normal! yW
+	:  let class=@"
+	:  execute "normal! /public\<CR>"
+	:  execute "normal! o".type." get_".var."();"
+	:  normal! Go
+	:  execute "normal! o".type." ".class."::get_".var."()"
+	:  execute "normal! o{\<CR>return ".var.";\<CR>}"
+	:  normal gg=G
+	:  let @"=hold
+	:  normal! `q
+	:endfunction
+	"}}}
+	
 " }}}
