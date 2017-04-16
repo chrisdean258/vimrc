@@ -26,16 +26,9 @@
 	:let maplocalleader = "/"
 
 	" insert a single char 
-	" :nnoremap <silent>s :exec "normal! i".nr2char(getchar())."\e"<CR>
-	" :nnoremap <silent>S :exec "normal! a".nr2char(getchar())."\e"<CR>
 	:nnoremap s i <esc>r
 	:nnoremap S a <esc>r
 
-	" For magic vim regex
-	:nnoremap / /\v
-	:vnoremap / /\v
-	:cnoremap s/ s/\v
-	
 	" key mappings
 	:nnoremap H ^
 	:nnoremap L $
@@ -48,6 +41,8 @@
 	:noremap <Left> <nop>
 	:noremap <Right> <nop>
 	:noremap <space> <nop>
+	:nnoremap <silent><A-right> :wincmd l<CR>
+	:nnoremap <silent><A-left> :wincmd h<CR>
 	
  
 	" move lines up and down 
@@ -55,7 +50,7 @@
 	:nnoremap _ ddkP
 	
 	" indent file
-	:nnoremap <leader>g mqgg=G`q
+	:nnoremap <leader>g mqgg=G`qzz
 
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
