@@ -140,10 +140,10 @@
 	:  autocmd FileType cpp :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
 	:  autocmd FileType cpp :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
-	:  autocmd filetype cpp :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<cr>w"cyw/public<cr>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<cr><esc>"wp^wh"cpa::<esc>o{<cr>return <esc>"vpa;<cr>}<esc>gg=g`q:noh<cr>
-	:  autocmd filetype cpp :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
-	:  autocmd filetype cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
-	:  autocmd filetype cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<cr>w"cyw/public<cr>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<cr><esc>"wp^wh"cpa::<esc>o{<cr>return <esc>"vpa;<cr>}<esc>gg=g`q:noh<cr>
+	:  autocmd FileType cpp :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
+	:  autocmd FileType cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
 	:augroup END
 	"}}}}
 
@@ -193,8 +193,8 @@
 	" accepts as string uses that as a beginning of the line comment
 	:function! CommentBL(in) range
 	:  normal! mq
-	:  execute a:firstline.",".a:lastline.'s/^\s*/&'.a:in.'/e'
-	:  execute a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
+	:  execute "silent ".a:firstline.",".a:lastline.'s/^\s*/&'.a:in.'/e'
+	:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
 	:  normal! `q
 	:  nohlsearch
 	:endfunction
