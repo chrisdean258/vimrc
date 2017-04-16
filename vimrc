@@ -10,6 +10,8 @@
 	:set smartindent
 	:colorscheme elflord
 
+	:let g:syntastic_always_populate_loc_list = 1
+
 	:set hlsearch incsearch
 
 	:command! W w
@@ -97,6 +99,10 @@
 
 	" clear higlighting from search
 	:nnoremap <silent>noh :nohlsearch<CR>	
+
+	" mapping for jumping to errors
+	:nnoremap <A-up> :llast<CR>
+	:nnoremap <A-down> :lnext<CR>
 
 " }}}
 
