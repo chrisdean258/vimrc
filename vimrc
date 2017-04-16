@@ -20,7 +20,6 @@
 
 " UNVIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
-:nnoremap <expr>cv :normal! echo "v:count<<CR>>"
 
 	"mapleaders
 	:let mapleader = " "
@@ -52,9 +51,11 @@
 	
  
 	" move lines up and down 
-	:noremap - ddp
-	:noremap _ ddkP
+	:nnoremap - ddp
+	:nnoremap _ ddkP
 	
+	" indent file
+	:nnoremap <leader>g mqgg=G`q
 
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
