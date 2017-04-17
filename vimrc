@@ -90,7 +90,7 @@
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
-	:nnoremap <c-x> "+dd
+	:nnoremap <c-z> "+dd
 	:nnoremap <c-c> "+yy
 	:nnoremap <c-v> "+p
 	:inoremap <c-z> <esc>"+ddi
