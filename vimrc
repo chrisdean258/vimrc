@@ -93,7 +93,7 @@
 	:nnoremap <c-x> "+dd
 	:nnoremap <c-c> "+yy
 	:nnoremap <c-v> "+p
-	:inoremap <c-x> <esc>"+ddi
+	:inoremap <c-z> <esc>"+ddi
 	:inoremap <c-c> <esc>"+yyi
 	:inoremap <c-v> <esc>"+pi
 
