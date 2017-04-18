@@ -1,14 +1,57 @@
 Commands
+	General
+
+		:let {var}={val} - set a variable to a value
+
+		:set {(no)setting} - sets a general setting for vim
+		:setlocal {(no)setting} - sets setting only for local buffer
+
+		:command {toMap} {mapping} - maps the command toMap to mapping
+		
+		:normal - executes command as in normal mode
+		:normal! - executes command as in normal mode ignoring any user remapped characters:w
 	
-	:w - write buffer
-	:q - quit
-	:wq - write and quit
+		:execute {string} - executes the given string as a command
+		:call {function(args)} - calss the function with given args
+	
+	Buffer commands
+
+		:w - write buffer
+		:q - quit
+		:wq - write and quit
+	
+	Moving windows
+
+		:wincmd (h|j|k|l) - move between windows in split screens
 	
 	Regex
-	:(range)s/pattern/replace/(ge)
+
+		:(range)s/pattern/replace/(ge)
 	
 	Run Command on lines
-	:(range)g/pattern/command
+
+		:(range)g/pattern/command
+
+	Mapping
+
+		:noremap {lhs} {rhs} - general map lhs to rhs
+		:nnoremap {lhs} {rhs} - normal map lhs to rhs
+		:inoremap {lhs} {rhs} - insert map lhs to rhs
+		:vnoremap {lhs} {rhs} - visual map lhs to rhs
+		:onoremap {lhs} {rhs} - operator maps to the end of the line
+		:(n|i|v|o)unmap {expr} - unmaps the previously mapped expression
+
+	Abbreviation
+
+		:iabbrev {lhs} {rhs} - expands lhs to rhs in insert mode
+
+	Autocommands
+
+		:augroup (Name) - declares an autocommand group
+		:  autocmd!     - clears the group (for when it gets reloaded)
+		:  autocmd {expr} {pattern} {command} - runs autocmd when expr and pattern are met
+		:augroup END - ends augroup
+
 General mappings
 	
 	
