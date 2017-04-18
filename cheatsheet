@@ -1,0 +1,14 @@
+Commands
+	
+	:w - write buffer
+	:q - quit
+	:wq - write and quit
+	
+	Regex
+	:(range)s/pattern/replace/(ge)
+	
+	Run Command on lines
+	:(range)g/pattern/command
+General mappings
+	
+	
