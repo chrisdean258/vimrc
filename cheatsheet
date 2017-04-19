@@ -16,12 +16,16 @@ Commands
 
 		:e - edit new file
 		:r - read contents of file into buffer
+		:k{c} - mark a line with {c} 
+
+		:noh - turn off search highlighting
 	
 	Buffer commands
 
 		:w - write buffer
 		:q - quit
 		:wq - write and quit
+		:x- write and quit
 	
 	Moving windows
 
@@ -72,9 +76,15 @@ Navigation
 	ctrl -b     - move backward full page
 
 	ctrl -U     - move up half screen
-	ctrl -D     - down up half screen
+	ctrl -D     - down up half screen 
 
-	zz          - center cursor on page
+	zz          - center cursor on page(changes page frame)
+	M           - center cursor on page(change cursor position)
+	H           - put cursor at top of page (change cursor position)
+	L           - put cursor at bottomk of page (change cursor position)
+
+	%           - jump to corresponding item (e.g. closing brace)
+
 
 Operator pending mappings (* means can be used for navigation) 
 
@@ -92,7 +102,60 @@ Operator pending mappings (* means can be used for navigation)
 	F{c}        - *to previous occurence of {c}
 	T{c}        - *to after previous occurence of {c}
 	
+	iw          - word cursor is currently on
+	iW          - WORD cursor is currently on
+	i(|)        - in parentheses
+	i{|}        - in braces
+	i[|]        - in brackets
+	i<|>        - in angle brackets
+
+	i'          - in single quotes 
+	i"          - in double quotes 
+
+Operator Mappings (_ to denote operator pending mapping)
+	(double the letter to reference current line)
+
+	d_          - delete 
+	c_          - change (delete and leave in insert mode)
+	y_          - yank
 
 General mappings
-	
-	
+
+	Modes
+		i           - Insert mode
+		<esc>       - normal mode
+		R           - Replace mode
+		v           - Visual Mode
+
+		I           - Insert at beginning of line
+		o           - Insert on newline below current
+		O           - Insert on newline above current
+		a           - Append 
+		A           - Append to end of line
+		V           - Visual line mode
+
+	Deleting
+		x           - delete single char
+		X           - backspace
+		r           - replace char
+		
+		D           - Delete to EOL
+		C           - Change to EOL
+		Y           - Yank line
+
+	Pasting
+		
+		p           - Paste after cursor
+		P           - Paste above cursor
+
+	Other
+		=G          - Indent file under cursor
+		u           - undo
+		ctrl r      - redo
+		zM          - Fold all folds
+		zR          - Unfold all folds
+		q{reg}      - record macro to register
+		@{reg}      - play macro
+
+		>>          - indent
+		<<          - unindent

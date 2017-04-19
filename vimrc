@@ -175,20 +175,6 @@
 
 "}}}
 
-" Operator Depedent mappings  {{{
-"_______________________________________________________________________________________________________
-
-	" _____ word before ()
-	:onoremap fn :<C-U>normal! 0f(hviw<CR>
-	
-	" end and beginning of line
-	:onoremap L $
-	:onoremap h ^
-
-	" whole line
-	:onoremap il :<c-u>normal! Vl
-"}}}
-
 " Functions {{{ 
 "_______________________________________________________________________________________________________
 
