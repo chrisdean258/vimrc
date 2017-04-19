@@ -159,3 +159,4 @@ General mappings
 
 		>>          - indent
 		<<          - unindent
+		.           - replay last change
