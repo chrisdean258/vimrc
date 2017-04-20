@@ -29,7 +29,7 @@ Commands
 	
 	Moving windows
 
-		:wincmd (h|j|k|l) - move between windows in split screens
+		:wincmd (h|j|k|l) - move between windows in split screens (also see navigation)
 	
 	Regex
 
@@ -54,10 +54,14 @@ Commands
 
 	Autocommands
 
-		:augroup (Name) - declares an autocommand group
+		:augroup {Name} - declares an autocommand group
 		:  autocmd!     - clears the group (for when it gets reloaded)
 		:  autocmd {expr} {pattern} {command} - runs autocmd when expr and pattern are met
 		:augroup END - ends augroup
+	Previous versions:
+		:earlier {time} - jumps the file to the version it was Time ago
+		:later {time} - jumps the file to the version at time later(only used after earlier)
+		
 Navigation
 
 	h | <left>  - move left
@@ -157,7 +161,7 @@ General mappings
 
 	Other
 		u           - undo
-		ctrl r      - redo
+		ctrl-r      - redo
 		zM          - Fold all folds
 		zR          - Unfold all folds
 
@@ -172,3 +176,5 @@ General mappings
 
 		gi          - go to insert mode where you previously went into insert mode
 		g;          - go to where you previously went into insert mode
+		
+		ctrl-s      - show man page for word under cursor
