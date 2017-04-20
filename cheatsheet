@@ -118,6 +118,7 @@ Operator Mappings (_ to denote operator pending mapping)
 	d_          - delete 
 	c_          - change (delete and leave in insert mode)
 	y_          - yank
+	=           - format (e.g. gg=G indent whole file)
 
 General mappings
 
@@ -149,7 +150,6 @@ General mappings
 		P           - Paste above cursor
 
 	Other
-		=G          - Indent file under cursor
 		u           - undo
 		ctrl r      - redo
 		zM          - Fold all folds
