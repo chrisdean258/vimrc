@@ -41,9 +41,6 @@
 	:noremap <Left> <nop>
 	:noremap <Right> <nop>
 	:noremap <space> <nop>
-	:nnoremap <silent><A-right> :wincmd l<CR>
-	:nnoremap <silent><A-left> :wincmd h<CR>
-	
  
 	" move lines up and down 
 	:nnoremap - ddp
@@ -169,6 +166,25 @@
 	:  autocmd!
 	:  autocmd FileType vim nnoremap <buffer><localleader>/ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim setlocal foldmethod=marker
+	:augroup END
+	"}}}
+
+	" Markdown
+	"{{{
+	:augroup Markdown
+	:autocmd!
+	:autocmd Filetype markdown :setlocal spell
+	:autocmd Filetype markdown :nnoremap <buffer><localleader>sp mq[s1z=`q
+	:autocmd Filetype markdown :nnoremap <buffer><localleader>h1 "qyy"qpVr=
+	:autocmd Filetype markdown :nnoremap <buffer><localleader>h2 "qyy"qpVr-
+	:augroup END
+	"}}}
+
+	"{{{
+	:augroup Muttmail 
+	:autocmd!
+	:autocmd BufRead,BufNewFile MUTTTEMPFILE :setlocal spell
+	:autocmd BufRead,BufNewFile MUTTTEMPFILE :nnoremap <buffer><localleader>sp mq[s1z=`q
 	:augroup END
 	"}}}
 
