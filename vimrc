@@ -18,6 +18,13 @@
 	:command! Wq wq
 	:command! WQ wq
 	:command! Q q
+
+	" Allows for recursive finding
+	:set path+=**
+
+	" Used for making a tags file for jumping to tags
+	:command MakeTags !ctags -R
+
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -94,6 +101,7 @@
 
 	" clear higlighting from search
 	:nnoremap <silent>noh :nohlsearch<CR>	
+	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
 	" mapping for jumping to errors
 	:nnoremap <A-up> :llast<CR>
@@ -211,7 +219,7 @@
 	:  let type=@"
 	:  normal! t llyt;
 	:  let var=@"
-	:  execute "normal! ?class\<CR>W"
+	:  execute "normal! ?\v(struct|class)\<CR>W"
 	:  normal! yW
 	:  let class=@"
 	:  execute "normal! /public\<CR>"
@@ -232,7 +240,7 @@
 	:  let type=@"
 	:  normal! t llyt;
 	:  let var=@"
-	:  execute "normal! ?class\<CR>W"
+	:  execute "normal! ?\v(struct|class)\<CR>W"
 	:  normal! yW
 	:  let class=@"
 	:  execute "normal! /public\<CR>"
@@ -249,7 +257,7 @@
 	:  let hold=@"
 	:  normal! ^yt;
 	:  let full=@"
-	:  execute "normal! ?class\<CR>W"
+	:  execute "normal! ?\\v(struct|class)\<CR>W"
 	:  normal! yW
 	:  let class=@"
 	:  execute "normal! /};\r"
@@ -260,5 +268,6 @@
 	:  execute "normal! o}"
 	:  let @"=hold
 	:endfunction
+
 
 " }}}

@@ -1,5 +1,7 @@
 Commands
+========
 	General
+	-------
 
 		:let {var}={val} - set a variable to a value
 
@@ -21,6 +23,7 @@ Commands
 		:noh - turn off search highlighting
 	
 	Buffer commands
+	---------------
 
 		:w - write buffer
 		:q - quit
@@ -28,18 +31,22 @@ Commands
 		:x- write and quit
 	
 	Moving windows
+	--------------
 
 		:wincmd (h|j|k|l) - move between windows in split screens (also see navigation)
 	
 	Regex
+	-----
 
 		:(range)s/pattern/replace/(ge)
 	
 	Run Command on lines
+	--------------------
 
 		:(range)g/pattern/command - executes command on lines mathcing pattern
 
 	Mapping
+	-------
 
 		:noremap {lhs} {rhs} - general map lhs to rhs
 		:nnoremap {lhs} {rhs} - normal map lhs to rhs
@@ -49,20 +56,24 @@ Commands
 		:(n|i|v|o)unmap {expr} - unmaps the previously mapped expression
 
 	Abbreviation
+	------------
 
 		:iabbrev {lhs} {rhs} - expands lhs to rhs in insert mode
 
 	Autocommands
+	------------
 
 		:augroup {Name} - declares an autocommand group
 		:  autocmd!     - clears the group (for when it gets reloaded)
 		:  autocmd {expr} {pattern} {command} - runs autocmd when expr and pattern are met
 		:augroup END - ends augroup
 	Previous versions:
+	------------------
 		:earlier {time} - jumps the file to the version it was Time ago
 		:later {time} - jumps the file to the version at time later(only used after earlier)
 		
 Navigation
+==========
 
 	h | <left>  - move left
 	j | <down>  - move down
@@ -96,7 +107,12 @@ Navigation
 	ctrl-w<dir>- jump to split window in given direction
 
 
+	Using Tags
+	----------
+
+
 Operator pending mappings (* means can be used for navigation) 
+===============================================================
 
 	$           - *End of current line
 	^           - *Beginning of current line	
@@ -123,16 +139,19 @@ Operator pending mappings (* means can be used for navigation)
 	i"          - in double quotes 
 
 Operator Mappings (_ to denote operator pending mapping)
+========================================================
 	(double the letter to reference current line)
 
 	d_          - delete 
 	c_          - change (delete and leave in insert mode)
 	y_          - yank
-	=           - format (e.g. gg=G indent whole file)
+	=_          - format (e.g. gg=G indent whole file)
 
 General mappings
+================
 
 	Modes
+	-----
 		i           - Insert mode
 		<esc>       - normal mode
 		R           - Replace mode
@@ -146,6 +165,7 @@ General mappings
 		V           - Visual line mode
 
 	Deleting
+	--------
 		x           - delete single char
 		X           - backspace
 		r           - replace char
@@ -155,11 +175,13 @@ General mappings
 		Y           - Yank line
 
 	Pasting
+	-------
 		
 		p           - Paste after cursor
 		P           - Paste above cursor
 
 	Other
+	-----
 		u           - undo
 		ctrl-r      - redo
 		zM          - Fold all folds
