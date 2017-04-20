@@ -144,8 +144,9 @@
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
 	:augroup END
-	"}}}}
+	"}}}
 
 	" Python formatting
 	"{{{
@@ -188,7 +189,6 @@
 	" Creates getter and setter functions 
 
 	:function! MakeSetter_Cpp()
-	"{{{
 	:  let hold=@"
 	:  normal! mq
 	:  normal! ^yt 
@@ -207,11 +207,9 @@
 	:  let @"=hold
 	:  normal! `q
 	:endfunction
-	"}}}
 	
 	
 	:function! MakeGetter_Cpp()
-	"{{{
 	:  let hold=@"
 	:  normal! mq
 	:  normal! ^yt 
@@ -230,6 +228,21 @@
 	:  let @"=hold
 	:  normal! `q
 	:endfunction
-	"}}}
 	
+	:function! MakeClassFunction_Cpp()
+	:  let hold=@"
+	:  normal! ^yt;
+	:  let full=@"
+	:  execute "normal! ?class\<CR>W"
+	:  normal! yW
+	:  let class=@"
+	:  execute "normal! /};\r"
+	:  execute "normal! o\r".full
+	:  execute "normal! ^t(B"
+	:  execute "normal! i".class."::"
+	:  execute "normal! o{"
+	:  execute "normal! o}"
+	:  let @"=hold
+	:endfunction
+
 " }}}
