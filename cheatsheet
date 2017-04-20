@@ -79,6 +79,9 @@ Navigation
 	ctrl -D     - down up half screen 
 
 	zz          - center cursor on page(changes page frame)
+	zt          - cursor at top of page(changes page frame)
+	zb          - cursor at bottom of page(changes page frame)
+
 	M           - center cursor on page(change cursor position)
 	H           - put cursor at top of page (change cursor position)
 	L           - put cursor at bottomk of page (change cursor position)
@@ -154,9 +157,15 @@ General mappings
 		ctrl r      - redo
 		zM          - Fold all folds
 		zR          - Unfold all folds
-		q{reg}      - record macro to register
+
+		q{reg}      - record macro to register (q to end recoding)
 		@{reg}      - play macro
+		@@          - play previous macro
 
 		>>          - indent
 		<<          - unindent
 		.           - replay last change
+		*           - search for word under cursor
+
+		gi          - go to insert mode where you previously went into insert mode
+		g;          - go to where you previously went into insert mode

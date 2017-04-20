@@ -32,8 +32,6 @@
 	:nnoremap S a <esc>r
 
 	" key mappings
-	:nnoremap H ^
-	:nnoremap L $
 	:nnoremap j gj
 	:nnoremap k gk
 	:inoremap jk <esc>l
