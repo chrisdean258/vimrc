@@ -26,7 +26,6 @@ General
 
 Buffer commands
 ---------------
-
 <pre>	
 	:w - write buffer
 	:q - quit
@@ -37,28 +36,24 @@ Buffer commands
 
 Moving windows
 --------------
-
 <pre>	
 	:wincmd (h|j|k|l) - move between windows in split screens (also see navigation)
 </pre>	
 
 Regex
 -----
-
 <pre>	
 	:(range)s/pattern/replace/(ge)
 </pre>	
 
 Run Command on lines
 --------------------
-
 <pre>	
 	:(range)g/pattern/command - executes command on lines mathcing pattern
 </pre>	
 
 Mapping
 -------
-
 <pre>	
 	:noremap {lhs} {rhs} - general map lhs to rhs
 	:nnoremap {lhs} {rhs} - normal map lhs to rhs
@@ -70,14 +65,12 @@ Mapping
 
 Abbreviation
 ------------
-
 <pre>	
 	:iabbrev {lhs} {rhs} - expands lhs to rhs in insert mode
 </pre>	
 
 Autocommands
 ------------
-
 <pre>	
 	:augroup {Name} - declares an autocommand group
 	:  autocmd!     - clears the group (for when it gets reloaded)
@@ -87,7 +80,6 @@ Autocommands
 
 Previous versions:
 ------------------
-
 <pre>	
 	:earlier {time} - jumps the file to the version it was Time ago
 	:later {time} - jumps the file to the version at time later(only used after earlier)
@@ -96,7 +88,6 @@ Previous versions:
 
 Navigation
 ==========
-
 <pre>
 	h | <left>  - move left
 	j | <down>  - move down
@@ -132,7 +123,6 @@ Navigation
 
 Using Tags
 ----------
-
 <pre>	
 	^]          - jump to tag under cursor
 	g^]         - used for ambiguous tags
@@ -142,7 +132,6 @@ Using Tags
 
 Operator pending mappings 
 =========================
-
 <pre>	
 	(* for navigation)
 	$           - *End of current line
@@ -170,10 +159,8 @@ Operator pending mappings
 	i"          - in double quotes
 </pre>	
 
-
 Operator Mappings 
 =================
-
 <pre>	
 	(double the letter to reference current line)
 	( _ to denote operator pending mapping)
@@ -206,7 +193,6 @@ Modes
 
 Deleting
 --------
-
 <pre>	
 	x           - delete single char
 	X           - backspace
@@ -220,7 +206,6 @@ Deleting
 
 Pasting
 -------
-
 <pre>	
 	p           - Paste after cursor
 	P           - Paste above cursor
@@ -228,7 +213,6 @@ Pasting
 
 Autocomplete
 -------------
-
 <pre>	
 	^n          - Autocomplete next word found
 	^p          - Autocomplete previous word found
@@ -239,7 +223,6 @@ Autocomplete
 
 Other
 -----
-
 <pre>	
 	u           - undo
 	^r          - redo
