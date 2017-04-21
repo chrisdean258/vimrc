@@ -23,7 +23,7 @@
 	:set path+=**
 
 	" Used for making a tags file for jumping to tags
-	:command MakeTags !ctags -R
+	:command! MakeTags !ctags -R
 
 " }}}
 
@@ -131,7 +131,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <c-p>
+	:  autocmd FileType c,cpp,javascript,java,perl inoremap <silent><buffer><tab> <esc>:execute SmartTab()<CR>a
 	:  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
 	:augroup END
 	"}}}
@@ -203,16 +203,18 @@
 
 	" accepts as string uses that as a beginning of the line comment
 	:function! CommentBL(in) range
+	"  {{{
 	:  normal! mq
 	:  execute "silent ".a:firstline.",".a:lastline.'s/^\s*/&'.a:in.'/e'
 	:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
 	:  normal! `q
 	:  nohlsearch
 	:endfunction
+	" }}}
 
 	" Creates getter and setter functions 
-
 	:function! MakeSetter_Cpp()
+	"  {{{
 	:  let hold=@"
 	:  normal! mq
 	:  normal! ^yt 
@@ -231,9 +233,10 @@
 	:  let @"=hold
 	:  normal! `q
 	:endfunction
-	
+	" }}}
 	
 	:function! MakeGetter_Cpp()
+	"  {{{
 	:  let hold=@"
 	:  normal! mq
 	:  normal! ^yt 
@@ -252,8 +255,10 @@
 	:  let @"=hold
 	:  normal! `q
 	:endfunction
+	" }}}
 	
 	:function! MakeClassFunction_Cpp()
+	"  {{{
 	:  let hold=@"
 	:  normal! ^yt;
 	:  let full=@"
@@ -268,6 +273,27 @@
 	:  execute "normal! o}"
 	:  let @"=hold
 	:endfunction
+	" }}}
+
+	:function! SmartTab()
+	"  {{{
+	:  normal! mq
+	:  let column = col('.')
+	:  let rowStr = getline('.')
+	:  echom rowStr 
+	:  let counter = 1
+	:  while rowStr =~ '^\s'
+	:    let counter = counter +1
+	:    let rowStr = rowStr[1:]
+	:  endwhile
+	:  echom counter
+	:  if column <= counter || rowStr =~ '\s$'
+	:    return 'execute "normal! a\<tab>"'
+	:  else 
+	:    return 'execute "normal! a\<c-n>"'
+	:  endif
+	:endfunction
+	" }}}
 
 
 " }}}
