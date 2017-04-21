@@ -131,7 +131,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	:  autocmd FileType c,cpp,javascript,java,perl inoremap <silent><buffer><tab> <esc>:execute SmartTab()<CR>a
+	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
 	:augroup END
 	"}}}
@@ -275,25 +275,15 @@
 	:endfunction
 	" }}}
 
-	:function! SmartTab()
-	"  {{{
-	:  normal! mq
-	:  let column = col('.')
-	:  let rowStr = getline('.')
-	:  echom rowStr 
-	:  let counter = 1
-	:  while rowStr =~ '^\s'
-	:    let counter = counter +1
-	:    let rowStr = rowStr[1:]
-	:  endwhile
-	:  echom counter
-	:  if column <= counter || rowStr =~ '\s$'
-	:    return 'execute "normal! a\<tab>"'
-	:  else 
-	:    return 'execute "normal! a\<c-n>"'
-	:  endif
+	:function! CleverTab()
+	" {{{
+	:   let str =  strpart( getline('.'), 0, col('.')-1 ) 
+	:   if str =~ '^\s*$' || str =~ '\s$' 
+	:      return "\<Tab>"
+	:   else
+	:      return "\<C-N>"
+	:   endif
 	:endfunction
-	" }}}
-
-
+	" }}} 
+	
 " }}}
