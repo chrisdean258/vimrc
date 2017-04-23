@@ -8,16 +8,12 @@
 	:set relativenumber
 	:set autoindent
 	:set smartindent
+	:set showcmd
 	:colorscheme elflord
 
 	:let g:syntastic_always_populate_loc_list = 1
 
 	:set hlsearch incsearch
-
-	:command! W w
-	:command! Wq wq
-	:command! WQ wq
-	:command! Q q
 
 	" Allows for recursive finding
 	:set path+=**
@@ -32,17 +28,23 @@
 
 	"mapleaders
 	:let mapleader = " "
-	:let maplocalleader = "/"
+	:let maplocalleader = "\\"
 
 	" insert a single char 
 	:nnoremap s i <esc>r
 	:nnoremap S a <esc>r
+	
+	" Writing/ quitting
+	:cnoremap Q q
+	:cnoremap W w
 
 	" key mappings
 	:nnoremap j gj
 	:nnoremap k gk
-	:inoremap jk <esc>l
-	:inoremap <esc> <nop>
+	" :inoremap jk <esc>l
+
+	:inoremap jk <C-R>=CleverEsc()<CR>
+	":inoremap <esc> <nop>
 	:noremap <Up> <nop>
 	:noremap <Down> <nop>
 	:noremap <Left> <nop>
@@ -125,8 +127,8 @@
 	"{{{
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <silent><buffer><localleader>/ :call CommentBL('\/\/')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl vnoremap <buffer><localleader>/ <esc>`<i/*<esc>`>a*/<esc> 
+	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc> 
 	:  autocmd FileType c,cpp,javascript,java,perl :set cindent
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
@@ -157,8 +159,8 @@
 	"{{{
 	:augroup python_
 	:  autocmd!
-	:  autocmd FileType python,matlab,sh nnoremap <silent><buffer><localleader>/ :call CommentBL('#')<CR>
-	:  autocmd FileType python vnoremap <buffer><localleader>/ <esc>`<i"""<esc>`>a"""<esc> 
+	:  autocmd FileType python,matlab,sh nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:  autocmd FileType python vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc> 
 	:  autocmd FileType python :setlocal foldmethod=indent
 	:  autocmd FileType python :normal! zR
 	:  autocmd FileType python inoremap <buffer><tab> <c-p>
@@ -172,7 +174,7 @@
 	"{{{
 	:augroup vim_
 	:  autocmd!
-	:  autocmd FileType vim nnoremap <buffer><localleader>/ :call CommentBL('" ')<CR>
+	:  autocmd FileType vim nnoremap <buffer><localleader>\ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim setlocal foldmethod=marker
 	:augroup END
 	"}}}
@@ -285,5 +287,15 @@
 	:   endif
 	:endfunction
 	" }}} 
+
+	:function! CleverEsc()
+	" {{{
+	:  if col('.') == 1
+	:    return "\<esc>"
+	:  else
+	:    return "\<esc>l"
+	:  endif
+	:endfunction
+	" }}}
 	
 " }}}
