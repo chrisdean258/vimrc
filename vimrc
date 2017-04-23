@@ -44,7 +44,7 @@
 	" :inoremap jk <esc>l
 
 	:inoremap jk <C-R>=CleverEsc()<CR>
-	":inoremap <esc> <nop>
+	:inoremap <esc> <nop>
 	:noremap <Up> <nop>
 	:noremap <Down> <nop>
 	:noremap <Left> <nop>
@@ -84,9 +84,13 @@
 
 	:nnoremap <leader>) viw<esc>a)<esc>hbi(<esc>lel
 	:vnoremap <leader>) <esc>`>a)<esc>`<i(<esc>`<lv`>l
+	:nnoremap <leader>( viw<esc>a)<esc>hbi(<esc>lel
+	:vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>`<lv`>l
 
 	:nnoremap <leader>> viw<esc>a><esc>hbi<<esc>lel
 	:vnoremap <leader>> <esc>`>a><esc>`<i<<esc>`<lv`>l
+	:nnoremap <leader>< viw<esc>a><esc>hbi<<esc>lel
+	:vnoremap <leader>< <esc>`>a><esc>`<i<<esc>`<lv`>l
 	
 
 	" mapping for ease of {} use 
@@ -108,6 +112,9 @@
 	" mapping for jumping to errors
 	:nnoremap <A-up> :llast<CR>
 	:nnoremap <A-down> :lnext<CR>
+
+	" Clever Tabs
+	:inoremap <tab> <C-R>=CleverTab()<CR>
 
 " }}}
 
@@ -133,7 +140,6 @@
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	:  autocmd FileType c,cpp,javascript,java,perl inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
 	:augroup END
 	"}}}
