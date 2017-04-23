@@ -169,6 +169,8 @@ Operator Mappings
 	c_          - change (delete and leave in insert mode)
 	y_          - yank
 	=_          - format (e.g. gg=G indent whole file)
+	>_          - indent
+	<_          - unindent
 </pre>
 
 
@@ -179,7 +181,7 @@ Modes
 -----
 <pre>
 	i           - Insert mode
-	<esc>       - normal mode
+	&lt;esc&gt;       - normal mode
 	R           - Replace mode
 	v           - Visual Mode
 
@@ -233,8 +235,6 @@ Other
 	@{reg}      - play macro
 	@@          - play previous macro
 
-	>>          - indent
-	<<          - unindent
 	.           - replay last change
 	*           - search for word under cursor
 
