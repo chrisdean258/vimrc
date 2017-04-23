@@ -37,6 +37,7 @@
 	" Writing/ quitting
 	:cnoremap Q q
 	:cnoremap W w
+	:cnoremap wq execute CleverQuit(TMUX)
 
 	" key mappings
 	:nnoremap j gj
@@ -304,4 +305,13 @@
 	:endfunction
 	" }}}
 	
+	:let TMUX = 0
+	:function! CleverQuit(arg)
+	:  if a:arg == 0
+	:    return 'wq'
+	:  else
+	:    return 'w! |  silent execute ''!tmux kill-session -t "vim" '' | q' 
+	:  endif
+	:endfunction
+
 " }}}
