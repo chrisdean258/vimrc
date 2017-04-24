@@ -37,9 +37,11 @@
 	:nnoremap S a <esc>r
 	
 	" Writing/ quitting
-	:cnoremap Q q
-	:cnoremap W w
-	:cnoremap wq execute CleverQuit(TMUX)
+	:cabbrev Q q
+	:cabbrev W w
+	:cabbrev Wq wq
+	:cabbrev WQ wq
+	:cabbrev wq <c-r>=CleverQuit(TMUX)<CR>
 
 	" key mappings
 	:nnoremap j gj
@@ -47,6 +49,7 @@
 	" :inoremap jk <esc>l
 
 	:inoremap jk <C-R>=CleverEsc()<CR>
+	:inoremap hj <C-R>=CleverEsc()<CR>
 	:inoremap <esc> <nop>
 	:noremap <Up> <nop>
 	:noremap <Down> <nop>
@@ -313,16 +316,15 @@
 	:  if a:arg == 0
 	:    return 'wq'
 	:  else
-	:    return 'w! |  silent execute ''!tmux kill-session -t "vim" '' | q' 
+	:    return 'w! | silent execute ''!tmux kill-session -t "vim" '' | q' 
 	:  endif
 	:endfunction
 	" }}}
 
-
 	:function! Terminal()
 	" {{{
 	:  mksession session.vim 
-	:  set noswapfile
+	:  setlocal noswapfile
 	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 10 \; selectp -t 0\;'
 	:  silent execute '!rm session.vim'
 	:  q!
