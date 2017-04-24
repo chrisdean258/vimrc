@@ -20,6 +20,8 @@
 
 	" Used for making a tags file for jumping to tags
 	:command! MakeTags !ctags -R
+	:command Term call Terminal()
+	:command T call Terminal()
 
 " }}}
 
@@ -307,11 +309,24 @@
 	
 	:let TMUX = 0
 	:function! CleverQuit(arg)
+	" {{{
 	:  if a:arg == 0
 	:    return 'wq'
 	:  else
 	:    return 'w! |  silent execute ''!tmux kill-session -t "vim" '' | q' 
 	:  endif
 	:endfunction
+	" }}}
+
+
+	:function! Terminal()
+	" {{{
+	:  mksession session.vim 
+	:  set noswapfile
+	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 10 \; selectp -t 0\;'
+	:  silent execute '!rm session.vim'
+	:  q!
+	:endfunction
+	" }}}
 
 " }}}
