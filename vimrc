@@ -18,10 +18,7 @@
 	" Allows for recursive finding
 	:set path+=**
 
-	" Used for making a tags file for jumping to tags
 	:command! MakeTags !ctags -R
-	:command Term call Terminal()
-	:command T call Terminal()
 
 " }}}
 
@@ -35,13 +32,6 @@
 	" insert a single char 
 	:nnoremap s i <esc>r
 	:nnoremap S a <esc>r
-	
-	" Writing/ quitting
-	:cabbrev Q q
-	:cabbrev W w
-	:cabbrev Wq wq
-	:cabbrev WQ wq
-	:cabbrev wq <c-r>=CleverQuit(TMUX)<CR>
 
 	" key mappings
 	:nnoremap j gj
@@ -130,6 +120,19 @@
 	" Signatures
 	:iabbrev utsign Chris Dean<CR>cdean16@vols.utk.edu
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
+
+	" Writing/ quitting vim tmux terminal compatibility
+	:cabbrev Q <c-r>=CleverQuit(TMUX)<CR>
+	:cabbrev W w 
+	:cabbrev Wq <c-r>=CleverWriteQuit(TMUX)<CR>
+	:cabbrev WQ <c-r>=CleverWriteQuit(TMUX)<CR>
+	:cabbrev wq <c-r>=CleverWriteQuit(TMUX)<CR>
+	:cabbrev q <c-r>=CleverQuit(TMUX)<CR>
+
+	" Used for making a tags file for jumping to tags
+	:command! Term call Terminal()
+	:command! T call Terminal()
+	:cabbrev t T
 "}}}
 
 " AUTOCMD GROUPS  {{{
@@ -164,6 +167,7 @@
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
+	:  autocmd FileType cpp :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
 	:augroup END
 	"}}}
 
@@ -202,6 +206,7 @@
 	:augroup END
 	"}}}
 
+	" Mutt
 	"{{{
 	:augroup Muttmail 
 	:autocmd!
@@ -226,50 +231,57 @@
 	:endfunction
 	" }}}
 
-	" Creates getter and setter functions 
-	:function! MakeSetter_Cpp()
-	"  {{{
-	:  let hold=@"
-	:  normal! mq
-	:  normal! ^yt 
-	:  let type=@"
-	:  normal! t llyt;
-	:  let var=@"
-	:  execute "normal! ?\v(struct|class)\<CR>W"
-	:  normal! yW
-	:  let class=@"
-	:  execute "normal! /public\<CR>"
-	:  execute "normal! ovoid set_".var."(".type." ".var."_);"
-	:  normal! Go
-	:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
-	:  execute "normal! o{\<CR>".var." = ".var."_;\<CR>}"
-	:  normal gg=G
-	:  let @"=hold
-	:  normal! `q
-	:endfunction
-	" }}}
-	
 	:function! MakeGetter_Cpp()
-	"  {{{
-	:  let hold=@"
 	:  normal! mq
-	:  normal! ^yt 
-	:  let type=@"
-	:  normal! t llyt;
-	:  let var=@"
-	:  execute "normal! ?\v(struct|class)\<CR>W"
-	:  normal! yW
-	:  let class=@"
-	:  execute "normal! /public\<CR>"
-	:  execute "normal! o".type." get_".var."();"
-	:  normal! Go
+	:  let list = split(getline('.'))
+	:  let type = list[0]
+	:  let varlist = split(list[1],';')[0]
+	:  let var = varlist[0]
+	:  execute "normal! ?\\v(class|struct)\<cr>"
+	:  let list = split(getline('.'))
+	:  let clst = list[0]
+	:  let class = list[1]
+	:  if clst ==# 'class'
+	:    execute "normal!/public\<CR>"
+	:  else 
+	:    execute "normal!/{\<CR>"
+	:  endif
+	:  normal! o
+	:  execute "normal! i".type." get_".var."();"
+	:  execute "normal! =="
+	:  execute "normal!/};\<CR>o"
 	:  execute "normal! o".type." ".class."::get_".var."()"
-	:  execute "normal! o{\<CR>return ".var.";\<CR>}"
-	:  normal gg=G
-	:  let @"=hold
+	:  execute "normal! o{" 
+	:  execute "normal! oreturn ".var.";"
+	:  execute "normal! o}" 
 	:  normal! `q
 	:endfunction
-	" }}}
+	
+	:function! MakeSetter_Cpp()
+	:  normal! mq
+	:  let list = split(getline('.'))
+	:  let type = list[0]
+	:  let varList = split(list[1],';')[0]
+	:  let var = varList[0]
+	:  execute "normal! ?\\v(class|struct)\<CR>"
+	:  let list = split(getline('.'))
+	:  let clst = list[0]
+	:  let class = list[1]
+	:  if clst ==# 'class'
+	:    execute "normal!/public\<CR>"
+	:  else 
+	:    execute "normal!/{\<CR>"
+	:  endif
+	:  normal! o
+	:  execute "normal! ivoid set_".var."(".type.");"
+	:  execute "normal! =="
+	:  execute "normal!/};\<CR>o"
+	:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
+	:  execute "normal! o{" 
+	:  execute "normal! o".var." = ".var."_;"
+	:  execute "normal! o}" 
+	:  normal! `q
+	:endfunction
 	
 	:function! MakeClassFunction_Cpp()
 	"  {{{
@@ -288,6 +300,23 @@
 	:  let @"=hold
 	:endfunction
 	" }}}
+	
+	:function! MakeConstructor_Cpp()
+	:  execute "normal! ?\\v(class|struct)\<CR>" 
+	:  let list = split(getline('.'))
+	:  let clst = list[0]
+	:  let class = list[1]
+	:  if clst ==# 'class'
+	:    execute "normal!/public\<CR>"
+	:  else 
+	:    execute "normal!/{\<CR>"
+	:  endif
+	:  execute "normal! o".class."();"
+	:  execute "normal!/};\<CR>o"
+	:  execute "normal! o".class."::".class."()"
+	:  execute "normal! o{"
+	:  execute "normal! o}"
+	:endfunction
 
 	:function! CleverTab()
 	" {{{
@@ -311,7 +340,7 @@
 	" }}}
 	
 	:let TMUX = 0
-	:function! CleverQuit(arg)
+	:function! CleverWriteQuit(arg)
 	" {{{
 	:  if a:arg == 0
 	:    return 'wq'
@@ -321,11 +350,21 @@
 	:endfunction
 	" }}}
 
+	:function! CleverQuit(arg)
+	" {{{
+	:  if a:arg == 0
+	:    return 'q'
+	:  else
+	:    return 'silent execute ''!tmux kill-session -t "vim" '' | q' 
+	:  endif
+	:endfunction
+	" }}}
+
 	:function! Terminal()
 	" {{{
 	:  mksession session.vim 
 	:  setlocal noswapfile
-	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 10 \; selectp -t 0\;'
+	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 10 \;'
 	:  silent execute '!rm session.vim'
 	:  q!
 	:endfunction
