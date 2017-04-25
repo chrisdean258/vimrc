@@ -122,22 +122,12 @@
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
 
 	" Writing/ quitting vim tmux terminal compatibility
-	:cabbrev Q <c-r>=CleverQuit(TMUX)<CR>
 	:cabbrev W w 
-	:cabbrev Wq <c-r>=CleverWriteQuit(TMUX)<CR>
-	:cabbrev WQ <c-r>=CleverWriteQuit(TMUX)<CR>
-	:cabbrev wq <c-r>=CleverWriteQuit(TMUX)<CR>
-	:cabbrev q <c-r>=CleverQuit(TMUX)<CR>
 
-	" Used for making a tags file for jumping to tags
-	:command! Term call Terminal()
-	:command! T call Terminal()
-	:cabbrev t T
 "}}}
 
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
-
 
 	" C style formatting
 	"{{{
@@ -149,7 +139,8 @@
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	:  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
+	" :  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
+	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev csign <c-r>=Csign()<CR>
 	:augroup END
 	"}}}
 
@@ -232,6 +223,7 @@
 	" }}}
 
 	:function! MakeGetter_Cpp()
+	" {{{
 	:  normal! mq
 	:  let list = split(getline('.'))
 	:  let type = list[0]
@@ -256,8 +248,10 @@
 	:  execute "normal! o}" 
 	:  normal! `q
 	:endfunction
+	" }}}
 	
 	:function! MakeSetter_Cpp()
+	" {{{
 	:  normal! mq
 	:  let list = split(getline('.'))
 	:  let type = list[0]
@@ -282,6 +276,7 @@
 	:  execute "normal! o}" 
 	:  normal! `q
 	:endfunction
+	" }}}
 	
 	:function! MakeClassFunction_Cpp()
 	"  {{{
@@ -302,6 +297,7 @@
 	" }}}
 	
 	:function! MakeConstructor_Cpp()
+	" {{{
 	:  execute "normal! ?\\v(class|struct)\<CR>" 
 	:  let list = split(getline('.'))
 	:  let clst = list[0]
@@ -317,6 +313,7 @@
 	:  execute "normal! o{"
 	:  execute "normal! o}"
 	:endfunction
+	" }}}
 
 	:function! CleverTab()
 	" {{{
@@ -338,22 +335,37 @@
 	:  endif
 	:endfunction
 	" }}}
-	
-	:let TMUX = 0
-	:function! CleverWriteQuit(arg)
+
+	:function! Csign()
 	" {{{
-	:  if a:arg == 0
-	:    return 'wq'
-	:  else
-	:    return 'w! | silent execute ''!tmux kill-session -t "vim" '' | q' 
-	:  endif
+	:  let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* \r*/"
+	:  return rtn 
 	:endfunction
 	" }}}
 
-	:function! CleverQuit(arg)
+" }}}
+
+" TMUX Terminal Split {{{
+"_______________________________________________________________________________________________________
+
+	:let TMUX = 0
+	:command! Term call Terminal()
+	:command! T call Terminal()
+
+	:cabbrev Q <c-r>=CleverQuit("",TMUX)<CR>
+	:cabbrev Wq <c-r>=CleverQuit("w",TMUX)<CR>
+	:cabbrev WQ <c-r>=CleverQuit("w",TMUX)<CR>
+	:cabbrev wq <c-r>=CleverQuit("w",TMUX)<CR>
+	:cabbrev q <c-r>=CleverQuit("",TMUX)<CR>
+	:cabbrev t T
+
+
+	:function! CleverQuit(write, TMUX)
 	" {{{
-	:  if a:arg == 0
-	:    return 'q'
+	:  if a:TMUX == 0
+	:    return a:write.'q'
+	:  elseif a:write ==# 'w'
+	:    return 'w | silent execute ''!tmux kill-session -t "vim" '' | q' 
 	:  else
 	:    return 'silent execute ''!tmux kill-session -t "vim" '' | q' 
 	:  endif
@@ -363,11 +375,12 @@
 	:function! Terminal()
 	" {{{
 	:  mksession session.vim 
-	:  setlocal noswapfile
+	:  set noswapfile
 	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 10 \;'
 	:  silent execute '!rm session.vim'
 	:  q!
 	:endfunction
 	" }}}
 
-" }}}
+	" }}}
+
