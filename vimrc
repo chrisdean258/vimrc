@@ -36,10 +36,8 @@
 	" key mappings
 	:nnoremap j gj
 	:nnoremap k gk
-	" :inoremap jk <esc>l
 
 	:inoremap jk <C-R>=CleverEsc()<CR>
-	:inoremap hj <C-R>=CleverEsc()<CR>
 	:inoremap <esc> <nop>
 	:noremap <Up> <nop>
 	:noremap <Down> <nop>
@@ -57,6 +55,7 @@
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 	:nnoremap <leader>sv :source $MYVIMRC<CR>
+	:nnoremap <leader>s% :source %<CR>
 
 
 	" add an empty line right above or below current line
@@ -112,6 +111,12 @@
 	" Clever Tabs
 	:inoremap <tab> <C-R>=CleverTab()<CR>
 
+	" Wrapping
+	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
+	:nnoremap <silent><leader>w :call Wrap("visual")
+
+	" Operator Pending
+	:onoremap . V
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
@@ -190,7 +195,7 @@
 	"{{{
 	:augroup Markdown
 	:autocmd!
-	:autocmd Filetype markdown :setlocal spell
+	:autocmd Filetype markdown :setlocal spell spelllang=en_us
 	:autocmd Filetype markdown :nnoremap <buffer><localleader>sp mq[s1z=`q
 	:autocmd Filetype markdown :nnoremap <buffer><localleader>h1 "qyy"qpVr=
 	:autocmd Filetype markdown :nnoremap <buffer><localleader>h2 "qyy"qpVr-
@@ -321,7 +326,7 @@
 	:   if str =~ '^\s*$' || str =~ '\s$' 
 	:      return "\<Tab>"
 	:   else
-	:      return "\<C-N>"
+	:      return "\<C-P>"
 	:   endif
 	:endfunction
 	" }}} 
@@ -340,6 +345,46 @@
 	" {{{
 	:  let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* \r*/"
 	:  return rtn 
+	:endfunction
+	" }}}
+
+	:function! Wrap(type)
+	" {{{
+	:  let sel_save = &selection
+	:  let &selection = "inclusive"
+	:  let input  = nr2char(getchar())
+	:  let forward = {"<" : ">", "[" : "]", "{" : "}", "(" : ")",} 
+	:  let backward = {">" : "<", "]" : "[", "}" : "{", ")" : "(",}
+	:  if has_key(forward, input)
+	:    let begin = input
+	:    let ending = forward[input]
+	:  elseif has_key(backward, input)
+	:    let ending = input
+	:    let begin = backward[input]
+	:   else
+	:    let ending = input
+	:    let begin = input
+	:  endif
+	:  if a:type ==# "line"
+	:    echom "help"
+	:    let deref = "\'"
+	:    let jump = "$"
+	:  else
+	:    let deref = "`"
+	:    let jump = ""
+	:  endif
+	:  if a:type !=# "visual"
+	:    silent exe "normal! ".deref."[v".deref."]".jump."d"
+	:    let @@ = begin.@@.ending
+	:    if col('.') == strlen(getline('.'))
+	:      normal! p
+	:    else
+	:      normal! P
+	:    endif
+	:    let &selection = sel_save
+	:  else
+	:    execute "normal! `<i".begin."\<esc>`>a".ending
+	:  endif
 	:endfunction
 	" }}}
 
@@ -382,5 +427,5 @@
 	:endfunction
 	" }}}
 
-	" }}}
+" }}}
 
