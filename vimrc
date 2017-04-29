@@ -68,28 +68,9 @@
 	:inoremap <c-u> <esc>viwUi
 	:nnoremap <c-l> viwu
 	:inoremap <c-l> <esc>viwui
-	
-
-	" add quotes around a word 
-	:nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
-	:vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>`<lv`>l
-
-	:nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
-	:vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>`<lv`>l
-
-	:nnoremap <leader>) viw<esc>a)<esc>hbi(<esc>lel
-	:vnoremap <leader>) <esc>`>a)<esc>`<i(<esc>`<lv`>l
-	:nnoremap <leader>( viw<esc>a)<esc>hbi(<esc>lel
-	:vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>`<lv`>l
-
-	:nnoremap <leader>> viw<esc>a><esc>hbi<<esc>lel
-	:vnoremap <leader>> <esc>`>a><esc>`<i<<esc>`<lv`>l
-	:nnoremap <leader>< viw<esc>a><esc>hbi<<esc>lel
-	:vnoremap <leader>< <esc>`>a><esc>`<i<<esc>`<lv`>l
-	
 
 	" mapping for ease of {} use 
-	:inoremap {} {<CR>}<esc>ko
+	:inoremap {} {<CR>}<esc>O
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
@@ -117,6 +98,24 @@
 
 	" Operator Pending
 	:onoremap . V
+
+	" Allow the numpad to work without num lock issues
+	:inoremap Oo /
+	:inoremap Oj *
+	:inoremap OF 1
+	:inoremap OB 2
+	:inoremap [6~ 3
+	:inoremap OD 4
+	:inoremap OE 5
+	:inoremap OC 6
+	:inoremap OH 7
+	:inoremap OA 8
+	:inoremap [5~ 9
+	:inoremap [2~ 0
+	:inoremap Ok +
+	:inoremap Om -
+	:inoremap [3~ .
+	
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
@@ -428,4 +427,3 @@
 	" }}}
 
 " }}}
-
