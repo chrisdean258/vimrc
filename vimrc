@@ -143,8 +143,9 @@
 	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	" :  autocmd FileType c,cpp,javascript,java,perl inoremap c-sign<CR> /**<CR><bs>* Chris Dean<CR>* <esc>"%pa<CR>* <esc>:put =strftime(\"%m/%d/%Y\")<CR>i<bs><esc>o* <CR>*/<up>
 	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev csign <c-r>=Csign()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl :inoremap <buffer><silent><localleader> \fl :call ForLoop()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl :inoremap <buffer><silent><localleader> \dl :call DoubleForLoop()<CR>
 	:augroup END
 	"}}}
 
@@ -387,6 +388,24 @@
 	:endfunction
 	" }}}
 
+	:function! ForLoop()
+	" {{{
+	:  let line = getline('.')
+	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
+	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}\<esc>O"
+	:  normal! mqgg=G`q
+	:endfunction
+	" }}}
+
+	:function! DoubleForLoop()
+	" {{{
+	:  let line = getline('.')
+	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
+	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}\<esc>O"
+	:  execute 'normal! ifor(j = 0; j < '.line."[i].size; j++)\<CR>{\<CR>}\<esc>O"
+	:  normal! mqgg=G`q
+	:endfunction
+	" }}}
 " }}}
 
 " TMUX Terminal Split {{{
