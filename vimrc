@@ -144,8 +144,8 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
 	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl :inoremap <buffer><silent><localleader> \fl :call ForLoop()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl :inoremap <buffer><silent><localleader> \dl :call DoubleForLoop()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader> \fl :call ForLoop()<CR>O
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader> \dl :call DoubleForLoop()<CR>O
 	:augroup END
 	"}}}
 
@@ -392,7 +392,7 @@
 	" {{{
 	:  let line = getline('.')
 	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
-	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}\<esc>O"
+	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}"
 	:  normal! mqgg=G`q
 	:endfunction
 	" }}}
@@ -402,7 +402,7 @@
 	:  let line = getline('.')
 	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
 	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}\<esc>O"
-	:  execute 'normal! ifor(j = 0; j < '.line."[i].size; j++)\<CR>{\<CR>}\<esc>O"
+	:  execute 'normal! ifor(j = 0; j < '.line."[i].size; j++)\<CR>{\<CR>}"
 	:  normal! mqgg=G`q
 	:endfunction
 	" }}}
