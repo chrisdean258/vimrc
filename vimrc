@@ -146,6 +146,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev csign <c-r>=Csign()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>O
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>O
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>O
 	:augroup END
 	"}}}
 
@@ -404,6 +405,18 @@
 	:  normal! mqgg=G`q
 	:endfunction
 	" }}}
+
+	:function! Swap_Cpp()
+	" {{{
+	:  let line = split(getline('.'))
+	:  normal! "_dd
+	:  execute "normal! Otemp = ".line[0].";"
+	:  execute "normal! ==o".line[0]." = ".line[1].";"
+	:  execute "normal! ==o".line[1]." = temp;"
+	:  normal! ==
+	:endfunction
+	" }}}
+
 " }}}
 
 " TMUX Terminal Split {{{
