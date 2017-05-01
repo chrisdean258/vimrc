@@ -158,7 +158,7 @@
 	:  autocmd FileType cpp :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
 	:  autocmd FileType cpp :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
-	:  autocmd FileType cpp :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<cr>w"cyw/public<cr>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<cr><esc>"wp^wh"cpa::<esc>o{<cr>return <esc>"vpa;<cr>}<esc>gg=g`q:noh<cr>
+	:  autocmd FileType cpp :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<CR>w"cyw/public<CR>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<CR><esc>"wp^wh"cpa::<esc>o{<CR>return <esc>"vpa;<CR>}<esc>gg=g`q:noh<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
@@ -234,7 +234,7 @@
 	:  let type = list[0]
 	:  let varlist = split(list[1],';')[0]
 	:  let var = varlist[0]
-	:  execute "normal! ?\\v(class|struct)\<cr>"
+	:  execute "normal! ?\\v(class|struct)\<CR>"
 	:  let list = split(getline('.'))
 	:  let clst = list[0]
 	:  let class = list[1]
@@ -285,19 +285,17 @@
 	
 	:function! MakeClassFunction_Cpp()
 	"  {{{
-	:  let hold=@"
-	:  normal! ^yt;
-	:  let full=@"
-	:  execute "normal! ?\\v(struct|class)\<CR>W"
-	:  normal! yW
-	:  let class=@"
-	:  execute "normal! /};\r"
-	:  execute "normal! o\r".full
-	:  execute "normal! ^t(B"
-	:  execute "normal! i".class."::"
+	:  let line = substitute(getline('.'), ";", "", "")
+	:  execute "normal! ?\\v(class|struct)\<CR>"
+	:  let class = substitute(split(getline('.'))[1], "{", "" , "")
+	:  let linesplit = split(line)
+	:  let linesplit[1] = class."::".linesplit[1]
+	:  let line = join(linesplit)
+	:  execute "normal! /};\<CR>"
+	:  normal! o
+	:  execute "normal! o".line
 	:  execute "normal! o{"
 	:  execute "normal! o}"
-	:  let @"=hold
 	:endfunction
 	" }}}
 	
