@@ -391,7 +391,7 @@
 	" {{{
 	:  let line = getline('.')
 	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
-	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}"
+	:  execute 'normal! ccfor(i = 0; i < '.line.".size(); i++)\<CR>{\<CR>}"
 	:  normal! mqgg=G`q
 	:endfunction
 	" }}}
@@ -400,8 +400,8 @@
 	" {{{
 	:  let line = getline('.')
 	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
-	:  execute 'normal! ccfor(i = 0; i < '.line.".size; i++)\<CR>{\<CR>}\<esc>O"
-	:  execute 'normal! ifor(j = 0; j < '.line."[i].size; j++)\<CR>{\<CR>}"
+	:  execute 'normal! ccfor(i = 0; i < '.line.".size(); i++)\<CR>{\<CR>}\<esc>O"
+	:  execute 'normal! ifor(j = 0; j < '.line."[i].size(); j++)\<CR>{\<CR>}"
 	:  normal! mqgg=G`q
 	:endfunction
 	" }}}
