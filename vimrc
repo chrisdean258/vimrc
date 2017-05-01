@@ -144,9 +144,9 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
 	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>O
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>O
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>O
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>zzO
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
 	:augroup END
 	"}}}
 
