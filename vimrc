@@ -342,7 +342,7 @@
 
 	:function! Csign()
 	" {{{
-	:  let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* \r*/"
+	:  let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* ".@%." \r* \r*/"
 	:  return rtn 
 	:endfunction
 	" }}}
