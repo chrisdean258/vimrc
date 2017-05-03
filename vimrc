@@ -233,7 +233,7 @@
 	:  normal! mq
 	:  let list = split(getline('.'))
 	:  let type = list[0]
-	:  let varlist = split(list[1],';')[0]
+	:  let varlist = split(list[1],';')
 	:  let var = varlist[0]
 	:  execute "normal! ?\\v(class|struct)\<CR>"
 	:  let list = split(getline('.'))
@@ -261,7 +261,7 @@
 	:  normal! mq
 	:  let list = split(getline('.'))
 	:  let type = list[0]
-	:  let varList = split(list[1],';')[0]
+	:  let varList = split(list[1],';')
 	:  let var = varList[0]
 	:  execute "normal! ?\\v(class|struct)\<CR>"
 	:  let list = split(getline('.'))
