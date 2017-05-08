@@ -76,10 +76,10 @@
 	"may not work if you arent on vim-gnome
 	:nnoremap <c-z> "+dd
 	:nnoremap <c-c> "+yy
-	:nnoremap <c-v> "+p
+	:nnoremap <c-b> "+p
 	:inoremap <c-z> <esc>"+ddi
 	:inoremap <c-c> <esc>"+yyi
-	:inoremap <c-v> <esc>"+pi
+	:inoremap <c-b> <esc>"+pi
 
 	" clear higlighting from search
 	:nnoremap <silent>noh :nohlsearch<CR>	
