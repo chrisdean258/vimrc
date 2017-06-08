@@ -172,11 +172,11 @@
 	"{{{
 	:augroup python_
 	:  autocmd!
-	:  autocmd FileType python,matlab,sh nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:  autocmd FileType python,matlab,shell,sh,bash nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
 	:  autocmd FileType python vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc> 
+	:  autocmd FileType python nnoremap ; mqA:<esc>'q
 	:  autocmd FileType python :setlocal foldmethod=indent
 	:  autocmd FileType python :normal! zR
-	:  autocmd FileType python inoremap <buffer><tab> <c-p>
 	:  autocmd FileType python :set tabstop=4
 	:  autocmd FileType python :set softtabstop=4
 	:  autocmd FileType python :set expandtab
