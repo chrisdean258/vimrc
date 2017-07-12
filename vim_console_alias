@@ -1,7 +1,0 @@
-alias vimc="vimc"
-vimc()
-{
-	if [ ! -z $1 ]; then
-		tmux new-session -s "vim" "vim -c \"let TMUX = 1\" $1" \; split-window -v -p 10 \; selectp -t 0\;
-	fi
-}
