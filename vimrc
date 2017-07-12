@@ -9,6 +9,7 @@
 	:set autoindent
 	:set smartindent
 	:set showcmd
+	:set wildmenu
 	:colorscheme elflord
 
 	:let g:syntastic_always_populate_loc_list = 1
