@@ -128,6 +128,9 @@
 
 	" Writing/ quitting vim tmux terminal compatibility
 	:cabbrev W w 
+	:cabbrev Q q
+	:cabbrev Wq wq
+	:cabbrev WQ wq
 
 "}}}
 
@@ -423,23 +426,25 @@
 " TMUX Terminal Split {{{
 "_______________________________________________________________________________________________________
 
-	:let TMUX = 0
-	:command! Term call Terminal()
+	:cabbrev t T
 	:command! T call Terminal()
 
-	:cabbrev Q <c-r>=CleverQuit("",TMUX)<CR>
-	:cabbrev Wq <c-r>=CleverQuit("w",TMUX)<CR>
-	:cabbrev WQ <c-r>=CleverQuit("w",TMUX)<CR>
-	:cabbrev wq <c-r>=CleverQuit("w",TMUX)<CR>
-	:cabbrev q <c-r>=CleverQuit("",TMUX)<CR>
-	:cabbrev t T
-
-
-	:function! CleverQuit(write, TMUX)
+	:function TerminalHelper()
 	" {{{
-	:  if a:TMUX == 0
-	:    return a:write.'q'
-	:  elseif a:write ==# 'w'
+	:  cunabbrev Q
+	:  cunabbrev Wq
+	:  cunabbrev WQ
+	:  cabbrev q <c-r>=CleverQuit("")<CR>
+	:  cabbrev Q <c-r>=CleverQuit("")<CR>
+	:  cabbrev wq <c-r>=CleverQuit("w")<CR>
+	:  cabbrev Wq <c-r>=CleverQuit("w")<CR>
+	:  cabbrev WQ <c-r>=CleverQuit("w")<CR>
+	:endfunction
+	" }}}
+
+	:function! CleverQuit(write)
+	" {{{
+	:  if a:write ==# 'w'
 	:    return 'w | silent execute ''!tmux kill-session -t "vim" '' | q' 
 	:  else
 	:    return 'silent execute ''!tmux kill-session -t "vim" '' | q' 
@@ -449,9 +454,10 @@
 
 	:function! Terminal()
 	" {{{
+	:  call TerminalHelper()
 	:  mksession session.vim 
 	:  set noswapfile
-	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 10 \;'
+	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 20 \;'
 	:  silent execute '!rm session.vim'
 	:  q!
 	:endfunction
