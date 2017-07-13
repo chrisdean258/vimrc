@@ -75,12 +75,10 @@
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
-	:nnoremap <c-z> "+dd
-	:nnoremap <c-c> "+yy
-	:nnoremap <c-b> "+p
-	:inoremap <c-z> <esc>"+ddi
-	:inoremap <c-c> <esc>"+yyi
-	:inoremap <c-b> <esc>"+pi
+	:nnoremap <leader>p "+p
+	:nnoremap <leader>P "+P
+	:nnoremap <leader>d "+dd
+	:nnoremap <leader>y "+yy
 
 	" clear higlighting from search
 	:nnoremap <silent>noh :nohlsearch<CR>	
@@ -95,27 +93,11 @@
 
 	" Wrapping
 	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
-	:nnoremap <silent><leader>w :call Wrap("visual")
+	:vnoremap <silent><leader>w :call Wrap("visual")
 
 	" Operator Pending
+	" selects the line
 	:onoremap . V
-
-	" Allow the numpad to work without num lock issues
-	:inoremap Oo /
-	:inoremap Oj *
-	:inoremap OF 1
-	:inoremap OB 2
-	:inoremap [6~ 3
-	:inoremap OD 4
-	:inoremap OE 5
-	:inoremap OC 6
-	:inoremap OH 7
-	:inoremap OA 8
-	:inoremap [5~ 9
-	:inoremap [2~ 0
-	:inoremap Ok +
-	:inoremap Om -
-	:inoremap [3~ .
 	
 " }}}
 
@@ -457,7 +439,7 @@
 	:  call TerminalHelper()
 	:  mksession session.vim 
 	:  set noswapfile
-	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim -c \"let TMUX=1\"" \; split-window -v -p 20 \;'
+	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim" \; split-window -v -p 40 \;'
 	:  silent execute '!rm session.vim'
 	:  q!
 	:endfunction
