@@ -34,10 +34,17 @@ Buffer commands
 </pre>
 
 
-Moving windows
+Windows and Tabs
 --------------
 <pre>
 	:wincmd (h|j|k|l) - move between windows in split screens (also see navigation)
+	:{v}split {file} - splits the window with the given file
+	^w (h|j|k|l) - move between windows in split screens (also see navigation)
+	^w (v|s) - split the window with the current file
+
+	:tab new - opens a new tab
+	:tabp -move to previous tab
+	:tabn -move to next tab
 </pre>
 
 Regex
@@ -116,9 +123,6 @@ Navigation
 	L           - put cursor at bottomk of page (change cursor position)
 
 	%           - jump to corresponding item (e.g. closing brace)
-
-	^w          - jump to split window
-	^w<dir>     - jump to split window in given direction
 </pre>
 
 Using Tags
