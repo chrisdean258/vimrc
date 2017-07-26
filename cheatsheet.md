@@ -210,11 +210,11 @@ Deleting
 </pre>
 
 
-Pasting
+Putting (Pasting)
 -------
 <pre>
-	p           - Paste after cursor
-	P           - Paste above cursor
+	p           - Put after cursor
+	P           - Put above cursor
 </pre>
 
 Autocomplete
