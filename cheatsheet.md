@@ -5,32 +5,32 @@ Commands
 General
 -------
 <pre>
-	:let {var}={val}  -  set a variable to a value
-	:set {(no)setting}  -  sets a general setting for vim
-	:setlocal {(no)setting}  -  sets setting only for local buffer
+	:let {var}={val}            - set a variable to a value
+	:set {(no)setting}          - sets a general setting for vim
+	:setlocal {(no)setting}     - sets setting only for local buffer
 
-	:command {toMap} {mapping}  -  maps the command toMap to mapping
-	:normal  -  executes command as in normal mode
-	:normal!  -  executes command as in normal mode ignoring any user remapped characters:w
+	:command {toMap} {mapping}  - maps the command toMap to mapping
+	:normal                     - executes command as in normal mode
+	:normal!                    - executes command as in normal mode ignoring any user remapped characters:w
 
-	:execute {string}  -  executes the given string as a command
-	:call {function(args)}  -  calss the function with given args
+	:execute {string}           - executes the given string as a command
+	:call {function(args)}      - calls the function with given args
 
-	:e  -  edit new file
-	:r  -  read contents of file into buffer
+	:e                          - edit new file
+	:r                          - read contents of file into buffer
 
-	:k{c}  -  mark a line with {c}
-	:noh  -  turn off search highlighting
+	:k{c}                       - mark a line with {c}
+	:noh                        - turn off search highlighting
 </pre>
 
 
 Buffer commands
 ---------------
 <pre>
-	:w - write buffer
-	:q - quit
-	:wq - write and quit
-	:x- write and quit
+	:w      - write buffer
+	:q      - quit
+	:wq     - write and quit
+	:x      - write and quit
 </pre>
 
 
@@ -38,13 +38,13 @@ Windows and Tabs
 --------------
 <pre>
 	:wincmd (h|j|k|l) - move between windows in split screens (also see navigation)
-	:{v}split {file} - splits the window with the given file
-	^w (h|j|k|l) - move between windows in split screens (also see navigation)
-	^w (v|s) - split the window with the current file
+	:{v}split {file}  - splits the window with the given file
+	^w (h|j|k|l)      - move between windows in split screens (also see navigation)
+	^w (v|s)          - split the window with the current file
 
-	:tab new - opens a new tab
-	:tabp -move to previous tab
-	:tabn -move to next tab
+	:tab new          - opens a new tab
+	:tabp             - move to previous tab
+	:tabn             - move to next tab
 </pre>
 
 Regex
@@ -53,53 +53,54 @@ Regex
 	:(range)s/pattern/replace/(ge)
 </pre>
 
-Run Command on lines
+Run Command on Lines
 --------------------
 <pre>
-	:(range)g/pattern/command - executes command on lines mathcing pattern
+	:(range)g/pattern/command - executes command on lines matching pattern
 </pre>
 
 Mapping
 -------
 <pre>
-	:noremap {lhs} {rhs} - general map lhs to rhs
-	:nnoremap {lhs} {rhs} - normal map lhs to rhs
-	:inoremap {lhs} {rhs} - insert map lhs to rhs
-	:vnoremap {lhs} {rhs} - visual map lhs to rhs
-	:onoremap {lhs} {rhs} - operator maps to the end of the line
-	:(n|i|v|o)unmap {expr} - unmaps the previously mapped expression
+	:noremap {lhs} {rhs}      - general map lhs to rhs
+	:nnoremap {lhs} {rhs}     - normal map lhs to rhs
+	:inoremap {lhs} {rhs}     - insert map lhs to rhs
+	:vnoremap {lhs} {rhs}     - visual map lhs to rhs
+	:onoremap {lhs} {rhs}     - operator maps to the end of the line
+	:(n|i|v|o)unmap {expr}    - unmaps the previously mapped expression
 </pre>
 
 Abbreviation
 ------------
 <pre>
-	:iabbrev {lhs} {rhs} - expands lhs to rhs in insert mode
+	:iabbrev {lhs} {rhs}   - expands lhs to rhs in insert mode
+	:cabbrev {lhs} {rhs}   - expands lhs to rhs in command mode (often useful when ending in <CR>)
 </pre>
 
 Auto commands
 ------------
 <pre>
-	:augroup {Name} - declares an autocommand group
-	:  autocmd!     - clears the group (for when it gets reloaded)
+	:augroup {Name}                       - declares an autocommand group
+	:  autocmd!                           - clears the group (for when it gets reloaded)
 	:  autocmd {expr} {pattern} {command} - runs autocmd when expr and pattern are met
-	:augroup END - ends augroup
+	:augroup END                          - ends augroup
 </pre>
 
 Previous versions:
 ------------------
 <pre>
-	:earlier {time} - jumps the file to the version it was Time ago
-	:later {time} - jumps the file to the version at time later(only used after earlier)
+	:earlier {time}   - jumps the file to the version it was Time ago
+	:later {time}     - jumps the file to the version at time later(only used after earlier)
 </pre>
 
 
 Navigation
 ==========
 <pre>
-	h | <left>  - move left
-	j | <down>  - move down
-	k | <up>    - move up
-	l | <right> - move right
+	h | &lt;left&gt;  - move left
+	j | &lt;down&gt;  - move down
+	k | &lt;up&gt;    - move up
+	l | &lt;right&gt; - move right
 
 	nG or :n    - move to line n
 	G           - move to the end of the file
@@ -137,7 +138,7 @@ Using Tags
 Operator pending mappings
 =========================
 <pre>
-	(* for navigation)
+	(* also for navigation)
 	$           - *End of current line
 	^           - *Beginning of current line
 	0           - *Beginning of current line
@@ -185,7 +186,7 @@ Modes
 -----
 <pre>
 	i           - Insert mode
-	&lt;esc&gt;       - normal mode
+	&lt;esc&gt;       - Normal mode
 	R           - Replace mode
 	v           - Visual Mode
 
@@ -210,11 +211,11 @@ Deleting
 </pre>
 
 
-Pasting
+Putting (Pasting)
 -------
 <pre>
-	p           - Paste after cursor
-	P           - Paste above cursor
+	p           - Put after cursor
+	P           - Put above cursor
 </pre>
 
 Autocomplete
