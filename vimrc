@@ -21,6 +21,7 @@
 
 	:command! MakeTags !ctags -R
 
+	:filetype plugin on
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -69,9 +70,6 @@
 	:inoremap <c-u> <esc>viwUi
 	:nnoremap <c-l> viwu
 	:inoremap <c-l> <esc>viwui
-
-	" mapping for ease of {} use 
-	:inoremap {} {<CR>}<esc>O
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
@@ -133,6 +131,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
+	:  autocmd FileType c,cpp,javascript,java,perl :inoremap {} {<CR>}<esc>O
 	:augroup END
 	"}}}
 
@@ -197,6 +196,7 @@
 	:autocmd BufRead,BufNewFile MUTTTEMPFILE :nnoremap <buffer><localleader>sp mq[s1z=`q
 	:augroup END
 	"}}}
+
 
 "}}}
 
@@ -411,7 +411,7 @@
 	:cabbrev t T
 	:command! T call Terminal()
 
-	:function TerminalHelper()
+	:function! TerminalHelper()
 	" {{{
 	:  cunabbrev Q
 	:  cunabbrev Wq
