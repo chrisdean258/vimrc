@@ -67,10 +67,8 @@
 	
 
 	" capitalize and lowercase a word
-	:nnoremap <c-u> viwU
-	:inoremap <c-u> <esc>viwUi
-	:nnoremap <c-l> viwu
-	:inoremap <c-l> <esc>viwui
+	:nnoremap <c-u> viw~
+	:inoremap <c-u> <esc>viw~i
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
