@@ -41,6 +41,8 @@
 	:nnoremap k gk
 
 	:inoremap jk <C-R>=CleverEsc()<CR>
+	:inoremap Jk <C-R>=CleverEsc()<CR>
+	:inoremap JK <C-R>=CleverEsc()<CR>
 	:inoremap <esc> <nop>
 	:noremap <Up> <nop>
 	:noremap <Down> <nop>
