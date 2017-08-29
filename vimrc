@@ -13,6 +13,7 @@
 	:colorscheme elflord
 
 	:let g:syntastic_always_populate_loc_list = 1
+	:let g:syntastic_c_include_dirs = [ '../include', 'include' ]
 
 	:set hlsearch incsearch
 
@@ -66,10 +67,10 @@
 	
 
 	" capitalize and lowercase a word
-	:nnoremap <c-U> viwU
-	:inoremap <c-U> <esc>viwUi
-	:nnoremap <c-u> viwu
-	:inoremap <c-u> <esc>viwui
+	:nnoremap <c-u> viwU
+	:inoremap <c-u> <esc>viwUi
+	:nnoremap <c-l> viwu
+	:inoremap <c-l> <esc>viwui
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
