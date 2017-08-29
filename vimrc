@@ -66,10 +66,10 @@
 	
 
 	" capitalize and lowercase a word
-	:nnoremap <c-u> viwU
-	:inoremap <c-u> <esc>viwUi
-	:nnoremap <c-l> viwu
-	:inoremap <c-l> <esc>viwui
+	:nnoremap <c-U> viwU
+	:inoremap <c-U> <esc>viwUi
+	:nnoremap <c-u> viwu
+	:inoremap <c-u> <esc>viwui
 
 	" For external clipboard use
 	"may not work if you arent on vim-gnome
@@ -88,6 +88,7 @@
 
 	" Clever Tabs
 	:inoremap <tab> <C-R>=CleverTab()<CR>
+	:inoremap <S-tab> <c-x><c-f>
 
 	" Wrapping
 	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
