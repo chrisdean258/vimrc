@@ -43,11 +43,11 @@
 	:inoremap jk <C-R>=CleverEsc()<CR>
 	:inoremap Jk <C-R>=CleverEsc()<CR>
 	:inoremap JK <C-R>=CleverEsc()<CR>
-	:inoremap <esc> <nop>
-	:noremap <Up> <nop>
-	:noremap <Down> <nop>
-	:noremap <Left> <nop>
-	:noremap <Right> <nop>
+	" :inoremap <esc> <nop>
+	" :noremap <Up> <nop>
+	" :noremap <Down> <nop>
+	" :noremap <Left> <nop>
+	" :noremap <Right> <nop>
 	:noremap <space> <nop>
  
 	" move lines up and down 
