@@ -272,7 +272,7 @@
 	:endfunction
 	" }}}
 	
-	:function! MakeClassFunction_Cpp()
+	:function! MakeClassFunction_old_Cpp()
 	"  {{{
 	:  let line = substitute(getline('.'), ";", "", "")
 	:  execute "normal! ?\\v(class|struct)\<CR>"
@@ -280,6 +280,24 @@
 	:  let linesplit = split(line)
 	:  let linesplit[1] = class."::".linesplit[1]
 	:  let line = join(linesplit)
+	:  execute "normal! /};\<CR>"
+	:  normal! o
+	:  execute "normal! o".line
+	:  execute "normal! o{"
+	:  execute "normal! o}"
+	:endfunction
+	" }}}
+
+	:function! MakeClassFunction_Cpp()
+	"  {{{
+	:  let funcline = substitute(getline('.'), ";", "", "")
+	:  execute "normal! ?\\v(class|struct)\<CR>"
+	:  let classname = substitute(split(getline('.'))[1], "{", "" , "")
+	:  let splitLine = split(funcline, '(')
+	:  let splitSignature = split(splitLine[0], " ")
+	:  let splitSignature[-1] = classname . "::" . splitSignature[-1]
+	:  let splitLine[0] = join(splitSignature, ' ')
+	:  let line = substitute(join(splitLine, '('), "\t","","")
 	:  execute "normal! /};\<CR>"
 	:  normal! o
 	:  execute "normal! o".line
