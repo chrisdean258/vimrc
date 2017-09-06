@@ -84,7 +84,7 @@
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
 	" mapping for jumping to errors
-	:nnoremap <A-up> :llast<CR>
+	:nnoremap <A-up> :lprev<CR>
 	:nnoremap <A-down> :lnext<CR>
 
 	" Clever Tabs
@@ -297,7 +297,7 @@
 	:  let splitSignature = split(splitLine[0], " ")
 	:  let splitSignature[-1] = classname . "::" . splitSignature[-1]
 	:  let splitLine[0] = join(splitSignature, ' ')
-	:  let line = substitute(join(splitLine, '('), "\t","","")
+	:  let line = substitute(join(splitLine, '('), "\t*","","")
 	:  execute "normal! /};\<CR>"
 	:  normal! o
 	:  execute "normal! o".line
