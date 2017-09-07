@@ -348,7 +348,11 @@
 
 	:function! Csign()
 	" {{{
-	:  let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* ".@%." \r* \r*/"
+	:  if &l:formatoptions =~ "cro"
+	:    let rtn = "/**\rChris Dean\r".strftime("%m/%d/%y")."\r".split(expand('%:p'), '/')[-2]."\r".@%." \r\r\<bs>*/"
+	:  else
+	:    let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* ".split(expand('%:p'), '/')[-2]."\r* ".@%." \r* \r*/"
+	:  endif
 	:  return rtn 
 	:endfunction
 	" }}}
