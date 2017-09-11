@@ -23,6 +23,8 @@
 	:command! MakeTags !ctags -R
 
 	:filetype plugin on
+
+	:set omnifunc=syntaxcomplete#Complete
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
