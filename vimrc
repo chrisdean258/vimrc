@@ -43,11 +43,6 @@
 	:inoremap jk <C-R>=CleverEsc()<CR>
 	:inoremap Jk <C-R>=CleverEsc()<CR>
 	:inoremap JK <C-R>=CleverEsc()<CR>
-	" :inoremap <esc> <nop>
-	" :noremap <Up> <nop>
-	" :noremap <Down> <nop>
-	" :noremap <Left> <nop>
-	" :noremap <Right> <nop>
 	:noremap <space> <nop>
  
 	" move lines up and down 
@@ -55,7 +50,7 @@
 	:nnoremap _ ddkP
 	
 	" indent file
-	:nnoremap <leader>g mqgg=G`qzz
+	:nnoremap <leader>g mqgg=G`q
 
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
@@ -95,6 +90,9 @@
 	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
 	:vnoremap <silent><leader>w :call Wrap("visual")
 
+	" Window Compatibility
+	" :inoremap <BS> <Left><Del>
+
 	" Operator Pending
 	" selects the line
 	:onoremap . V
@@ -113,6 +111,7 @@
 	:cabbrev Q q
 	:cabbrev Wq wq
 	:cabbrev WQ wq
+	:cabbrev jk SyntasticReset
 
 "}}}
 
@@ -134,6 +133,8 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl :inoremap {} {<CR>}<esc>O
+	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <localleader>mm :call Make_Macro()<CR>
+	
 	:augroup END
 	"}}}
 
@@ -426,6 +427,27 @@
 	:  normal! ==
 	:endfunction
 	" }}}
+
+	:function! Make_Macro()
+	" {{{
+	:  let linesplit = split(getline('.'))
+	:  let fullName = linesplit[1]
+	:  let evalname = split(fullName, '(')
+	:  let name = evalname[0]
+	:  let evalname[0] = evalname[0].'_EVAL'
+	:  let evalName = join(evalname, '(')
+	:  normal! dd
+	:  execute 'normal! O#define '.name.' _'.fullName
+	:  execute 'normal! vi(U'
+	:  execute 'normal! o#define _'.fullName.' _'.evalName
+	:  execute 'normal! o#define _'.evalName.' '.join(linesplit[2:])
+	:  execute 'normal! Go#undef '.name
+	:  execute 'normal! Go#undef _'.split(fullName,'(')[0]
+	:  execute 'normal! Go#undef _'.split(evalName,'(')[0]
+	:  execute "normal! o"
+	:endfunction
+	" }}}
+
 
 " }}}
 
