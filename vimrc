@@ -136,7 +136,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl :inoremap {} {<CR>}<esc>O
 	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <localleader>mm :call Make_Macro()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl :set nofoldenabled
+	:  autocmd FileType c,cpp,javascript,java,perl :set nofoldenable
 	:augroup END
 	"}}}
 
