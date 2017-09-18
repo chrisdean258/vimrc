@@ -25,6 +25,13 @@
 	:filetype plugin on
 
 	:set omnifunc=syntaxcomplete#Complete
+	" If you want 4 width tabs changes tabstop ad shiftwidth to 4
+	:set tabstop=8
+	:set softtabstop=0
+	:set shiftwidth=8
+
+	:highlight LongLine ctermbg=grey guibg=grey
+	:highlight Folded ctermbg=black guibg=black
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -155,6 +162,8 @@
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
 	:  autocmd FileType cpp :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
+	:  autocmd FileType c   :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
+	:  autocmd FileType cpp :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(100)
 	:augroup END
 	"}}}
 
@@ -168,7 +177,8 @@
 	:  autocmd FileType python :setlocal foldmethod=indent
 	:  autocmd FileType python :normal! zR
 	:  autocmd FileType python :set tabstop=4
-	:  autocmd FileType python :set softtabstop=4
+	:  autocmd FileType python :set softtabstop=0
+	:  autocmd FileType python :set shiftwidth=4
 	:  autocmd FileType python :set expandtab
 	:augroup END
 	"}}}
@@ -450,6 +460,11 @@
 	:endfunction
 	" }}}
 
+	:function! HighlightAfterColumn(col)
+	" {{{
+	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col-1).'c/'
+	:endfunction
+	" }}}
 
 " }}}
 
