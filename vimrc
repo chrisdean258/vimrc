@@ -21,6 +21,7 @@
 	:set path+=**
 
 	:command! MakeTags !ctags -R
+	:cabbrev help vert help
 
 	:filetype plugin on
 
@@ -30,8 +31,10 @@
 	:set softtabstop=0
 	:set shiftwidth=8
 
-	:highlight LongLine ctermbg=grey guibg=grey
-	:highlight Folded ctermbg=black guibg=black
+	:highlight LongLine guifg=Red ctermfg=Red
+	" :highlight Folded ctermbg=black guisp=black ctermbg=black
+	:highlight Folded None
+	:highlight Folded ctermfg=Black guifg=Black
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
