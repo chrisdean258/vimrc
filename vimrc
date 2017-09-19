@@ -25,6 +25,7 @@
 
 	:filetype plugin on
 
+
 	:set omnifunc=syntaxcomplete#Complete
 	" If you want 4 width tabs changes tabstop ad shiftwidth to 4
 	:set tabstop=8
@@ -33,8 +34,11 @@
 
 	:highlight LongLine guifg=Red ctermfg=Red
 	" :highlight Folded ctermbg=black guisp=black ctermbg=black
-	:highlight Folded None
+ 	:highlight Folded None
 	:highlight Folded ctermfg=Black guifg=Black
+
+	" Comment out this line for auto commenting
+	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -134,19 +138,20 @@
 	"{{{
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType c,cpp,javascript,java,perl nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc> 
-	:  autocmd FileType c,cpp,javascript,java,perl :set cindent
-	:  autocmd FileType c,cpp,javascript,java,perl nnoremap ; mqA;<esc>'q
-	:  autocmd FileType c,cpp,javascript,java,perl :setlocal foldmethod=syntax
-	:  autocmd FileType c,cpp,javascript,java,perl :normal! zR
-	:  autocmd FileType c,cpp,javascript,java,perl :iabbrev csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>zzO
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
-	:  autocmd FileType c,cpp,javascript,java,perl :inoremap {} {<CR>}<esc>O
-	:  autocmd FileType c,cpp,javascript,java,perl :nnoremap <localleader>mm :call Make_Macro()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl :set nofoldenable
+	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc> 
+	:  autocmd FileType c,cpp,javascript,java,perl   :set cindent
+	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA;<esc>'q
+	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
+	:  autocmd FileType c,cpp,javascript,java,perl   :normal! zR
+	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev csign <c-r>=Csign()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>zzO
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
+	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap {} {<CR>}<esc>O
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <localleader>mm :call Make_Macro()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
+	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:augroup END
 	"}}}
 
@@ -154,19 +159,19 @@
 	"{{{
 	:augroup c_cpp
 	:  autocmd!
-	:  autocmd FileType cpp :iabbrev <buffer> nstd using namespace std;<CR>
-	:  autocmd FileType c,cpp :iabbrev <buffer> #i #include
-	:  autocmd FileType cpp :iabbrev <buffer> enld endl
-	:  autocmd FileType c,cpp :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
-	:  autocmd FileType cpp :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
-	:  autocmd FileType cpp :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<CR>w"cyw/public<CR>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<CR><esc>"wp^wh"cpa::<esc>o{<CR>return <esc>"vpa;<CR>}<esc>gg=g`q:noh<CR>
-	:  autocmd FileType cpp :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
-	:  autocmd FileType cpp :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
-	:  autocmd FileType cpp :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
-	:  autocmd FileType cpp :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
-	:  autocmd FileType cpp :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
-	:  autocmd FileType c   :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
-	:  autocmd FileType cpp :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(100)
+	:  autocmd FileType cpp  :iabbrev <buffer> nstd using namespace std;<CR>
+	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
+	:  autocmd FileType cpp  :iabbrev <buffer> enld endl
+	:  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
+	:  autocmd FileType cpp  :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
+	:  autocmd FileType cpp  :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<CR>w"cyw/public<CR>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<CR><esc>"wp^wh"cpa::<esc>o{<CR>return <esc>"vpa;<CR>}<esc>gg=g`q:noh<CR>
+	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
+	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
+	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
+	:  autocmd FileType c    :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
+	:  autocmd FileType cpp  :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(100)
 	:augroup END
 	"}}}
 
@@ -174,15 +179,15 @@
 	"{{{
 	:augroup python_
 	:  autocmd!
-	:  autocmd FileType python,matlab,shell,sh,bash nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
-	:  autocmd FileType python vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc> 
-	:  autocmd FileType python nnoremap ; mqA:<esc>'q
-	:  autocmd FileType python :setlocal foldmethod=indent
-	:  autocmd FileType python :normal! zR
-	:  autocmd FileType python :set tabstop=4
-	:  autocmd FileType python :set softtabstop=0
-	:  autocmd FileType python :set shiftwidth=4
-	:  autocmd FileType python :set expandtab
+	:  autocmd FileType python,matlab,shell,sh,bash  nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:  autocmd FileType python  vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc> 
+	:  autocmd FileType python  nnoremap ; mqA:<esc>'q
+	:  autocmd FileType python  :setlocal foldmethod=indent
+	:  autocmd FileType python  :normal! zR
+	:  autocmd FileType python  :set tabstop=4
+	:  autocmd FileType python  :set softtabstop=0
+	:  autocmd FileType python  :set shiftwidth=4
+	:  autocmd FileType python  :set expandtab
 	:augroup END
 	"}}}
 
@@ -190,8 +195,8 @@
 	"{{{
 	:augroup vim_
 	:  autocmd!
-	:  autocmd FileType vim nnoremap <buffer><localleader>\ :call CommentBL('" ')<CR>
-	:  autocmd FileType vim setlocal foldmethod=marker
+	:  autocmd FileType vim :nnoremap <buffer><localleader>\ :call CommentBL('" ')<CR>
+	:  autocmd FileType vim :setlocal foldmethod=marker
 	:augroup END
 	"}}}
 
@@ -199,10 +204,10 @@
 	"{{{
 	:augroup Markdown
 	:autocmd!
-	:autocmd Filetype markdown :setlocal spell spelllang=en_us
-	:autocmd Filetype markdown :nnoremap <buffer><localleader>sp mq[s1z=`q
-	:autocmd Filetype markdown :nnoremap <buffer><localleader>h1 "qyy"qpVr=
-	:autocmd Filetype markdown :nnoremap <buffer><localleader>h2 "qyy"qpVr-
+	:autocmd Filetype markdown  :setlocal spell spelllang=en_us
+	:autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
+	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
+	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h2 "qyy"qpVr-
 	:augroup END
 	"}}}
 
@@ -466,6 +471,23 @@
 	:function! HighlightAfterColumn(col)
 	" {{{
 	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col-1).'c/'
+	:endfunction
+	" }}}
+	
+	:function! CFold()
+	" {{{
+	:  setlocal foldtext=CFoldText()
+	:  setlocal fillchars=fold:\ 
+	:  highlight Folded guifg=DarkGreen ctermfg=DarkGreen
+	:endfunction
+	" }}}
+
+	:function! CFoldText()
+	" {{{
+	:  let tablen = &l:shiftwidth
+	:  let lines = v:foldend - v:foldstart + 1
+	:  let line = getline(v:foldstart)
+	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "").' '. lines .' lines  }'
 	:endfunction
 	" }}}
 
