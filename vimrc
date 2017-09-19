@@ -470,7 +470,7 @@
 
 	:function! HighlightAfterColumn(col)
 	" {{{
-	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col-1).'c/'
+	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col-1).'v./'
 	:endfunction
 	" }}}
 	
