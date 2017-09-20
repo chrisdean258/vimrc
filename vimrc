@@ -37,8 +37,11 @@
  	:highlight Folded None
 	:highlight Folded ctermfg=Black guifg=Black
 
-	" Comment out this line for auto commenting
+	" Comment out this group for auto commenting
+	:augroup commenting
+	:autocmd!
 	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
+	:augroup END
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -141,7 +144,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc> 
 	:  autocmd FileType c,cpp,javascript,java,perl   :set cindent
-	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA;<esc>'q
+	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA<C-R>=AppendSemicolon()<CR><esc>'q
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl   :normal! zR
 	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev csign <c-r>=Csign()<CR>
@@ -159,9 +162,9 @@
 	"{{{
 	:augroup c_cpp
 	:  autocmd!
-	:  autocmd FileType cpp  :iabbrev <buffer> nstd using namespace std;<CR>
+	:  autocmd FileType cpp    :iabbrev <buffer> nstd using namespace std;<CR>
 	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
-	:  autocmd FileType cpp  :iabbrev <buffer> enld endl
+	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
 	:  autocmd FileType cpp  :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
 	:  autocmd FileType cpp  :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<CR>w"cyw/public<CR>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<CR><esc>"wp^wh"cpa::<esc>o{<CR>return <esc>"vpa;<CR>}<esc>gg=g`q:noh<CR>
@@ -488,6 +491,15 @@
 	:  let lines = v:foldend - v:foldstart + 1
 	:  let line = getline(v:foldstart)
 	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "").' '. lines .' lines  }'
+	:endfunction
+	" }}}
+
+	:function! AppendSemicolon()
+	" {{{
+	:  if getline('.') =~ ';\s*'
+	:    return "\<bs>"
+	:  endif
+	:  return ';'
 	:endfunction
 	" }}}
 
