@@ -546,3 +546,7 @@
 	" }}}
 
 " }}}
+
+
+" If you cannot see anything but this message uncomment the next line
+" :highlight Folded ctermfg=grey guifg=grey
