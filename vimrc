@@ -124,6 +124,9 @@
 	" Signatures
 	:iabbrev utsign Chris Dean<CR>cdean16@vols.utk.edu
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
+	
+	:cabbrev help vert help
+	:cabbrev sp vs
 
 	" Writing/ quitting vim tmux terminal compatibility
 	:cabbrev W w 
