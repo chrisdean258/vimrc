@@ -494,7 +494,7 @@
 	:  let tablen = &l:shiftwidth
 	:  let lines = v:foldend - v:foldstart + 1
 	:  let line = getline(v:foldstart)
-	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "").' '. lines .' lines  }'
+	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "g").' '. lines .' lines  }'
 	:endfunction
 	" }}}
 
