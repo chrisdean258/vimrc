@@ -164,6 +164,7 @@
 	:  autocmd!
 	:  autocmd FileType cpp    :iabbrev <buffer> nstd using namespace std;<CR>
 	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
+	:  autocmd FileType c,cpp  :iabbrev <buffer> cahr char
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
 	:  autocmd FileType cpp  :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
