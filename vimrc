@@ -109,6 +109,12 @@
 	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
 	:vnoremap <silent><leader>w :call Wrap("visual")
 
+	" Resizing splits
+	:nnoremap <S-right> :vertical resize +5 <CR>
+	:nnoremap <S-left> :vertical resize -5 <CR>
+	:nnoremap <S-up> :resize +5 <CR>
+	:nnoremap <S-down> :resize -5 <CR>
+
 	" Window Compatibility
 	" :inoremap <BS> <Left><Del>
 
@@ -477,7 +483,7 @@
 
 	:function! HighlightAfterColumn(col)
 	" {{{
-	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col-1).'v./'
+	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
 	:endfunction
 	" }}}
 	
