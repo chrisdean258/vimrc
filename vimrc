@@ -121,7 +121,9 @@
 	" Operator Pending
 	" selects the line
 	:onoremap . V
-	
+
+
+	:inoremap <C-BS> <esc>dbi
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
