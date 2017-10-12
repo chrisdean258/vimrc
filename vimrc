@@ -122,8 +122,6 @@
 	" selects the line
 	:onoremap . V
 
-
-	:inoremap <C-BS> <esc>dbi
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
@@ -508,7 +506,7 @@
 
 	:function! AppendSemicolon()
 	" {{{
-	:  if getline('.') =~ ';\s*'
+	:  if getline('.') =~ ';\s*$'
 	:    return "\<bs>"
 	:  endif
 	:  return ';'
