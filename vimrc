@@ -153,7 +153,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc> 
 	:  autocmd FileType c,cpp,javascript,java,perl   :set cindent
-	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA<C-R>=AppendSemicolon()<CR><esc>'q
+	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA<C-R>=AppendSemicolon()<CR><esc>`q
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl   :normal! zR
 	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev csign <c-r>=Csign()<CR>
