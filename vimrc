@@ -498,9 +498,10 @@
 	:function! CFoldText()
 	" {{{
 	:  let tablen = &l:shiftwidth
-	:  let lines = v:foldend - v:foldstart + 1
+	:  let lines = v:foldend - v:foldstart - 1
 	:  let line = getline(v:foldstart)
-	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "g").' '. lines .' lines  }'
+	:  let endline = getline(v:foldend)
+	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "g").' '. lines .' lines '. endline
 	:endfunction
 	" }}}
 
