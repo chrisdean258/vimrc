@@ -42,6 +42,7 @@
 	:autocmd!
 	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
 	:augroup END
+
 " }}}
 
 " UNVIVERSAL MAPPINGS {{{
@@ -51,7 +52,7 @@
 	:let mapleader = " "
 	:let maplocalleader = "\\"
 
-	" insert a single char 
+	" insert a single char
 	:nnoremap s i <esc>r
 	:nnoremap S a <esc>r
 
@@ -63,11 +64,11 @@
 	:inoremap Jk <C-R>=CleverEsc()<CR>
 	:inoremap JK <C-R>=CleverEsc()<CR>
 	:noremap <space> <nop>
- 
-	" move lines up and down 
+
+	" move lines up and down
 	:nnoremap - ddp
 	:nnoremap _ ddkP
-	
+
 	" indent file
 	:nnoremap <leader>g mqgg=G`q
 
@@ -80,7 +81,7 @@
 	" add an empty line right above or below current line
 	:nnoremap <leader>o o<esc>
 	:nnoremap <leader>O O<esc>
-	
+
 
 	" capitalize and lowercase a word
 	:nnoremap <c-u> viw~
@@ -94,7 +95,7 @@
 	:nnoremap <leader>y "+yy
 
 	" clear higlighting from search
-	:nnoremap <silent>noh :nohlsearch<CR>	
+	:nnoremap <silent>noh :nohlsearch<CR>
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
 	" mapping for jumping to errors
@@ -130,12 +131,12 @@
 	" Signatures
 	:iabbrev utsign Chris Dean<CR>cdean16@vols.utk.edu
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
-	
+
 	:cabbrev help vert help
 	:cabbrev sp vs
 
 	" Writing/ quitting vim tmux terminal compatibility
-	:cabbrev W w 
+	:cabbrev W w
 	:cabbrev Q q
 	:cabbrev Wq wq
 	:cabbrev WQ wq
@@ -151,7 +152,7 @@
 	:augroup c_style
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc> 
+	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc>
 	:  autocmd FileType c,cpp,javascript,java,perl   :set cindent
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA<C-R>=AppendSemicolon()<CR><esc>`q
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
@@ -164,10 +165,11 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <localleader>mm :call Make_Macro()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
+	" :  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace()
 	:augroup END
 	"}}}
 
-	" C/cpp specific 
+	" C/cpp specific
 	"{{{
 	:augroup c_cpp
 	:  autocmd!
@@ -193,7 +195,7 @@
 	:augroup python_
 	:  autocmd!
 	:  autocmd FileType python,matlab,shell,sh,bash  nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
-	:  autocmd FileType python  vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc> 
+	:  autocmd FileType python  vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc>
 	:  autocmd FileType python  nnoremap ; mqA:<esc>'q
 	:  autocmd FileType python  :setlocal foldmethod=indent
 	:  autocmd FileType python  :normal! zR
@@ -208,7 +210,7 @@
 	"{{{
 	:augroup vim_
 	:  autocmd!
-	:  autocmd FileType vim :nnoremap <buffer><localleader>\ :call CommentBL('" ')<CR>
+	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim :setlocal foldmethod=marker
 	:augroup END
 	"}}}
@@ -226,7 +228,7 @@
 
 	" Mutt
 	"{{{
-	:augroup Muttmail 
+	:augroup Muttmail
 	:autocmd!
 	:autocmd BufRead,BufNewFile MUTTTEMPFILE :setlocal spell
 	:autocmd BufRead,BufNewFile MUTTTEMPFILE :nnoremap <buffer><localleader>sp mq[s1z=`q
@@ -236,14 +238,15 @@
 
 "}}}
 
-" Functions {{{ 
+" Functions {{{
 "_______________________________________________________________________________________________________
 
 	" accepts as string uses that as a beginning of the line comment
 	:function! CommentBL(in) range
 	"  {{{
 	:  normal! mq
-	:  execute "silent ".a:firstline.",".a:lastline.'s/^\s*/&'.a:in.'/e'
+	:  execute "silent ".a:firstline.",".a:lastline.'s/\s*$//e'
+	:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:in.'\2/e'
 	:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
 	:  normal! `q
 	:  nohlsearch
@@ -263,7 +266,7 @@
 	:  let class = list[1]
 	:  if clst ==# 'class'
 	:    execute "normal!/public\<CR>"
-	:  else 
+	:  else
 	:    execute "normal!/{\<CR>"
 	:  endif
 	:  normal! o
@@ -271,13 +274,13 @@
 	:  execute "normal! =="
 	:  execute "normal!/};\<CR>o"
 	:  execute "normal! o".type." ".class."::get_".var."()"
-	:  execute "normal! o{" 
+	:  execute "normal! o{"
 	:  execute "normal! oreturn ".var.";"
-	:  execute "normal! o}" 
+	:  execute "normal! o}"
 	:  normal! `q
 	:endfunction
 	" }}}
-	
+
 	:function! MakeSetter_Cpp()
 	" {{{
 	:  normal! mq
@@ -291,7 +294,7 @@
 	:  let class = list[1]
 	:  if clst ==# 'class'
 	:    execute "normal!/public\<CR>"
-	:  else 
+	:  else
 	:    execute "normal!/{\<CR>"
 	:  endif
 	:  normal! o
@@ -299,13 +302,13 @@
 	:  execute "normal! =="
 	:  execute "normal!/};\<CR>o"
 	:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
-	:  execute "normal! o{" 
+	:  execute "normal! o{"
 	:  execute "normal! o".var." = ".var."_;"
-	:  execute "normal! o}" 
+	:  execute "normal! o}"
 	:  normal! `q
 	:endfunction
 	" }}}
-	
+
 	:function! MakeClassFunction_old_Cpp()
 	"  {{{
 	:  let line = substitute(getline('.'), ";", "", "")
@@ -339,16 +342,16 @@
 	:  execute "normal! o}"
 	:endfunction
 	" }}}
-	
+
 	:function! MakeConstructor_Cpp()
 	" {{{
-	:  execute "normal! ?\\v(class|struct)\<CR>" 
+	:  execute "normal! ?\\v(class|struct)\<CR>"
 	:  let list = split(getline('.'))
 	:  let clst = list[0]
 	:  let class = list[1]
 	:  if clst ==# 'class'
 	:    execute "normal!/public\<CR>"
-	:  else 
+	:  else
 	:    execute "normal!/{\<CR>"
 	:  endif
 	:  execute "normal! o".class."();"
@@ -361,14 +364,14 @@
 
 	:function! CleverTab()
 	" {{{
-	:   let str =  strpart( getline('.'), 0, col('.')-1 ) 
-	:   if str =~ '^\s*$' || str =~ '\s$' 
+	:   let str =  strpart( getline('.'), 0, col('.')-1 )
+	:   if str =~ '^\s*$' || str =~ '\s$'
 	:      return "\<Tab>"
 	:   else
 	:      return "\<C-P>"
 	:   endif
 	:endfunction
-	" }}} 
+	" }}}
 
 	:function! CleverEsc()
 	" {{{
@@ -387,7 +390,7 @@
 	:  else
 	:    let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* ".split(expand('%:p'), '/')[-2]."\r* ".@%." \r* \r*/"
 	:  endif
-	:  return rtn 
+	:  return rtn
 	:endfunction
 	" }}}
 
@@ -396,7 +399,7 @@
 	:  let sel_save = &selection
 	:  let &selection = "inclusive"
 	:  let input  = nr2char(getchar())
-	:  let forward = {"<" : ">", "[" : "]", "{" : "}", "(" : ")",} 
+	:  let forward = {"<" : ">", "[" : "]", "{" : "}", "(" : ")",}
 	:  let backward = {">" : "<", "]" : "[", "}" : "{", ")" : "(",}
 	:  if has_key(forward, input)
 	:    let begin = input
@@ -486,11 +489,11 @@
 	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
 	:endfunction
 	" }}}
-	
+
 	:function! CFold()
 	" {{{
 	:  setlocal foldtext=CFoldText()
-	:  setlocal fillchars=fold:\ 
+	:  setlocal fillchars=fold:\
 	:  highlight Folded guifg=DarkGreen ctermfg=DarkGreen
 	:endfunction
 	" }}}
@@ -511,6 +514,15 @@
 	:    return "\<bs>"
 	:  endif
 	:  return ';'
+	:endfunction
+	" }}}
+
+	:function! RemoveTrailingWhitespace()
+	" {{{
+	:autocmd BufWrite * :kq
+	:autocmd BufRead,BufWrite * :silent %s/\s*$//g
+	:autocmd BufRead,BufWrite * :nohlsearch
+	:autocmd BufWrite * :normal! 'q
 	:endfunction
 	" }}}
 
@@ -538,9 +550,9 @@
 	:function! CleverQuit(write)
 	" {{{
 	:  if a:write ==# 'w'
-	:    return 'w | silent execute ''!tmux kill-session -t "vim" '' | q' 
+	:    return 'w | silent execute ''!tmux kill-session -t "vim" '' | q'
 	:  else
-	:    return 'silent execute ''!tmux kill-session -t "vim" '' | q' 
+	:    return 'silent execute ''!tmux kill-session -t "vim" '' | q'
 	:  endif
 	:endfunction
 	" }}}
@@ -548,7 +560,7 @@
 	:function! Terminal()
 	" {{{
 	:  call TerminalHelper()
-	:  mksession session.vim 
+	:  mksession session.vim
 	:  set noswapfile
 	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim" \; split-window -v -p 40 \;'
 	:  silent execute '!rm session.vim'
