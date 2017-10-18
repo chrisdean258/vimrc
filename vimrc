@@ -165,7 +165,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <localleader>mm :call Make_Macro()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
-	" :  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace()
+	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	"}}}
 
@@ -203,6 +203,7 @@
 	:  autocmd FileType python  :set softtabstop=0
 	:  autocmd FileType python  :set shiftwidth=4
 	:  autocmd FileType python  :set expandtab
+	:  autocmd FileType python   :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	"}}}
 
@@ -212,6 +213,7 @@
 	:  autocmd!
 	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim :setlocal foldmethod=marker
+	:  autocmd FileType vim   :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	"}}}
 
@@ -517,12 +519,22 @@
 	:endfunction
 	" }}}
 
+	:function! RemoveTrailingWhitespace_AU()
+	" {{{
+	:autocmd BufRead,BufWrite * :silent call RemoveTrailingWhitespace()
+	:endfunction
+	" }}}
+
 	:function! RemoveTrailingWhitespace()
 	" {{{
-	:autocmd BufWrite * :kq
-	:autocmd BufRead,BufWrite * :silent %s/\s*$//g
-	:autocmd BufRead,BufWrite * :nohlsearch
-	:autocmd BufWrite * :normal! 'q
+	:normal! mq
+	:normal! M
+	:normal! mm
+	:silent %s/\s*$//g
+	:nohlsearch
+	:normal! `m
+	:normal! zz
+	:normal! `q
 	:endfunction
 	" }}}
 
