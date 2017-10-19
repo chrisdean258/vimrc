@@ -1,47 +1,45 @@
-" UNIVERSAL SETTINGS {{{
+" NORMAL CONFIGURATION SETTINGS {{{
 "_______________________________________________________________________________________________________
-	execute pathogen#infect()
 	:syntax on
-	:set nocompatible
 	:set nowrap
 	:set number
 	:set relativenumber
-	:set autoindent
-	:set smartindent
-	:set showcmd
-	:set wildmenu
 	:colorscheme elflord
+	:highlight LongLine guifg=Red ctermfg=Red
 
-	:let g:syntastic_always_populate_loc_list = 1
-	:let g:syntastic_c_include_dirs = [ '../include', 'include' ]
+	" :highlight Folded ctermbg=black guisp=black ctermbg=black
+ 	:highlight Folded None
+	:highlight Folded ctermfg=Black guifg=Black
 
-	:set hlsearch incsearch
-
-	" Allows for recursive finding
-	:set path+=**
-
-	:command! MakeTags !ctags -R
-	:cabbrev help vert help
-
-	:filetype plugin on
-
-
-	:set omnifunc=syntaxcomplete#Complete
 	" If you want 4 width tabs changes tabstop ad shiftwidth to 4
 	:set tabstop=8
 	:set softtabstop=0
 	:set shiftwidth=8
+" }}}
 
-	:highlight LongLine guifg=Red ctermfg=Red
-	" :highlight Folded ctermbg=black guisp=black ctermbg=black
- 	:highlight Folded None
-	:highlight Folded ctermfg=Black guifg=Black
+" UNIVERSAL SETTINGS {{{
+"_______________________________________________________________________________________________________
+	execute pathogen#infect()
+	:set nocompatible
+	:set autoindent
+	:set smartindent
+	:set showcmd
+	:set wildmenu
+	:set hlsearch incsearch
+	:filetype plugin on
+
+	" Allows for recursive finding
+	:set path+=**
+
+	:set omnifunc=syntaxcomplete#Complete
+
 
 	" Comment out this group for auto commenting
 	:augroup commenting
 	:autocmd!
 	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
 	:augroup END
+	:setlocal foldtext=MyFold()
 
 " }}}
 
@@ -99,8 +97,8 @@
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
 	" mapping for jumping to errors
-	:nnoremap <A-up> :lprev<CR>
-	:nnoremap <A-down> :lnext<CR>
+	:nnoremap <A-up> :lnext<CR>
+	:nnoremap <A-down> :lprev<CR>
 
 	" Clever Tabs
 	:inoremap <tab> <C-R>=CleverTab()<CR>
@@ -134,6 +132,7 @@
 
 	:cabbrev help vert help
 	:cabbrev sp vs
+	:cabbrev help vert help
 
 	" Writing/ quitting vim tmux terminal compatibility
 	:cabbrev W w
@@ -142,13 +141,15 @@
 	:cabbrev WQ wq
 	:cabbrev jk SyntasticReset
 
-"}}}
+	:command! MakeTags !ctags -R
+
+" }}}
 
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
 
 	" C style formatting
-	"{{{
+	" {{{
 	:augroup c_style
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
@@ -162,24 +163,21 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap {} {<CR>}<esc>O
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <localleader>mm :call Make_Macro()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
 	:augroup END
-	"}}}
+	" }}}
 
 	" C/cpp specific
-	"{{{
+	" {{{
 	:augroup c_cpp
 	:  autocmd!
 	:  autocmd FileType cpp    :iabbrev <buffer> nstd using namespace std;<CR>
 	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
 	:  autocmd FileType c,cpp  :iabbrev <buffer> cahr char
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
-	:  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char** argv)<CR>{<CR>}<up>
-	:  autocmd FileType cpp  :nnoremap <buffer>ms ^mq"tyt W"vyt;?class<CR>w"cyW/public<CR>o<esc>"tpA set_<esc>"vpA(<esc>"tpA <esc>"vpA_);<esc>^"wyt;Go<esc>"wp^Wh"cpa::<esc>o{<CR><esc>"vpa = <esc>"vpa_;<CR>}<Esc>gg=G`q:noh<CR>
-	:  autocmd FileType cpp  :nnoremap <buffer>mg ^mq"tyt w"vyt;?class<CR>w"cyw/public<CR>o<esc>"tpa get_<esc>"vpa();<esc>^"wyt;go<CR><esc>"wp^wh"cpa::<esc>o{<CR>return <esc>"vpa;<CR>}<esc>gg=g`q:noh<CR>
+	:  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char ** argv)<CR>{<CR>}<up>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
@@ -188,10 +186,10 @@
 	:  autocmd FileType c    :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
 	:  autocmd FileType cpp  :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
 	:augroup END
-	"}}}
+	" }}}
 
 	" Python formatting
-	"{{{
+	" {{{
 	:augroup python_
 	:  autocmd!
 	:  autocmd FileType python,matlab,shell,sh,bash  nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
@@ -205,20 +203,20 @@
 	:  autocmd FileType python  :set expandtab
 	:  autocmd FileType python   :call RemoveTrailingWhitespace_AU()
 	:augroup END
-	"}}}
+	" }}}
 
 	" Vim files
-	"{{{
+	" {{{
 	:augroup vim_
 	:  autocmd!
 	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim :setlocal foldmethod=marker
 	:  autocmd FileType vim   :call RemoveTrailingWhitespace_AU()
 	:augroup END
-	"}}}
+	" }}}
 
 	" Markdown
-	"{{{
+	" {{{
 	:augroup Markdown
 	:autocmd!
 	:autocmd Filetype markdown  :setlocal spell spelllang=en_us
@@ -226,318 +224,308 @@
 	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
 	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h2 "qyy"qpVr-
 	:augroup END
-	"}}}
+	" }}}
 
 	" Mutt
-	"{{{
+	" {{{
 	:augroup Muttmail
 	:autocmd!
 	:autocmd BufRead,BufNewFile MUTTTEMPFILE :setlocal spell
 	:autocmd BufRead,BufNewFile MUTTTEMPFILE :nnoremap <buffer><localleader>sp mq[s1z=`q
 	:augroup END
-	"}}}
+	" }}}
 
 
-"}}}
+" }}}
 
 " Functions {{{
 "_______________________________________________________________________________________________________
 
-	" accepts as string uses that as a beginning of the line comment
-	:function! CommentBL(in) range
-	"  {{{
-	:  normal! mq
-	:  execute "silent ".a:firstline.",".a:lastline.'s/\s*$//e'
-	:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:in.'\2/e'
-	:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
-	:  normal! `q
-	:  nohlsearch
-	:endfunction
-	" }}}
-
-	:function! MakeGetter_Cpp()
+	" C++ Code Generation
 	" {{{
-	:  normal! mq
-	:  let list = split(getline('.'))
-	:  let type = list[0]
-	:  let varlist = split(list[1],';')
-	:  let var = varlist[0]
-	:  execute "normal! ?\\v(class|struct)\<CR>"
-	:  let list = split(getline('.'))
-	:  let clst = list[0]
-	:  let class = list[1]
-	:  if clst ==# 'class'
-	:    execute "normal!/public\<CR>"
-	:  else
-	:    execute "normal!/{\<CR>"
-	:  endif
-	:  normal! o
-	:  execute "normal! i".type." get_".var."();"
-	:  execute "normal! =="
-	:  execute "normal!/};\<CR>o"
-	:  execute "normal! o".type." ".class."::get_".var."()"
-	:  execute "normal! o{"
-	:  execute "normal! oreturn ".var.";"
-	:  execute "normal! o}"
-	:  normal! `q
-	:endfunction
+		:function! MakeGetter_Cpp()
+		" {{{
+		:  normal! mq
+		:  let list = split(getline('.'))
+		:  let type = list[0]
+		:  let varlist = split(list[1],';')
+		:  let var = varlist[0]
+		:  execute "normal! ?\\v(class|struct)\<CR>"
+		:  let list = split(getline('.'))
+		:  let clst = list[0]
+		:  let class = list[1]
+		:  if clst ==# 'class'
+		:    execute "normal!/public\<CR>"
+		:  else
+		:    execute "normal!/{\<CR>"
+		:  endif
+		:  normal! o
+		:  execute "normal! i".type." get_".var."();"
+		:  execute "normal! =="
+		:  execute "normal!/};\<CR>o"
+		:  execute "normal! o".type." ".class."::get_".var."()"
+		:  execute "normal! o{"
+		:  execute "normal! oreturn ".var.";"
+		:  execute "normal! o}"
+		:  normal! `q
+		:endfunction
+		" }}}
+
+		:function! MakeSetter_Cpp()
+		" {{{
+		:  normal! mq
+		:  let list = split(getline('.'))
+		:  let type = list[0]
+		:  let varList = split(list[1],';')
+		:  let var = varList[0]
+		:  execute "normal! ?\\v(class|struct)\<CR>"
+		:  let list = split(getline('.'))
+		:  let clst = list[0]
+		:  let class = list[1]
+		:  if clst ==# 'class'
+		:    execute "normal!/public\<CR>"
+		:  else
+		:    execute "normal!/{\<CR>"
+		:  endif
+		:  normal! o
+		:  execute "normal! ivoid set_".var."(".type.");"
+		:  execute "normal! =="
+		:  execute "normal!/};\<CR>o"
+		:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
+		:  execute "normal! o{"
+		:  execute "normal! o".var." = ".var."_;"
+		:  execute "normal! o}"
+		:  normal! `q
+		:endfunction
+		" }}}
+
+		:function! MakeClassFunction_old_Cpp()
+		"  {{{
+		:  let line = substitute(getline('.'), ";", "", "")
+		:  execute "normal! ?\\v(class|struct)\<CR>"
+		:  let class = substitute(split(getline('.'))[1], " {", "" , "")
+		:  let linesplit = split(line)
+		:  let linesplit[1] = class."::".linesplit[1]
+		:  let line = join(linesplit)
+		:  execute "normal! /};\<CR>"
+		:  normal! o
+		:  execute "normal! o".line
+		:  execute "normal! o{"
+		:  execute "normal! o}"
+		:endfunction
+		" }}}
+
+		:function! MakeClassFunction_Cpp()
+		"  {{{
+		:  let funcline = substitute(getline('.'), ";", "", "")
+		:  execute "normal! ?\\v(class|struct)\<CR>"
+		:  let classname = substitute(split(getline('.'))[1], " {", "" , "")
+		:  let splitLine = split(funcline, '(')
+		:  let splitSignature = split(splitLine[0], " ")
+		:  let splitSignature[-1] = classname . "::" . splitSignature[-1]
+		:  let splitLine[0] = join(splitSignature, ' ')
+		:  let line = substitute(join(splitLine, '('), "\t*","","")
+		:  execute "normal! /};\<CR>"
+		:  normal! o
+		:  execute "normal! o".line
+		:  execute "normal! o{"
+		:  execute "normal! o}"
+		:endfunction
+		" }}}
+
+		:function! MakeConstructor_Cpp()
+		" {{{
+		:  execute "normal! ?\\v(class|struct)\<CR>"
+		:  let list = split(getline('.'))
+		:  let clst = list[0]
+		:  let class = list[1]
+		:  if clst ==# 'class'
+		:    execute "normal!/public\<CR>"
+		:  else
+		:    execute "normal!/{\<CR>"
+		:  endif
+		:  execute "normal! o".class."();"
+		:  execute "normal!/};\<CR>o"
+		:  execute "normal! o".class."::".class."()"
+		:  execute "normal! o{"
+		:  execute "normal! o}"
+		:endfunction
+		" }}}
+
 	" }}}
 
-	:function! MakeSetter_Cpp()
+	" C Style Functions
 	" {{{
-	:  normal! mq
-	:  let list = split(getline('.'))
-	:  let type = list[0]
-	:  let varList = split(list[1],';')
-	:  let var = varList[0]
-	:  execute "normal! ?\\v(class|struct)\<CR>"
-	:  let list = split(getline('.'))
-	:  let clst = list[0]
-	:  let class = list[1]
-	:  if clst ==# 'class'
-	:    execute "normal!/public\<CR>"
-	:  else
-	:    execute "normal!/{\<CR>"
-	:  endif
-	:  normal! o
-	:  execute "normal! ivoid set_".var."(".type.");"
-	:  execute "normal! =="
-	:  execute "normal!/};\<CR>o"
-	:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
-	:  execute "normal! o{"
-	:  execute "normal! o".var." = ".var."_;"
-	:  execute "normal! o}"
-	:  normal! `q
-	:endfunction
+		:function! Csign()
+		" {{{
+		:  if &l:formatoptions =~ "cro"
+		:    let rtn = "/**\rChris Dean\r".strftime("%m/%d/%y")."\r".split(expand('%:p'), '/')[-2]."\r".@%." \r\r\<bs>*/"
+		:  else
+		:    let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* ".split(expand('%:p'), '/')[-2]."\r* ".@%." \r* \r*/"
+		:  endif
+		:  return rtn
+		:endfunction
+		" }}}
+
+		:function! CFold()
+		" {{{
+		:  setlocal foldtext=CFoldText()
+		:  setlocal fillchars=fold:\ "
+		:  highlight Folded guifg=DarkGreen ctermfg=DarkGreen
+		:endfunction
+		" }}}
+
+		:function! CFoldText()
+		" {{{
+		:  let tablen = &l:shiftwidth
+		:  let lines = v:foldend - v:foldstart - 1
+		:  let line = getline(v:foldstart)
+		:  let endline = getline(v:foldend)
+		:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "g").' '. lines .' lines '. endline
+		:endfunction
+		" }}}
+
+		:function! HighlightAfterColumn(col)
+		" {{{
+		:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
+		:endfunction
+		" }}}
+
+		:function! AppendSemicolon()
+		" {{{
+		:  if getline('.') =~ ';\s*$'
+		:    return "\<bs>"
+		:  endif
+		:  return ';'
+		:endfunction
+		" }}}
+
+		:function! MainAbbrev()
+		" {{{
+		:  if getline('.') =~ '^main'
+		:    return 'main int main(int argc, char ** argv)<CR>{<CR>}<up>'
+		:  else
+		:    return 'main'
+		:  endif
+		:endfunction
+		" }}}
+
 	" }}}
 
-	:function! MakeClassFunction_old_Cpp()
-	"  {{{
-	:  let line = substitute(getline('.'), ";", "", "")
-	:  execute "normal! ?\\v(class|struct)\<CR>"
-	:  let class = substitute(split(getline('.'))[1], "{", "" , "")
-	:  let linesplit = split(line)
-	:  let linesplit[1] = class."::".linesplit[1]
-	:  let line = join(linesplit)
-	:  execute "normal! /};\<CR>"
-	:  normal! o
-	:  execute "normal! o".line
-	:  execute "normal! o{"
-	:  execute "normal! o}"
-	:endfunction
-	" }}}
-
-	:function! MakeClassFunction_Cpp()
-	"  {{{
-	:  let funcline = substitute(getline('.'), ";", "", "")
-	:  execute "normal! ?\\v(class|struct)\<CR>"
-	:  let classname = substitute(split(getline('.'))[1], "{", "" , "")
-	:  let splitLine = split(funcline, '(')
-	:  let splitSignature = split(splitLine[0], " ")
-	:  let splitSignature[-1] = classname . "::" . splitSignature[-1]
-	:  let splitLine[0] = join(splitSignature, ' ')
-	:  let line = substitute(join(splitLine, '('), "\t*","","")
-	:  execute "normal! /};\<CR>"
-	:  normal! o
-	:  execute "normal! o".line
-	:  execute "normal! o{"
-	:  execute "normal! o}"
-	:endfunction
-	" }}}
-
-	:function! MakeConstructor_Cpp()
+	" Universally used functions
 	" {{{
-	:  execute "normal! ?\\v(class|struct)\<CR>"
-	:  let list = split(getline('.'))
-	:  let clst = list[0]
-	:  let class = list[1]
-	:  if clst ==# 'class'
-	:    execute "normal!/public\<CR>"
-	:  else
-	:    execute "normal!/{\<CR>"
-	:  endif
-	:  execute "normal! o".class."();"
-	:  execute "normal!/};\<CR>o"
-	:  execute "normal! o".class."::".class."()"
-	:  execute "normal! o{"
-	:  execute "normal! o}"
-	:endfunction
-	" }}}
+		:function! CommentBL(in) range
+		"  {{{
+		:  normal! mq
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\s*$//e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:in.'\2/e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
+		:  normal! `q
+		:  nohlsearch
+		:endfunction
+		" }}}
 
-	:function! CleverTab()
-	" {{{
-	:   let str =  strpart( getline('.'), 0, col('.')-1 )
-	:   if str =~ '^\s*$' || str =~ '\s$'
-	:      return "\<Tab>"
-	:   else
-	:      return "\<C-P>"
-	:   endif
-	:endfunction
-	" }}}
+		:function! CleverTab()
+		" {{{
+		:   let str =  strpart( getline('.'), 0, col('.')-1 )
+		:   if str =~ '^\s*$' || str =~ '\s$'
+		:      return "\<Tab>"
+		:   else
+		:      return "\<C-P>"
+		:   endif
+		:endfunction
+		" }}}
 
-	:function! CleverEsc()
-	" {{{
-	:  if col('.') == 1
-	:    return "\<esc>"
-	:  else
-	:    return "\<esc>l"
-	:  endif
-	:endfunction
-	" }}}
+		:function! CleverEsc()
+		" {{{
+		:  if col('.') == 1
+		:    return "\<esc>"
+		:  else
+		:    return "\<esc>l"
+		:  endif
+		:endfunction
+		" }}}
 
-	:function! Csign()
-	" {{{
-	:  if &l:formatoptions =~ "cro"
-	:    let rtn = "/**\rChris Dean\r".strftime("%m/%d/%y")."\r".split(expand('%:p'), '/')[-2]."\r".@%." \r\r\<bs>*/"
-	:  else
-	:    let rtn = "/**\r\<bs>* Chris Dean\r* ".strftime("%m/%d/%y")."\r* ".split(expand('%:p'), '/')[-2]."\r* ".@%." \r* \r*/"
-	:  endif
-	:  return rtn
-	:endfunction
-	" }}}
+		:function! Wrap(type)
+		" {{{
+		:  let sel_save = &selection
+		:  let &selection = "inclusive"
+		:  let input  = nr2char(getchar())
+		:  let forward = {"<" : ">", "[" : "]", " {" : " }", "(" : ")",}
+		:  let backward = {">" : "<", "]" : "[", " }" : " {", ")" : "(",}
+		:  if has_key(forward, input)
+		:    let begin = input
+		:    let ending = forward[input]
+		:  elseif has_key(backward, input)
+		:    let ending = input
+		:    let begin = backward[input]
+		:   else
+		:    let ending = input
+		:    let begin = input
+		:  endif
+		:  if a:type ==# "line"
+		:    echom "help"
+		:    let deref = "\'"
+		:    let jump = "$"
+		:  else
+		:    let deref = "`"
+		:    let jump = ""
+		:  endif
+		:  if a:type !=# "visual"
+		:    silent exe "normal! ".deref."[v".deref."]".jump."d"
+		:    let @@ = begin.@@.ending
+		:    if col('.') == strlen(getline('.'))
+		:      normal! p
+		:    else
+		:      normal! P
+		:    endif
+		:    let &selection = sel_save
+		:  else
+		:    execute "normal! `<i".begin."\<esc>`>a".ending
+		:  endif
+		:endfunction
+		" }}}
 
-	:function! Wrap(type)
-	" {{{
-	:  let sel_save = &selection
-	:  let &selection = "inclusive"
-	:  let input  = nr2char(getchar())
-	:  let forward = {"<" : ">", "[" : "]", "{" : "}", "(" : ")",}
-	:  let backward = {">" : "<", "]" : "[", "}" : "{", ")" : "(",}
-	:  if has_key(forward, input)
-	:    let begin = input
-	:    let ending = forward[input]
-	:  elseif has_key(backward, input)
-	:    let ending = input
-	:    let begin = backward[input]
-	:   else
-	:    let ending = input
-	:    let begin = input
-	:  endif
-	:  if a:type ==# "line"
-	:    echom "help"
-	:    let deref = "\'"
-	:    let jump = "$"
-	:  else
-	:    let deref = "`"
-	:    let jump = ""
-	:  endif
-	:  if a:type !=# "visual"
-	:    silent exe "normal! ".deref."[v".deref."]".jump."d"
-	:    let @@ = begin.@@.ending
-	:    if col('.') == strlen(getline('.'))
-	:      normal! p
-	:    else
-	:      normal! P
-	:    endif
-	:    let &selection = sel_save
-	:  else
-	:    execute "normal! `<i".begin."\<esc>`>a".ending
-	:  endif
-	:endfunction
-	" }}}
+		:function! RemoveTrailingWhitespace_AU()
+		" {{{
+		:  autocmd BufRead,BufWrite * :silent call RemoveTrailingWhitespace()
+		:endfunction
+		" }}}
 
-	:function! ForLoop()
-	" {{{
-	:  let line = getline('.')
-	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
-	:  execute 'normal! ccfor(i = 0; i < '.line.".size(); i++)\<CR>{\<CR>}"
-	:  normal! mqgg=G`q
-	:endfunction
-	" }}}
+		:function! RemoveTrailingWhitespace()
+		" {{{
+		:  normal! mq
+		:  normal! M
+		:  normal! mm
+		:  silent %s/\s*$//g
+		:  nohlsearch
+		:  normal! `m
+		:  normal! zz
+		:  normal! `q
+		:endfunction
+		" }}}
 
-	:function! DoubleForLoop()
-	" {{{
-	:  let line = getline('.')
-	:  let line = substitute(line, '^\s*\(.*\)\s*', '\1', '')
-	:  execute 'normal! ccfor(i = 0; i < '.line.".size(); i++)\<CR>{\<CR>}\<esc>O"
-	:  execute 'normal! ifor(j = 0; j < '.line."[i].size(); j++)\<CR>{\<CR>}"
-	:  normal! mqgg=G`q
-	:endfunction
-	" }}}
+		:function! MyFold()
+		" {{{
+		:  let tablen = &l:shiftwidth
+		:  let line = getline(v:foldstart)
+		:  let lines_count = v:foldend - v:foldstart + 1
+		:  let i = 0
+		:  while line[i] == "\t"
+		:    let i += 1
+		:  endwhile
+		:  setlocal fillchars=fold:\ "
+		:  let foldline = substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g')
+		:  if strlen(foldline) == 0
+		:    let foldline = ' '
+		:  else
+		:    let foldline = ' ' . foldline . ' '
+		:  endif
+		:  return repeat(" ", tablen*i). '+--- ' . lines_count . ' lines:' . foldline . '---+'
+		:endfunction
+		" }}}
 
-	:function! Swap_Cpp()
-	" {{{
-	:  let line = split(getline('.'))
-	:  normal! "_dd
-	:  execute "normal! Otemp = ".line[0].";"
-	:  execute "normal! ==o".line[0]." = ".line[1].";"
-	:  execute "normal! ==o".line[1]." = temp;"
-	:  normal! ==
-	:endfunction
 	" }}}
-
-	:function! Make_Macro()
-	" {{{
-	:  let linesplit = split(getline('.'))
-	:  let fullName = linesplit[1]
-	:  let evalname = split(fullName, '(')
-	:  let name = evalname[0]
-	:  let evalname[0] = evalname[0].'_EVAL'
-	:  let evalName = join(evalname, '(')
-	:  normal! dd
-	:  execute 'normal! O#define '.name.' _'.fullName
-	:  execute 'normal! vi(U'
-	:  execute 'normal! o#define _'.fullName.' _'.evalName
-	:  execute 'normal! o#define _'.evalName.' '.join(linesplit[2:])
-	:  execute 'normal! Go#undef '.name
-	:  execute 'normal! Go#undef _'.split(fullName,'(')[0]
-	:  execute 'normal! Go#undef _'.split(evalName,'(')[0]
-	:  execute "normal! o"
-	:endfunction
-	" }}}
-
-	:function! HighlightAfterColumn(col)
-	" {{{
-	:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
-	:endfunction
-	" }}}
-
-	:function! CFold()
-	" {{{
-	:  setlocal foldtext=CFoldText()
-	:  setlocal fillchars=fold:\
-	:  highlight Folded guifg=DarkGreen ctermfg=DarkGreen
-	:endfunction
-	" }}}
-
-	:function! CFoldText()
-	" {{{
-	:  let tablen = &l:shiftwidth
-	:  let lines = v:foldend - v:foldstart - 1
-	:  let line = getline(v:foldstart)
-	:  let endline = getline(v:foldend)
-	:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "g").' '. lines .' lines '. endline
-	:endfunction
-	" }}}
-
-	:function! AppendSemicolon()
-	" {{{
-	:  if getline('.') =~ ';\s*$'
-	:    return "\<bs>"
-	:  endif
-	:  return ';'
-	:endfunction
-	" }}}
-
-	:function! RemoveTrailingWhitespace_AU()
-	" {{{
-	:autocmd BufRead,BufWrite * :silent call RemoveTrailingWhitespace()
-	:endfunction
-	" }}}
-
-	:function! RemoveTrailingWhitespace()
-	" {{{
-	:normal! mq
-	:normal! M
-	:normal! mm
-	:silent %s/\s*$//g
-	:nohlsearch
-	:normal! `m
-	:normal! zz
-	:normal! `q
-	:endfunction
-	" }}}
-
 " }}}
 
 " TMUX Terminal Split {{{
