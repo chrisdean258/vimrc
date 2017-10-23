@@ -46,7 +46,7 @@
 " UNVIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
 
-	"mapleaders
+	"mapleader
 	:let mapleader = " "
 	:let maplocalleader = "\\"
 
@@ -54,7 +54,7 @@
 	:nnoremap s i <esc>r
 	:nnoremap S a <esc>r
 
-	" key mappings
+	" key mapping
 	:nnoremap j gj
 	:nnoremap k gk
 
@@ -96,11 +96,11 @@
 	:nnoremap <silent>noh :nohlsearch<CR>
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
-	" mapping for jumping to errors
+	" mapping for jumping to error
 	:nnoremap <A-up> :lnext<CR>
 	:nnoremap <A-down> :lprev<CR>
 
-	" Clever Tabs
+	" Clever Tab
 	:inoremap <tab> <C-R>=CleverTab()<CR>
 	:inoremap <S-tab> <c-x><c-f>
 
@@ -108,7 +108,7 @@
 	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
 	:vnoremap <silent><leader>w :call Wrap("visual")
 
-	" Resizing splits
+	" Resizing split
 	:nnoremap <S-right> :vertical resize +5 <CR>
 	:nnoremap <S-left> :vertical resize -5 <CR>
 	:nnoremap <S-up> :resize +5 <CR>
@@ -126,12 +126,12 @@
 " UNIVERSAL ABBREVIATIONS {{{
 "_______________________________________________________________________________________________________
 
-	" Signatures
+	" Signature
 	:iabbrev utsign Chris Dean<CR>cdean16@vols.utk.edu
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
 
 	:cabbrev help vert help
-	:cabbrev sp vs
+	:cabbrev sp v
 	:cabbrev help vert help
 
 	" Writing/ quitting vim tmux terminal compatibility
@@ -205,7 +205,7 @@
 	:augroup END
 	" }}}
 
-	" Vim files
+	" Vim file
 	" {{{
 	:augroup vim_
 	:  autocmd!
@@ -219,7 +219,7 @@
 	" {{{
 	:augroup Markdown
 	:autocmd!
-	:autocmd Filetype markdown  :setlocal spell spelllang=en_us
+	:autocmd Filetype markdown  :setlocal spell spelllang=en_u
 	:autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
 	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
 	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h2 "qyy"qpVr-
@@ -354,7 +354,7 @@
 
 	" }}}
 
-	" C Style Functions
+	" C Style Function
 	" {{{
 		:function! Csign()
 		" {{{
@@ -412,7 +412,7 @@
 
 	" }}}
 
-	" Universally used functions
+	" Universally used function
 	" {{{
 		:function! CommentBL(in) range
 		"  {{{
@@ -494,10 +494,20 @@
 
 		:function! RemoveTrailingWhitespace()
 		" {{{
+		:  let line = line('.')
+		:  let ll = line-1
+		:  let end = line('$')
 		:  normal! mq
 		:  normal! M
 		:  normal! mm
-		:  silent %s/\s*$//g
+		:  if line != 1
+		:    execute "1,".ll.'s/\s*$//g'
+		:    echom "1,".ll.'s/\s*$//g'
+		:  endif
+		:  if line != end
+		:    execute line+1.',$s/\s*$//g'
+		:    echom line+1.',$s/\s*$//g'
+		:  endif
 		:  nohlsearch
 		:  normal! `m
 		:  normal! zz
