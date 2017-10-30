@@ -11,6 +11,9 @@
  	:highlight Folded None
 	:highlight Folded ctermfg=Black guifg=Black
 
+	" Set line buffer at top and bottom of screen
+	:set scrolloff=5
+
 	" If you want 4 width tabs changes tabstop ad shiftwidth to 4
 	:set tabstop=8
 	:set softtabstop=0
@@ -131,7 +134,7 @@
 	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
 
 	:cabbrev help vert help
-	:cabbrev sp v
+	:cabbrev sp vs
 	:cabbrev help vert help
 
 	" Writing/ quitting vim tmux terminal compatibility
@@ -498,7 +501,7 @@
 		:  let ll = line-1
 		:  let end = line('$')
 		:  normal! mq
-		:  normal! M
+		:  normal! H
 		:  normal! mm
 		:  if line != 1
 		:    execute "1,".ll.'s/\s*$//g'
@@ -510,7 +513,7 @@
 		:  endif
 		:  nohlsearch
 		:  normal! `m
-		:  normal! zz
+		:  normal! zt
 		:  normal! `q
 		:endfunction
 		" }}}
