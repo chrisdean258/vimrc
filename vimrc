@@ -222,10 +222,10 @@
 	" {{{
 	:augroup Markdown
 	:autocmd!
-	:autocmd Filetype markdown  :setlocal spell spelllang=en_u
-	:autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
-	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
-	:autocmd Filetype markdown  :nnoremap <buffer><localleader>h2 "qyy"qpVr-
+	" :autocmd Filetype markdown  :setlocal spell spelllang=en_u
+	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
+	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
+	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h2 "qyy"qpVr-
 	:augroup END
 	" }}}
 
