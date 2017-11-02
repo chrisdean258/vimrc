@@ -4,14 +4,14 @@ Commands
 
 General
 -------
-```
+```vim
 	:let {var}={val}            - set a variable to a value
 	:set {(no)setting}          - sets a general setting for vim
 	:setlocal {(no)setting}     - sets setting only for local buffer
 
 	:command {toMap} {mapping}  - maps the command toMap to mapping
 	:normal                     - executes command as in normal mode
-	:normal!                    - executes command as in normal mode ignoring any user remapped characters:w
+	:normal!                    - executes command as in normal mode ignoring any user remapped characters
 
 	:execute {string}           - executes the given string as a command
 	:call {function(args)}      - calls the function with given args
@@ -26,7 +26,7 @@ General
 
 Buffer commands
 ---------------
-```
+```vim
 	:w      - write buffer
 	:q      - quit
 	:wq     - write and quit
@@ -36,7 +36,7 @@ Buffer commands
 
 Windows and Tabs
 --------------
-```
+```vim
 	:wincmd (h|j|k|l) - move between windows in split screens (also see navigation)
 	:{v}split {file}  - splits the window with the given file
 	^w (h|j|k|l)      - move between windows in split screens (also see navigation)
@@ -49,19 +49,19 @@ Windows and Tabs
 
 Regex
 -----
-```
+```vim
 	:(range)s/pattern/replace/(ge)
 ```
 
 Run Command on Lines
 --------------------
-```
+```vim
 	:(range)g/pattern/command - executes command on lines matching pattern
 ```
 
 Mapping
 -------
-```
+```vim
 	:noremap {lhs} {rhs}      - general map lhs to rhs
 	:nnoremap {lhs} {rhs}     - normal map lhs to rhs
 	:inoremap {lhs} {rhs}     - insert map lhs to rhs
@@ -72,14 +72,14 @@ Mapping
 
 Abbreviation
 ------------
-```
+```vim
 	:iabbrev {lhs} {rhs}   - expands lhs to rhs in insert mode
 	:cabbrev {lhs} {rhs}   - expands lhs to rhs in command mode (often useful when ending in <CR>)
 ```
 
 Auto commands
 ------------
-```
+```vim
 	:augroup {Name}                       - declares an autocommand group
 	:  autocmd!                           - clears the group (for when it gets reloaded)
 	:  autocmd {expr} {pattern} {command} - runs autocmd when expr and pattern are met
@@ -88,7 +88,7 @@ Auto commands
 
 Previous versions:
 ------------------
-```
+```vim
 	:earlier {time}   - jumps the file to the version it was Time ago
 	:later {time}     - jumps the file to the version at time later(only used after earlier)
 ```
@@ -96,7 +96,7 @@ Previous versions:
 
 Navigation
 ==========
-```
+```vim
 	h | &lt;left&gt;  - move left
 	j | &lt;down&gt;  - move down
 	k | &lt;up&gt;    - move up
@@ -128,7 +128,7 @@ Navigation
 
 Using Tags
 ----------
-```
+```vim
 	^]          - jump to tag under cursor
 	g^]         - used for ambiguous tags
 	^t          - jump backl in the tag stack
@@ -137,7 +137,7 @@ Using Tags
 
 Operator pending mappings
 =========================
-```
+```vim
 	(* also for navigation)
 	$           - *End of current line
 	^           - *Beginning of current line
@@ -166,7 +166,7 @@ Operator pending mappings
 
 Operator Mappings
 =================
-```
+```vim
 	(double the letter to reference current line)
 	( _ to denote operator pending mapping)
 
@@ -184,7 +184,7 @@ General mappings
 
 Modes
 -----
-```
+```vim
 	i           - Insert mode
 	&lt;esc&gt;       - Normal mode
 	R           - Replace mode
@@ -200,7 +200,7 @@ Modes
 
 Deleting
 --------
-```
+```vim
 	x           - delete single char
 	X           - backspace
 	r           - replace char
@@ -213,14 +213,14 @@ Deleting
 
 Putting (Pasting)
 -------
-```
+```vim
 	p           - Put after cursor
 	P           - Put above cursor
 ```
 
 Autocomplete
 -------------
-```
+```vim
 	^n          - Autocomplete next word found
 	^p          - Autocomplete previous word found
 	^x^n        - Autocomplete this file only
@@ -230,7 +230,7 @@ Autocomplete
 
 Other
 -----
-```
+```vim
 	u           - undo
 	^r          - redo
 	zM          - Fold all folds
