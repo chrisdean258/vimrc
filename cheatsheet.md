@@ -3,7 +3,7 @@ Commands
 ========
 
 General
-"""""""
+-------
 ```vim
 :let {var}={val}            " set a variable to a value
 :set {(no)setting}          " sets a general setting for vim
@@ -25,7 +25,7 @@ General
 
 
 Buffer commands
-"""""""""""""""
+---------------
 ```vim
 :w      " write buffer
 :q      " quit
@@ -35,7 +35,7 @@ Buffer commands
 
 
 Windows and Tabs
-""""""""""""""
+--------------
 ```vim
 :wincmd (h|j|k|l) " move between windows in split screens (also see navigation)
 :{v}split {file}  " splits the window with the given file
@@ -48,19 +48,19 @@ Windows and Tabs
 ```
 
 Regex
-"""""
+-----
 ```vim
 :(range)s/pattern/replace/(ge)
 ```
 
 Run Command on Lines
-""""""""""""""""""""
+--------------------
 ```vim
 :(range)g/pattern/command " executes command on lines matching pattern
 ```
 
 Mapping
-"""""""
+-------
 ```vim
 :noremap {lhs} {rhs}      " general map lhs to rhs
 :nnoremap {lhs} {rhs}     " normal map lhs to rhs
@@ -71,14 +71,14 @@ Mapping
 ```
 
 Abbreviation
-""""""""""""
+------------
 ```vim
 :iabbrev {lhs} {rhs}   " expands lhs to rhs in insert mode
 :cabbrev {lhs} {rhs}   " expands lhs to rhs in command mode (often useful when ending in <CR>)
 ```
 
 Auto commands
-""""""""""""
+------------
 ```vim
 :augroup {Name}                       " declares an autocommand group
 :  autocmd!                           " clears the group (for when it gets reloaded)
@@ -87,7 +87,7 @@ Auto commands
 ```
 
 Previous versions:
-""""""""""""""""""
+------------------
 ```vim
 :earlier {time}   " jumps the file to the version it was Time ago
 :later {time}     " jumps the file to the version at time later(only used after earlier)
@@ -127,7 +127,7 @@ L           " put cursor at bottomk of page (change cursor position)
 ```
 
 Using Tags
-""""""""""
+----------
 ```vim
 ^]          " jump to tag under cursor
 g^]         " used for ambiguous tags
@@ -183,7 +183,7 @@ General mappings
 ================
 
 Modes
-"""""
+-----
 ```vim
 i           " Insert mode
 &lt;esc&gt;       " Normal mode
@@ -199,7 +199,7 @@ V           " Visual line mode
 ```
 
 Deleting
-""""""""
+--------
 ```vim
 x           " delete single char
 X           " backspace
@@ -212,14 +212,14 @@ Y           " Yank line
 
 
 Putting (Pasting)
-"""""""
+-------
 ```vim
 p           " Put after cursor
 P           " Put above cursor
 ```
 
 Autocomplete
-"""""""""""""
+-------------
 ```vim
 ^n          " Autocomplete next word found
 ^p          " Autocomplete previous word found
@@ -229,7 +229,7 @@ Autocomplete
 ```
 
 Other
-"""""
+-----
 ```vim
 u           " undo
 ^r          " redo
