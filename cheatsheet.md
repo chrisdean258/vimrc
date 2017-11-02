@@ -97,10 +97,10 @@ Previous versions:
 Navigation
 ==========
 ```vim
-h | &lt;left&gt;  " move left
-j | &lt;down&gt;  " move down
-k | &lt;up&gt;    " move up
-l | &lt;right&gt; " move right
+h | <left>  " move left
+j | <down>  " move down
+k | <up>    " move up
+l | <right> " move right
 
 nG or :n    " move to line n
 G           " move to the end of the file
@@ -186,7 +186,7 @@ Modes
 -----
 ```vim
 i           " Insert mode
-&lt;esc&gt;       " Normal mode
+<esc>       " Normal mode
 R           " Replace mode
 v           " Visual Mode
 
