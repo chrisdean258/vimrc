@@ -71,7 +71,7 @@
 	:nnoremap _ ddkP
 
 	" indent file
-	:nnoremap <leader>g mqgg=G`q
+	:nnoremap <leader>g :call Indent()<CR>
 
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
@@ -189,6 +189,13 @@
 	:  autocmd FileType c    :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
 	:  autocmd FileType cpp  :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
 	:augroup END
+	" }}}
+
+	" JS, HTML
+	" {{{
+	:  autocmd FileType javascript,js,html :set tabstop=2
+	:  autocmd FileType javascript,js,html :set softtabstop=0
+	:  autocmd FileType javascript,js,html :set shiftwidth=2
 	" }}}
 
 	" Python formatting
@@ -537,6 +544,18 @@
 		:  return repeat(" ", tablen*i). '+--- ' . lines_count . ' lines:' . foldline . '---+'
 		:endfunction
 		" }}}
+
+		:function! Indent()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  normal! gg=G
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		" }}}
+		:endfunction
 
 	" }}}
 " }}}
