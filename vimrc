@@ -102,7 +102,6 @@
 	:nnoremap <leader>y "+yy
 
 	" clear higlighting from search
-	:nnoremap <silent>noh :nohlsearch<CR>
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
 	" mapping for jumping to error
