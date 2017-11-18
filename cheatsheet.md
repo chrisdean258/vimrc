@@ -20,6 +20,7 @@ General
 :r                          " read contents of file into buffer
 
 :k{c}                       " mark a line with {c}
+m{c}                        " mark a spot with {c}
 :noh                        " turn off search highlighting
 ```
 
