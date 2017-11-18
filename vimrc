@@ -13,6 +13,8 @@
 
 	" Set line buffer at top and bottom of screen
 	:set scrolloff=5
+	:set sidescroll=1
+	:set sidescrolloff=5
 
 	" If you want 4 width tabs changes tabstop ad shiftwidth to 4
 	:set tabstop=8
@@ -571,37 +573,18 @@
 	:cabbrev t T
 	:command! T call Terminal()
 
-	:function! TerminalHelper()
-	" {{{
-	:  cunabbrev Q
-	:  cunabbrev Wq
-	:  cunabbrev WQ
-	:  cabbrev q <c-r>=CleverQuit("")<CR>
-	:  cabbrev Q <c-r>=CleverQuit("")<CR>
-	:  cabbrev wq <c-r>=CleverQuit("w")<CR>
-	:  cabbrev Wq <c-r>=CleverQuit("w")<CR>
-	:  cabbrev WQ <c-r>=CleverQuit("w")<CR>
-	:endfunction
-	" }}}
-
-	:function! CleverQuit(write)
-	" {{{
-	:  if a:write ==# 'w'
-	:    return 'w | silent execute ''!tmux kill-session -t "vim" '' | q'
-	:  else
-	:    return 'silent execute ''!tmux kill-session -t "vim" '' | q'
-	:  endif
-	:endfunction
-	" }}}
-
 	:function! Terminal()
 	" {{{
-	:  call TerminalHelper()
+	:  let aucmd = ' ''autocmd VimLeave :!tmux kill-session -t vim '' '
+	:  let tmuxSession = 'tmux new-session -s "vim" "vim -S session.vim -c '.aucmd .'"'
+	:  echo tmuxSession
+	:  call getchar()
+	:  let split = '\; split-window -v -p 40 \;'
 	:  mksession session.vim
 	:  set noswapfile
-	:  silent execute '!tmux new-session -s "vim" "vim -S session.vim" \; split-window -v -p 40 \;'
+	:  silent execute '!' . tmuxSession . split
 	:  silent execute '!rm session.vim'
-	:  q!
+	" :  q!
 	:endfunction
 	" }}}
 
