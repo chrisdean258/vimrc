@@ -46,10 +46,6 @@
 	:augroup END
 	:setlocal foldtext=MyFold()
 
-	:set statusline+=%#warningmsg#
-	:set statusline+=%{SyntasticStatuslineFlag()}
-	:set statusline+=%*
-
 	:let g:syntastic_check_on_wq = 0
 
 " }}}
@@ -187,7 +183,8 @@
 	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
 	:  autocmd FileType c,cpp  :iabbrev <buffer> cahr char
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
-	:  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char ** argv)<CR>{<CR>}<up>
+	" :  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char ** argv)<CR>{<CR>}<up>
+	:  autocmd FileType c,cpp  :iabbrev <buffer> main <C-R>=MainAbbrev()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
@@ -419,9 +416,11 @@
 
 		:function! MainAbbrev()
 		" {{{
-		:  if getline('.') =~ '^main'
-		:    return 'main int main(int argc, char ** argv)<CR>{<CR>}<up>'
+		:  if getline('.') =~ '^$'
+		:    echom "abbrev"
+		:    return "int main(int argc, char ** argv)\<CR>{\<CR>}\<up>"
 		:  else
+		:    echom "no abbrev"
 		:    return 'main'
 		:  endif
 		:endfunction
