@@ -165,13 +165,11 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl   :normal! zR
 	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>fl :call ForLoop()<CR>zzO
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>dl :call DoubleForLoop()<CR>zzO
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer><silent><localleader>sw :call Swap_Cpp()<CR>zzO
 	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap {} {<CR>}<esc>O
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <leader>S :call SplitIf()<CR>
 	:augroup END
 	" }}}
 
@@ -183,7 +181,6 @@
 	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
 	:  autocmd FileType c,cpp  :iabbrev <buffer> cahr char
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
-	" :  autocmd FileType c,cpp  :iabbrev <buffer> main int main(int argc, char ** argv)<CR>{<CR>}<up>
 	:  autocmd FileType c,cpp  :iabbrev <buffer> main <C-R>=MainAbbrev()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
@@ -426,6 +423,23 @@
 		:endfunction
 		" }}}
 
+		:function! SplitIf()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  execute "normal! 0f(%l"
+		:  if getline('.')[col('.')] == ")"
+		:    echom "No split found"
+		:  else
+		:    execute "normal! i\<CR>{\<CR>\<esc>$a\<CR>}"
+		:  endif
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
 	" }}}
 
 	" Universally used function
@@ -560,8 +574,8 @@
 		:  normal! `m
 		:  normal! zt
 		:  normal! `q
-		" }}}
 		:endfunction
+		" }}}
 
 	" }}}
 " }}}
