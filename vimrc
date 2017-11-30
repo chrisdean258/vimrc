@@ -169,7 +169,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <leader>S :call SplitIf()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
 	:augroup END
 	" }}}
 
@@ -246,10 +246,18 @@
 	:augroup END
 	" }}}
 
+	" txt files
+	" {{{
+	:augroup Text
+	:autocmd!
+	:autocmd BufRead,BufNewFile *.txt :setlocal wrap
+	:augroup END
+	" }}}
+
 
 " }}}
 
-" Functions {{{
+" FUNCTIONS {{{
 "_______________________________________________________________________________________________________
 
 	" C++ Code Generation
@@ -428,15 +436,22 @@
 		:  normal! mq
 		:  normal! H
 		:  normal! mm
+		:  normal! `q
 		:  execute "normal! 0f(%l"
-		:  if getline('.')[col('.')] == ")"
+		:  if !(getline('.') =~ ".*(.*)\s*.*;$")
+		:    return
 		:    echom "No split found"
+		:    normal! `m
+		:    normal! zt
+		:    normal! `q
+		:    return
 		:  else
 		:    execute "normal! i\<CR>{\<CR>\<esc>$a\<CR>}"
 		:  endif
 		:  normal! `m
 		:  normal! zt
 		:  normal! `q
+		:  normal! 2j^
 		:endfunction
 		" }}}
 
