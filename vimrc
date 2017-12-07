@@ -462,9 +462,14 @@
 		:function! CommentBL(in) range
 		"  {{{
 		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  normal! `q
 		:  execute "silent ".a:firstline.",".a:lastline.'s/\s*$//e'
 		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:in.'\2/e'
 		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
+		:  normal! `m
+		:  normal! zt
 		:  normal! `q
 		:  nohlsearch
 		:endfunction
