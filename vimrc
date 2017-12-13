@@ -624,9 +624,9 @@
 
 " AUTO UPDATE SCRIPT {{{
 "_______________________________________________________________________________________________________
-	:let update_script="sh /home/chris/bin/fetch_vimrc.sh auto"
+	:let update_script= "sh $HOME/bin/fetch_vimrc.sh auto"
 	:try
-	:  silent execute "! " . update_script . ""
+	:  silent execute "! " . update_script . " &>/dev/null"
 	:catch
 	:endtry
 " }}}
