@@ -1,3 +1,4 @@
+
 " NORMAL CONFIGURATION SETTINGS {{{
 "_______________________________________________________________________________________________________
 	:syntax on
@@ -619,6 +620,15 @@
 	:endfunction
 	" }}}
 
+" }}}
+
+" AUTO UPDATE SCRIPT {{{
+"_______________________________________________________________________________________________________
+	:let update_script="sh /home/chris/bin/fetch_vimrc.sh auto"
+	:try
+	:  silent execute "! " . update_script . ""
+	:catch
+	:endtry
 " }}}
 
 
