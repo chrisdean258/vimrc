@@ -28,8 +28,8 @@
 	:try
 	:  execute pathogen#infect()
 	:catch
-	:  silent !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim > /dev/null 2> /dev/null
-	:  silent !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git > /dev/null 2> /dev/null
+	:  silent !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
+	:  silent !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
 	:  execute pathogen#infect()
 	:endtry
 
@@ -634,3 +634,5 @@
 
 " If you cannot see anything but this message uncomment the next line
 " :highlight Folded ctermfg=DarkGrey guifg=DarkGrey
+
+
