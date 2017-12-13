@@ -140,15 +140,11 @@
 " UNIVERSAL ABBREVIATIONS {{{
 "_______________________________________________________________________________________________________
 
-	" Signature
-	:iabbrev utsign Chris Dean<CR>cdean16@vols.utk.edu
-	:iabbrev gsign Chris Dean<CR>chrisdean258@gmail.com
-
 	:cabbrev help vert help
 	:cabbrev sp vs
 	:cabbrev help vert help
 
-	" Writing/ quitting vim tmux terminal compatibility
+	" Quitting cause Im bad at typing
 	:cabbrev W w
 	:cabbrev Q q
 	:cabbrev Wq wq
@@ -195,8 +191,8 @@
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
 	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
-	:  autocmd FileType c    :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
-	:  autocmd FileType cpp  :autocmd CursorMoved,CursorMovedI * call HighlightAfterColumn(80)
+	:  autocmd FileType c    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
+	:  autocmd FileType cpp  :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
 	:augroup END
 	" }}}
 
@@ -220,7 +216,7 @@
 	:  autocmd FileType python  :set softtabstop=0
 	:  autocmd FileType python  :set shiftwidth=4
 	:  autocmd FileType python  :set expandtab
-	:  autocmd FileType python   :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType python  :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	" }}}
 
@@ -245,15 +241,6 @@
 	:augroup END
 	" }}}
 
-	" Mutt
-	" {{{
-	:augroup Muttmail
-	:autocmd!
-	:autocmd BufRead,BufNewFile MUTTTEMPFILE :setlocal spell
-	:autocmd BufRead,BufNewFile MUTTTEMPFILE :nnoremap <buffer><localleader>sp mq[s1z=`q
-	:augroup END
-	" }}}
-
 	" txt files
 	" {{{
 	:augroup Text
@@ -261,7 +248,6 @@
 	:autocmd BufRead,BufNewFile *.txt :setlocal wrap
 	:augroup END
 	" }}}
-
 
 " }}}
 
@@ -559,12 +545,16 @@
 		:  normal! H
 		:  normal! mm
 		:  if line != 1
-		:    execute "1,".ll.'s/\s*$//g'
-		:    echom "1,".ll.'s/\s*$//g'
+		:    try
+		:      silent execute "1,".ll.'s/\s*$//g'
+		:    catch
+		:    endtry
 		:  endif
 		:  if line != end
-		:    execute line+1.',$s/\s*$//g'
-		:    echom line+1.',$s/\s*$//g'
+		:    try
+		:      silent execute line+1.',$s/\s*$//g'
+		:    catch
+		:    endtry
 		:  endif
 		:  nohlsearch
 		:  normal! `m
