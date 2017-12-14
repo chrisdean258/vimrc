@@ -1,4 +1,3 @@
-
 " NORMAL CONFIGURATION SETTINGS {{{
 "_______________________________________________________________________________________________________
 	:syntax on
@@ -624,11 +623,13 @@
 
 " AUTO UPDATE SCRIPT {{{
 "_______________________________________________________________________________________________________
-	:let update_script= "sh $HOME/bin/fetch_vimrc.sh auto"
-	:try
+	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
+	:silent execute "! " . update_script . " &>/dev/null"
+	:if v:shell_error != 0
+	:  silent !mkdir -p $HOME/.vim/auto_update
+	:  silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh
 	:  silent execute "! " . update_script . " &>/dev/null"
-	:catch
-	:endtry
+	:endif
 " }}}
 
 
