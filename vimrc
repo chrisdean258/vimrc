@@ -629,7 +629,7 @@
 	:  silent execute "! " . update_script . " &> /dev/null"
 	:  if v:shell_error != 0
 	:    silent !mkdir -p $HOME/.vim/auto_update
-	:    silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh
+	:    silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
 	:    silent execute "! " . update_script . " &>/dev/null"
 	:  endif
 	:endfunction
