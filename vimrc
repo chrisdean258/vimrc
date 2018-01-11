@@ -249,6 +249,14 @@
 	:augroup END
 	" }}}
 
+	" Assembly
+	" {{{
+	:augroup Text
+	:autocmd!
+	:autocmd BufRead,BufNewFile *.S :iunmap <tab>
+	:augroup END
+	" }}}
+
 " }}}
 
 " FUNCTIONS {{{
@@ -623,13 +631,19 @@
 
 " AUTO UPDATE SCRIPT {{{
 "_______________________________________________________________________________________________________
+	:function Update_Vimrc()
+	" {{{
 	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
-	:silent execute "! " . update_script . " &>/dev/null"
-	:if v:shell_error != 0
-	:  silent !mkdir -p $HOME/.vim/auto_update
-	:  silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh
-	:  silent execute "! " . update_script . " &>/dev/null"
-	:endif
+	:  silent execute "! " . update_script . " &> /dev/null"
+	:  if v:shell_error != 0
+	:    silent !mkdir -p $HOME/.vim/auto_update
+	:    silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
+	:    silent execute "! " . update_script . " &>/dev/null"
+	:  endif
+	:endfunction
+	" }}}
+	:call Update_Vimrc()
+	:command! Update call Update_Vimrc()
 " }}}
 
 
