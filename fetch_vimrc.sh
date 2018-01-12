@@ -8,7 +8,7 @@ UPDIR=$HOME/.vim/auto_update
 MY_VIMRC=$HOME/.vimrc
 
 THIS_FILE=$0
-LAST_UPDATE=1515728490
+LAST_UPDATE=1
 NOW=`date +%s`
 DIFF=`echo $NOW - $LAST_UPDATE | bc`
 
