@@ -52,7 +52,7 @@
 	:autocmd!
 	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
 	:augroup END
-	:setlocal foldtext=MyFold()
+	:set foldtext=MyFold()
 
 	:let g:syntastic_check_on_wq = 0
 
@@ -251,12 +251,23 @@
 
 	" Assembly
 	" {{{
-	:augroup Text
+	:augroup Assembly
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.S :iunmap <tab>
+	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:augroup END
 	" }}}
 
+	" Notes
+	" {{{
+	:augroup Notes
+	:autocmd!
+	:autocmd BufRead,BufNewFile *.notes :setlocal spell
+	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
+	:autocmd BufRead,BufNewFile *.notes :nnoremap <localleader>s :call SpellReplace()<CR>
+	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
+	:augroup END
+	" }}}
 " }}}
 
 " FUNCTIONS {{{
@@ -597,6 +608,18 @@
 		:  normal! H
 		:  normal! mm
 		:  normal! gg=G
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
+		:function! SpellReplace()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  normal! [s1z=
 		:  normal! `m
 		:  normal! zt
 		:  normal! `q
