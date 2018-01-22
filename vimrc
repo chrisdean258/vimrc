@@ -265,7 +265,9 @@
 	:autocmd BufRead,BufNewFile *.notes :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
 	:autocmd BufRead,BufNewFile *.notes :nnoremap <localleader>s :call SpellReplace()<CR>
+	:autocmd BufRead,BufNewFile *.notes :inoremap <localleader>s <esc>:call SpellReplace()<CR>a
 	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
+	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	" }}}
 " }}}
