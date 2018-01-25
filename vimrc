@@ -52,7 +52,7 @@
 	:autocmd!
 	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
 	:augroup END
-	:setlocal foldtext=MyFold()
+	:set foldtext=MyFold()
 
 	:let g:syntastic_check_on_wq = 0
 
@@ -173,6 +173,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType c,cpp,javascript,java,perl   :call FormatCommas_AU()
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
 	:augroup END
 	" }}}
@@ -198,9 +199,12 @@
 
 	" JS, HTML
 	" {{{
+	:augroup web
+	:  autocmd!
 	:  autocmd FileType javascript,js,html :set tabstop=2
 	:  autocmd FileType javascript,js,html :set softtabstop=0
 	:  autocmd FileType javascript,js,html :set shiftwidth=2
+	:augroup END
 	" }}}
 
 	" Python formatting
@@ -217,6 +221,7 @@
 	:  autocmd FileType python  :set shiftwidth=4
 	:  autocmd FileType python  :set expandtab
 	:  autocmd FileType python  :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType python  :call FormatCommas_AU()
 	:augroup END
 	" }}}
 
@@ -249,6 +254,27 @@
 	:augroup END
 	" }}}
 
+	" Assembly
+	" {{{
+	:augroup Assembly
+	:autocmd!
+	:autocmd BufRead,BufNewFile *.S :iunmap <tab>
+	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:augroup END
+	" }}}
+
+	" Notes
+	" {{{
+	:augroup Notes
+	:autocmd!
+	:autocmd BufRead,BufNewFile *.notes :setlocal spell
+	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
+	:autocmd BufRead,BufNewFile *.notes :nnoremap <localleader>s :call SpellReplace()<CR>
+	:autocmd BufRead,BufNewFile *.notes :inoremap <localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
+	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
+	:augroup END
+	" }}}
 " }}}
 
 " FUNCTIONS {{{
@@ -563,6 +589,26 @@
 		:endfunction
 		" }}}
 
+		:function! FormatCommas_AU()
+		" {{{
+		:  autocmd BufRead,BufWrite * :silent call FormatCommas()
+		:endfunction
+		" }}}
+
+		:function! FormatCommas()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  %s/ *, */,/g
+		:  %s/,/, /g
+		:  nohlsearch
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
 		:function! MyFold()
 		" {{{
 		:  let tablen = &l:shiftwidth
@@ -589,6 +635,18 @@
 		:  normal! H
 		:  normal! mm
 		:  normal! gg=G
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
+		:function! SpellReplace()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  normal! [s1z=
 		:  normal! `m
 		:  normal! zt
 		:  normal! `q
@@ -625,7 +683,7 @@
 "_______________________________________________________________________________________________________
 	:function Update_Vimrc()
 	" {{{
-	:  let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
+	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
 	:  silent execute "! " . update_script . " &> /dev/null"
 	:  if v:shell_error != 0
 	:    silent !mkdir -p $HOME/.vim/auto_update
@@ -641,5 +699,3 @@
 
 " If you cannot see anything but this message uncomment the next line
 " :highlight Folded ctermfg=DarkGrey guifg=DarkGrey
-
-
