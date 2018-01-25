@@ -266,6 +266,7 @@
 	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
 	:autocmd BufRead,BufNewFile *.notes :nnoremap <localleader>s :call SpellReplace()<CR>
 	:autocmd BufRead,BufNewFile *.notes :inoremap <localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd BufRead,BufNewFile *.notes :inoremap << <esc><<A
 	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
 	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
 	:augroup END
@@ -649,6 +650,12 @@
 	:  silent execute '!' . tmuxSession . split
 	:  silent execute '!rm session.vim'
 	" :  q!
+	:endfunction
+	" }}}
+
+	:function! TestSuspend()
+	" {{{
+	: silent execute '!sleep 3 && echo hi &'
 	:endfunction
 	" }}}
 
