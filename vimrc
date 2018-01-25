@@ -173,6 +173,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType c,cpp,javascript,java,perl   :call FormatCommas_AU()
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
 	:augroup END
 	" }}}
@@ -198,9 +199,12 @@
 
 	" JS, HTML
 	" {{{
+	:augroup web
+	:  autocmd!
 	:  autocmd FileType javascript,js,html :set tabstop=2
 	:  autocmd FileType javascript,js,html :set softtabstop=0
 	:  autocmd FileType javascript,js,html :set shiftwidth=2
+	:augroup END
 	" }}}
 
 	" Python formatting
@@ -217,6 +221,7 @@
 	:  autocmd FileType python  :set shiftwidth=4
 	:  autocmd FileType python  :set expandtab
 	:  autocmd FileType python  :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType python  :call FormatCommas_AU()
 	:augroup END
 	" }}}
 
@@ -578,6 +583,26 @@
 		:    catch
 		:    endtry
 		:  endif
+		:  nohlsearch
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
+		:function! FormatCommas_AU()
+		" {{{
+		:  autocmd BufRead,BufWrite * :silent call FormatCommas()
+		:endfunction
+		" }}}
+
+		:function! FormatCommas()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		:  %s/ *, */,/g
+		:  %s/,/, /g
 		:  nohlsearch
 		:  normal! `m
 		:  normal! zt
