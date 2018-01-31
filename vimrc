@@ -39,6 +39,7 @@
 	:set showcmd
 	:set wildmenu
 	:set hlsearch incsearch
+	:filetype plugin indent on
 	:filetype plugin on
 
 	" Allows for recursive finding
@@ -164,7 +165,7 @@
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc>
-	:  autocmd FileType c,cpp,javascript,java,perl   :set cindent
+	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal cindent
 	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA<C-R>=AppendSemicolon()<CR><esc>`q
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
 	:  autocmd FileType c,cpp,javascript,java,perl   :normal! zR
@@ -201,9 +202,10 @@
 	" {{{
 	:augroup web
 	:  autocmd!
-	:  autocmd FileType javascript,js,html :set tabstop=2
-	:  autocmd FileType javascript,js,html :set softtabstop=0
-	:  autocmd FileType javascript,js,html :set shiftwidth=2
+	:  autocmd FileType javascript,js,html :setlocal tabstop=2
+	:  autocmd FileType javascript,js,html :setlocal softtabstop=0
+	:  autocmd FileType javascript,js,html :setlocal shiftwidth=2
+	:  autocmd FileType javascript,js,html :setlocal expandtab
 	:augroup END
 	" }}}
 
@@ -269,11 +271,14 @@
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.notes :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
-	:autocmd BufRead,BufNewFile *.notes :nnoremap <localleader>s :call SpellReplace()<CR>
-	:autocmd BufRead,BufNewFile *.notes :inoremap <localleader>s <esc>:call SpellReplace()<CR>a
-	:autocmd BufRead,BufNewFile *.notes :inoremap << <esc><<A
+	:autocmd BufRead,BufNewFile *.notes :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><< <esc><<A
 	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
 	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
+	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><BS> <C-R>=NotesBackspace()<CR>
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer>w/ with
 	:augroup END
 	" }}}
 " }}}
@@ -478,6 +483,22 @@
 
 	" }}}
 
+	" Notes Functons
+	" {{{
+		:function! NotesBackspace()
+		" {{{
+		:  let tablen = &l:shiftwidth
+		:  let line = getline('.')
+		:  let column = col('.')
+		:  let line = line[0:column-2]
+		:  if line =~ '^\s*$' && column > tablen
+		:    return repeat("\b", tablen)
+		:  endif
+		:  return "\b"
+		"}}}
+		:endfunction
+	"}}}
+
 	" Universally used function
 	" {{{
 		:function! CommentBL(in) range
@@ -592,7 +613,7 @@
 
 		:function! FormatCommas_AU()
 		" {{{
-		:  autocmd BufRead,BufWrite * :silent call FormatCommas()
+		" :  autocmd BufRead,BufWrite * :silent call FormatCommas()
 		:endfunction
 		" }}}
 
