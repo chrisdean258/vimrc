@@ -171,7 +171,7 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal cindent
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal nofoldenable
-	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev csign <c-r>=Csign()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev <buffer>csign <c-r>=Csign()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
 	:augroup END
@@ -204,6 +204,9 @@
 	:  autocmd FileType javascript,js,html :setlocal softtabstop=0
 	:  autocmd FileType javascript,js,html :setlocal shiftwidth=2
 	:  autocmd FileType javascript,js,html :setlocal expandtab
+	:  autocmd FileType html,php :inoremap <buffer>> <esc>:call EndTagHTML()<CR>a
+	:  autocmd FileType html,php :inoremap <buffer><CR> <esc>:call HTMLCarriageReturn()<CR>i_<esc>==a<BS>
+	:  autocmd FileType html,php :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:augroup END
 	" }}}
 
@@ -228,6 +231,7 @@
 	:  autocmd!
 	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim :setlocal foldmethod=marker
+	:  autocmd FileType vim :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:augroup END
 	" }}}
 
@@ -265,11 +269,13 @@
 	:autocmd BufRead,BufNewFile *.notes :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
 	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer>w/ with
+	:autocmd BufRead,BufNewFile *.notes :iabbrev <buffer>w/ with
+	:autocmd BufRead,BufNewFile *.notes :iabbrev <buffer># number
 	:autocmd BufRead,BufNewFile *.notes :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
 	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
 	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:augroup END
 	" }}}
 " }}}
@@ -277,7 +283,7 @@
 " FUNCTIONS {{{
 "_______________________________________________________________________________________________________
 
-	" C++ Code Generation
+	" Code Generation
 	" {{{
 		:function! MakeGetter_Cpp()
 		" {{{
@@ -385,6 +391,49 @@
 		:  execute "normal! o".class."::".class."()"
 		:  execute "normal! o{"
 		:  execute "normal! o}"
+		:endfunction
+		" }}}
+
+		:function! EndTagHTML()
+		" {{{
+		:  let line = getline('.')
+		:  let unclosed = [ "area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr" ]
+		:  if line =~ '^\s*<.*'
+		:    try
+		:      let tag = substitute(split(split(line, "<")[1], " ")[0], ">", "", "g")
+		:      for item in unclosed
+		:        if item == tolower(tag)
+		:          normal! a>
+		:          return
+		:        endif
+		:      endfor
+		:      execute 'normal! a></'.tag.">"
+		:      normal! %h
+		:      return
+		:    catch
+		:      normal! a>
+		:      return
+		:    endtry
+		:  else
+		:    normal! a>
+		:    return
+		:  endif
+		:endfunction
+		" }}}
+
+		:function! HTMLCarriageReturn()
+		" {{{
+		:  let line = getline('.')
+		:  let cursorcol = col('.')
+		:  let leftside = line[0:cursorcol-1]
+		:  let rightside = line[cursorcol:]
+		:  if leftside =~ '<.*>$' && rightside =~ '^</.*>'
+		:    execute "normal! a\<CR>"
+		:    normal! O
+		:    normal! ==
+		:  else
+		:    execute "normal! a\<CR>"
+		:  endif
 		:endfunction
 		" }}}
 
