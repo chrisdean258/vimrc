@@ -118,7 +118,6 @@
 	:nnoremap <A-down> :lprev<CR>
 
 	" Clever Tab
-	:inoremap <tab> <C-R>=CleverTab()<CR>
 	:inoremap <S-tab> <c-x><c-f>
 
 	" Wrapping
@@ -165,19 +164,16 @@
 	" {{{
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   vnoremap <buffer><localleader>\ <esc>`<i/*<esc>`>a*/<esc>
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer>; mqA<C-R>=AppendSemicolon()<CR><esc>`q
+	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap <buffer>{} {<CR>}<esc>O
+	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal cindent
-	:  autocmd FileType c,cpp,javascript,java,perl   nnoremap ; mqA<C-R>=AppendSemicolon()<CR><esc>`q
-	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal foldmethod=syntax
-	:  autocmd FileType c,cpp,javascript,java,perl   :normal! zR
+	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap {} {<CR>}<esc>O
-	:  autocmd FileType c,cpp,javascript,java,perl   :set nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
-	:  autocmd FileType c,cpp,javascript,java,perl   :call FormatCommas_AU()
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
 	:augroup END
 	" }}}
 
@@ -190,13 +186,13 @@
 	:  autocmd FileType c,cpp  :iabbrev <buffer> cahr char
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp  :iabbrev <buffer> main <C-R>=MainAbbrev()<CR>
-	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
-	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
-	:  autocmd FileType cpp  :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
-	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
-	:  autocmd FileType cpp  :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
-	:  autocmd FileType c    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
-	:  autocmd FileType cpp  :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
+	:  autocmd FileType cpp    :nnoremap <silent><buffer> \ms :call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp    :nnoremap <silent><buffer> \mg :call MakeGetter_Cpp()<CR>
+	:  autocmd FileType cpp    :nnoremap <silent><buffer> \ma :call MakeGetter_Cpp()<CR>:call MakeSetter_Cpp()<CR>
+	:  autocmd FileType cpp    :nnoremap <silent><buffer> \mf :call MakeClassFunction_Cpp()<CR>O
+	:  autocmd FileType cpp    :nnoremap <silent><buffer> \mc :call MakeConstructor_Cpp()<CR>O
+	:  autocmd FileType c      :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
+	:  autocmd FileType cpp    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
 	:augroup END
 	" }}}
 
@@ -215,17 +211,14 @@
 	" {{{
 	:augroup python_
 	:  autocmd!
-	:  autocmd FileType python,matlab,shell,sh,bash  nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
-	:  autocmd FileType python  vnoremap <buffer><localleader>\ <esc>`<i"""<esc>`>a"""<esc>
-	:  autocmd FileType python  nnoremap ; mqA:<esc>'q
-	:  autocmd FileType python  :setlocal foldmethod=indent
-	:  autocmd FileType python  :normal! zR
-	:  autocmd FileType python  :set tabstop=4
-	:  autocmd FileType python  :set softtabstop=0
-	:  autocmd FileType python  :set shiftwidth=4
-	:  autocmd FileType python  :set expandtab
+	:  autocmd FileType python,matlab,shell,sh,bash  :nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:  autocmd FileType python,matlab,shell,sh,bash  :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
+	:  autocmd FileType python  :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
+	:  autocmd FileType python  :setlocal tabstop=4
+	:  autocmd FileType python  :setlocal softtabstop=0
+	:  autocmd FileType python  :setlocal shiftwidth=4
+	:  autocmd FileType python  :setlocal expandtab
 	:  autocmd FileType python  :call RemoveTrailingWhitespace_AU()
-	:  autocmd FileType python  :call FormatCommas_AU()
 	:augroup END
 	" }}}
 
@@ -235,7 +228,6 @@
 	:  autocmd!
 	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
 	:  autocmd FileType vim :setlocal foldmethod=marker
-	:  autocmd FileType vim   :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	" }}}
 
@@ -262,7 +254,6 @@
 	" {{{
 	:augroup Assembly
 	:autocmd!
-	:autocmd BufRead,BufNewFile *.S :iunmap <tab>
 	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:augroup END
 	" }}}
@@ -271,16 +262,14 @@
 	" {{{
 	:augroup Notes
 	:autocmd!
-	:autocmd BufRead,BufNewFile *.notes :setlocal spell
-	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
 	:autocmd BufRead,BufNewFile *.notes :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><< <esc><<A
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
+	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer>w/ with
+	:autocmd BufRead,BufNewFile *.notes :setlocal spell
+	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
 	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
 	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
-	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><BS> <C-R>=NotesBackspace()<CR>
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer>w/ with
 	:augroup END
 	" }}}
 " }}}
@@ -485,22 +474,6 @@
 
 	" }}}
 
-	" Notes Functons
-	" {{{
-		:function! NotesBackspace()
-		" {{{
-		:  let tablen = &l:shiftwidth
-		:  let line = getline('.')
-		:  let column = col('.')
-		:  let line = line[0:column-2]
-		:  if line =~ '^\s*$' && column > tablen
-		:    return repeat("\b", tablen)
-		:  endif
-		:  return "\b"
-		"}}}
-		:endfunction
-	"}}}
-
 	" Universally used function
 	" {{{
 		:function! CommentBL(in) range
@@ -676,6 +649,18 @@
 		:  normal! `q
 		:endfunction
 		" }}}
+		:function! ExpandedTabBackSpace()
+		" {{{
+		:  let tablen = &l:shiftwidth
+		:  let line = getline('.')
+		:  let column = col('.')
+		:  let line = line[0:column-2]
+		:  if line =~ '^\s*$' && column > tablen
+		:    return repeat("\b", tablen)
+		:  endif
+		:  return "\b"
+		:endfunction
+		"}}}
 
 	" }}}
 " }}}
