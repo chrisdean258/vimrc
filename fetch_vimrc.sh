@@ -21,10 +21,10 @@ fi
 #auto update every week
 if [ $# -eq 0 ] || ( [ $1="auto" ] && [ $DIFF -gt 604800 ] ) ; then
 	get_files
-	diff -u vimrc_current_base vimrc_new_base > vimrc.patch
-	yes | patch vimrc_current vimrc.patch
+	diff -u $UPDIR/vimrc_current_base $UPDIR/vimrc_new_base > $UPDIR/vimrc.patch
+	yes | patch $UPDIR/vimrc_current $UPDIR/vimrc.patch
 	sed -i "s/^LAST_UPDATE=.*/LAST_UPDATE=${NOW}/" $THIS_FILE
-	mv vimrc_new_base vimrc_current_base
-	mv vimrc_current $MY_VIMRC
-	rm -f vimrc.patch vimrc_current
+	mv $UPDIR/vimrc_new_base $UPDIR/vimrc_current_base
+	mv $UPDIR/vimrc_current $MY_VIMRC
+	rm -f $UPDIR/vimrc.patch $UPDIR/vimrc_current
 fi
