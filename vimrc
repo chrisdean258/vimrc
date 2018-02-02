@@ -397,10 +397,12 @@
 		:function! EndTagHTML()
 		" {{{
 		:  let line = getline('.')
+		:  let line = line[0:col('.')-1]
+		:  echom line
 		:  let unclosed = [ "area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr" ]
 		:  if line =~ '^\s*<.*'
 		:    try
-		:      let tag = substitute(split(split(line, "<")[1], " ")[0], ">", "", "g")
+		:      let tag = substitute(split(split(line, "<")[-1], " ")[0], ">", "", "g")
 		:      for item in unclosed
 		:        if item == tolower(tag)
 		:          normal! a>
