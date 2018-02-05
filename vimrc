@@ -164,7 +164,8 @@
 	" {{{
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:  autocmd FileType cpp,javascript,java,perl     :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
+	:  autocmd FileType c                            :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\*', '\*\/')<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer>; mqA<C-R>=AppendSemicolon()<CR><esc>`q
 	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap <buffer>{} {<CR>}<esc>O
@@ -204,6 +205,7 @@
 	:  autocmd FileType javascript,js,html :setlocal softtabstop=0
 	:  autocmd FileType javascript,js,html :setlocal shiftwidth=2
 	:  autocmd FileType javascript,js,html :setlocal expandtab
+	:  autocmd FileType html,php :nnoremap <silent><buffer><localleader>\ :call CommentBL('\<!--', '-->')<CR>
 	:  autocmd FileType html,php :inoremap <buffer>> <esc>:call EndTagHTML()<CR>a
 	:  autocmd FileType html,php :inoremap <buffer><CR> <esc>:call HTMLCarriageReturn()<CR>i_<esc>==a<BS>
 	:  autocmd FileType html,php :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
@@ -527,15 +529,16 @@
 
 	" Universally used function
 	" {{{
-		:function! CommentBL(in) range
-		"  {{{
+		:function! CommentBL(start, end) range
+		" {{{
 		:  normal! mq
 		:  normal! H
 		:  normal! mm
 		:  normal! `q
-		:  execute "silent ".a:firstline.",".a:lastline.'s/\s*$//e'
-		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:in.'\2/e'
-		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:in.a:in.'/\1/e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:start.'\2/e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:start.a:start.'/\1/e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/$/'. a:end
+		:  execute "silent ".a:firstline.",".a:lastline.'s/'. a:end . a:end . '$//e'
 		:  normal! `m
 		:  normal! zt
 		:  normal! `q
