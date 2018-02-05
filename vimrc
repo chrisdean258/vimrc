@@ -280,6 +280,21 @@
 	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:augroup END
 	" }}}
+
+	" Homework
+	" {{{
+	:augroup hw
+	:autocmd!
+	:autocmd BufRead,BufNewFile *.hw :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
+	:autocmd BufRead,BufNewFile *.hw :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd BufRead,BufNewFile *.hw :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
+	:autocmd BufRead,BufNewFile *.hw :setlocal spell
+	:autocmd BufRead,BufNewFile *.hw :setlocal spelllang=en
+	:autocmd BufRead,BufNewFile *.hw :setlocal wrap
+	:autocmd BufRead,BufNewFile *.hw :setlocal linebreak
+	:autocmd BufRead,BufNewFile *.hw :setlocal syntax=
+	:augroup END
+	" }}}
 " }}}
 
 " FUNCTIONS {{{
