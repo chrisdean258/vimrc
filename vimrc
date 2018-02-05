@@ -253,6 +253,7 @@
 	:augroup Text
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.txt :setlocal wrap
+	:autocmd BufRead,BufNewFile *.txt :setlocal linebreak
 	:augroup END
 	" }}}
 
