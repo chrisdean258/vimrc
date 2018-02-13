@@ -173,7 +173,6 @@
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal cindent
 	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal nofoldenable
 	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev <buffer>csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :call CFold()
 	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	" }}}
@@ -269,16 +268,15 @@
 	" {{{
 	:augroup Notes
 	:autocmd!
-	:autocmd BufRead,BufNewFile *.notes :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
-	:autocmd BufRead,BufNewFile *.notes :iabbrev <buffer>w/ with
-	:autocmd BufRead,BufNewFile *.notes :iabbrev <buffer># number
-	:autocmd BufRead,BufNewFile *.notes :setlocal spell
-	:autocmd BufRead,BufNewFile *.notes :setlocal spelllang=en
-	:autocmd BufRead,BufNewFile *.notes :setlocal expandtab
-	:autocmd BufRead,BufNewFile *.notes :call RemoveTrailingWhitespace_AU()
-	:autocmd BufRead,BufNewFile *.notes :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
+	:autocmd BufRead,BufNewFile *.notes* :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
+	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
+	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
+	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
+	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
+	:autocmd BufRead,BufNewFile *.notes* :setlocal expandtab
+	:autocmd BufRead,BufNewFile *.notes* :call RemoveTrailingWhitespace_AU()
+	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:augroup END
 	" }}}
 
