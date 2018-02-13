@@ -164,16 +164,16 @@
 	" {{{
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType cpp,javascript,java,perl     :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
-	:  autocmd FileType c                            :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\*', '\*\/')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <buffer>; mqA<C-R>=AppendSemicolon()<CR><esc>`q
-	:  autocmd FileType c,cpp,javascript,java,perl   :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap <buffer>{} {<CR>}<esc>O
-	:  autocmd FileType c,cpp,javascript,java,perl   :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal cindent
-	:  autocmd FileType c,cpp,javascript,java,perl   :setlocal nofoldenable
-	:  autocmd FileType c,cpp,javascript,java,perl   :iabbrev <buffer>csign <c-r>=Csign()<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl   :call RemoveTrailingWhitespace_AU()
+	:  autocmd FileType cpp,javascript,java,perl,cs   :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
+	:  autocmd FileType c                             :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\*', '\*\/')<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <buffer>; mqA<C-R>=AppendSemicolon()<CR><esc>`q
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <buffer>{} {<CR>}<esc>O
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :setlocal cindent
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :setlocal nofoldenable
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :iabbrev <buffer>csign <c-r>=Csign()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :call RemoveTrailingWhitespace_AU()
 	:augroup END
 	" }}}
 
@@ -215,7 +215,7 @@
 	" {{{
 	:augroup python_
 	:  autocmd!
-	:  autocmd FileType python,matlab,shell,sh,bash  :nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:  autocmd FileType python,matlab,shell,sh,bash  :nnoremap <silent><buffer><localleader>\ :call CommentBL('#', '')<CR>
 	:  autocmd FileType python,matlab,shell,sh,bash  :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:  autocmd FileType python  :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
 	:  autocmd FileType python  :setlocal tabstop=4
@@ -455,6 +455,15 @@
 		:endfunction
 		" }}}
 
+		:function! NotesToMD()
+		" {{{
+		:  %s/^\w/#### &/ge
+		:  %s/        /  /ge
+		:  %s/^\(  *\)/&- /ge
+		:  %s/^\(  *\)- \(\d\)\./\1\2./ge
+		:  %s/^  //ge
+		:endfunction
+		" }}}
 	" }}}
 
 	" C Style Function
