@@ -90,7 +90,7 @@
 
 	" edit and reload vimrc
 	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
-	:nnoremap <leader>sv :source $MYVIMRC<CR>
+	:nnoremap <leader>sv :silent source $MYVIMRC<CR>
 	:nnoremap <leader>s% :source %<CR>
 
 
@@ -230,7 +230,7 @@
 	" {{{
 	:augroup vim_
 	:  autocmd!
-	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
+	:  autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ', "")<CR>
 	:  autocmd FileType vim :setlocal foldmethod=marker
 	:  autocmd FileType vim :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:augroup END
@@ -260,7 +260,7 @@
 	" {{{
 	:augroup Assembly
 	:autocmd!
-	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
 	:augroup END
 	" }}}
 
@@ -270,13 +270,12 @@
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.notes* :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
-	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><BS> <C-R>=ExpandedTabBackSpace()<CR>
 	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
-	:autocmd BufRead,BufNewFile *.notes* :setlocal expandtab
-	:autocmd BufRead,BufNewFile *.notes* :call RemoveTrailingWhitespace_AU()
 	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
+	:autocmd BufRead,BufNewFile *.notes* :command! MD call NotesToMD()
+	:autocmd BufRead,BufNewFile *.notes* :cabbrev md MD
 	:augroup END
 	" }}}
 
@@ -457,11 +456,11 @@
 
 		:function! NotesToMD()
 		" {{{
-		:  %s/^\w/#### &/ge
-		:  %s/        /  /ge
-		:  %s/^\(  *\)/&- /ge
-		:  %s/^\(  *\)- \(\d\)\./\1\2./ge
-		:  %s/^  //ge
+		:  silent %s/^\w/#### &/ge
+		:  silent %s/\t/  /ge
+		:  silent %s/^\(  *\)/&- /ge
+		:  silent %s/^\(  *\)- \(\d\)\./\1\2./ge
+		:  silent %s/^  //ge
 		:endfunction
 		" }}}
 	" }}}
