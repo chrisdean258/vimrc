@@ -514,10 +514,8 @@
 		:function! MainAbbrev()
 		" {{{
 		:  if getline('.') =~ '^$'
-		:    echom "abbrev"
 		:    return "int main(int argc, char ** argv)\<CR>{\<CR>}\<up>"
 		:  else
-		:    echom "no abbrev"
 		:    return 'main'
 		:  endif
 		:endfunction
