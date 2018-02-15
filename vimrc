@@ -275,8 +275,6 @@
 	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
-	:autocmd BufRead,BufNewFile *.notes* :command! MD call NotesToMD()
-	:autocmd BufRead,BufNewFile *.notes* :cabbrev md MD
 	:augroup END
 	" }}}
 
