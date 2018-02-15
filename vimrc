@@ -240,6 +240,8 @@
 	" {{{
 	:augroup Markdown
 	:autocmd!
+	:autocmd Filetype markdown  :inoremap <buffer><tab> <C-R>=MDTabReplacement()<CR>
+	:autocmd Filetype markdown  :inoremap <buffer><CR> <C-R>=MDCarriageReturnReplacement()<CR>
 	" :autocmd Filetype markdown  :setlocal spell spelllang=en_u
 	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
 	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
@@ -273,7 +275,6 @@
 	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
-	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><tab> <C-R>=CleverTab()<CR>
 	:autocmd BufRead,BufNewFile *.notes* :command! MD call NotesToMD()
 	:autocmd BufRead,BufNewFile *.notes* :cabbrev md MD
 	:augroup END
@@ -462,6 +463,62 @@
 		:  silent %s/^\(  *\)- \(\d\)\./\1\2./ge
 		:  silent %s/^  //ge
 		:endfunction
+		" }}}
+
+		function! MDCarriageReturnReplacement()
+		"  {{{
+		:  let allowable_starts = [ '>', '\*', '-', '+', '|' ]
+		:  let line = getline('.')
+		:  for starting in allowable_starts
+		:    if line =~ '^\s*' . starting . ' '
+		:      if line =~ '^\s*' . starting .' $'
+		:        return "\<esc>^C"
+		:      endif
+		:      return "\<esc>yyp^f lC"
+		:    endif
+		:  endfor
+		:  if line =~ '^\s*\d\d*\. '
+		:    if line =~ '^\s*\d\d*\. $'
+		:      return "\<esc>^C"
+		:    endif
+		:    return "\<esc>yyp^\<C-A>f lC"
+		:  endif
+		:  return "\<CR>"
+		endfunction
+		" }}}
+		
+		function! MDTabReplacement()
+		"  {{{
+		:  let allowable_starts = [ '>', '\*', '-', '+', '|' ]
+		:  let linenum = line('.')
+		:  if linenum == 1
+		:    return CleverTab()
+		:  endif
+		:
+		:  let lineabove = getline(linenum-1)
+		:  let line = getline('.')
+		:  let indention = indent(linenum-1)
+		:
+		:  let lineabove = lineabove[indention:]
+		:  let indent = stridx(lineabove, ' ') + 1
+		:
+		:  echom 
+		:  if indent == 0
+		:    let indent = 2
+		:  endif
+		:
+		:  for starting in allowable_starts
+		:    if line =~ '^\s*' . starting .' $'
+		:      return "\<esc>^C".repeat(" ", indent)
+		:    endif
+		:  endfor
+		:
+		:  if line =~ '^\s*\d*\. $'
+		:    return "\<esc>^C".repeat(" ", indent)
+		:  endif
+		:
+		:  return CleverTab()
+		endfunction
 		" }}}
 	" }}}
 
