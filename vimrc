@@ -275,6 +275,8 @@
 	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
+	:autocmd BufWrite *.notes.MD :call NotesMDFormat()
+	:autocmd BufWrite *.notes.md :call NotesMDFormat()
 	:augroup END
 	" }}}
 
@@ -518,6 +520,30 @@
 		:  return CleverTab()
 		endfunction
 		" }}}
+
+		function! NotesMDFormat()
+		" {{{
+		" The \{-} is the non greedy version of *
+		" Honestly there should be a *? but that who am I to judge
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+
+		:  %s/__\(.\{-}\)__/<u>\1<\/u>/ge
+
+		:  %s/_\(.\{-}\)_\^\(.\{-}\)\^/<sup>\2<\/sup><sub style='position: relative; left: -.5em;'>\1<\/sub> /ge
+		:  %s/\^\(.\{-}\)\^_\(.\{-}\)_/<sup>\1<\/sup><sub style='position: relative; left: -.5em;'>\2<\/sub> /ge
+
+		:  %s/_\(.\{-}\)_/<sub>\1<\/sub>/ge
+		:  %s/\^\(.\{-}\)\^/<sup>\1<\/sup>/ge
+
+		:  nohlsearch
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
 	" }}}
 
 	" C Style Function
