@@ -241,7 +241,8 @@
 	:augroup Markdown
 	:autocmd!
 	:autocmd Filetype markdown  :inoremap <buffer><tab> <C-R>=MDTabReplacement()<CR>
-	:autocmd Filetype markdown  :inoremap <buffer><CR> <C-R>=MDCarriageReturnReplacement()<CR>
+	:autocmd Filetype markdown  :nnoremap <buffer>o :execute "normal! " . MDNewlineReplacement("o")<CR>a
+	:autocmd Filetype markdown  :inoremap <buffer><CR> <C-R>=MDNewlineReplacement("\r")<CR>
 	" :autocmd Filetype markdown  :setlocal spell spelllang=en_u
 	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
 	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
@@ -275,8 +276,8 @@
 	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
-	:autocmd BufWrite *.notes.MD :call NotesMDFormat()
-	:autocmd BufWrite *.notes.md :call NotesMDFormat()
+	" :autocmd BufWrite *.notes.md :call NotesMDFormat()
+	:autocmd BufRead,BufNewFile *.notes.md :cabbrev md call NotesMDFormat()
 	:augroup END
 	" }}}
 
@@ -465,7 +466,7 @@
 		:endfunction
 		" }}}
 
-		function! MDCarriageReturnReplacement()
+		function! MDNewlineReplacement(in)
 		"  {{{
 		:  let allowable_starts = [ '>', '\*', '-', '+', '|' ]
 		:  let line = getline('.')
@@ -474,16 +475,24 @@
 		:      if line =~ '^\s*' . starting .' $'
 		:        return "\<esc>^C"
 		:      endif
-		:      return "\<esc>yyp^f lC"
+		:      if a:in == "o"
+		:        return "\<esc>yyp^f lC"
+		:      else
+		:        return "\<esc>mq^\"ayaW`qa\<CR>\<esc>\"ap^f a"
+		:      endif
 		:    endif
 		:  endfor
 		:  if line =~ '^\s*\d\d*\. '
 		:    if line =~ '^\s*\d\d*\. $'
 		:      return "\<esc>^C"
 		:    endif
-		:    return "\<esc>yyp^\<C-A>f lC"
+		:    if a:in == "o"
+		:      return "\<esc>yyp^\<C-A>f lC"
+		:    else
+		:      return "\<esc>mq^\"ayaW`qa\<CR>\<esc>\"ap^\<C-A>f a"
+		:    endif
 		:  endif
-		:  return "\<CR>"
+		:  return a:in
 		endfunction
 		" }}}
 		
@@ -804,6 +813,7 @@
 		:  normal! `q
 		:endfunction
 		" }}}
+
 		:function! ExpandedTabBackSpace()
 		" {{{
 		:  let tablen = &l:shiftwidth
