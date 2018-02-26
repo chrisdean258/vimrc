@@ -478,6 +478,7 @@
 		:      if a:in == "o"
 		:        return "\<esc>yyp^f lC"
 		:      else
+		:        return "\<esc>yyp^f lC"
 		:        return "\<esc>mq^\"ayaW`qa\<CR>\<esc>\"ap^f a"
 		:      endif
 		:    endif
@@ -489,6 +490,7 @@
 		:    if a:in == "o"
 		:      return "\<esc>yyp^\<C-A>f lC"
 		:    else
+		:      return "\<esc>yyp^\<C-A>f lC"
 		:      return "\<esc>mq^\"ayaW`qa\<CR>\<esc>\"ap^\<C-A>f a"
 		:    endif
 		:  endif
