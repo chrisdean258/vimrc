@@ -204,6 +204,9 @@
 	:  autocmd FileType javascript,js,html :setlocal softtabstop=0
 	:  autocmd FileType javascript,js,html :setlocal shiftwidth=2
 	:  autocmd FileType javascript,js,html :setlocal expandtab
+	:  autocmd FileType javascript,js,html :setlocal wrap
+	:  autocmd FileType javascript,js,html :setlocal linebreak
+	:  autocmd FileType javascript,js,html :setlocal breakindent
 	:  autocmd FileType html,php :nnoremap <silent><buffer><localleader>\ :call CommentBL('\<!--', '-->')<CR>
 	:  autocmd FileType html,php :inoremap <buffer>> <esc>:call EndTagHTML()<CR>a
 	:  autocmd FileType html,php :inoremap <buffer><CR> <esc>:call HTMLCarriageReturn()<CR>i_<esc>==a<BS>
@@ -243,6 +246,9 @@
 	:autocmd Filetype markdown  :inoremap <buffer><tab> <C-R>=MDTabReplacement()<CR>
 	:autocmd Filetype markdown  :nnoremap <buffer>o :execute "normal! " . MDNewlineReplacement("o")<CR>a
 	:autocmd Filetype markdown  :inoremap <buffer><CR> <C-R>=MDNewlineReplacement("\r")<CR>
+	:autocmd Filetype markdown  :setlocal wrap
+	:autocmd Filetype markdown  :setlocal linebreak
+	:autocmd Filetype markdown  :setlocal breakindent
 	" :autocmd Filetype markdown  :setlocal spell spelllang=en_u
 	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
 	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
@@ -256,6 +262,7 @@
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.txt :setlocal wrap
 	:autocmd BufRead,BufNewFile *.txt :setlocal linebreak
+	:autocmd BufRead,BufNewFile *.txt :setlocal breakindent
 	:augroup END
 	" }}}
 
