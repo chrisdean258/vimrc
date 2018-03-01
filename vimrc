@@ -137,6 +137,9 @@
 	" selects the line
 	:onoremap . V
 
+	" Get rid of annoying history popup
+	:nnoremap ; :
+
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
@@ -261,6 +264,7 @@
 	:augroup Text
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.txt :setlocal wrap
+	:autocmd BufRead,BufNewFile *.txt :setlocal encoding=utf-8
 	:autocmd BufRead,BufNewFile *.txt :setlocal linebreak
 	:autocmd BufRead,BufNewFile *.txt :setlocal breakindent
 	:augroup END
@@ -307,7 +311,7 @@
 " FUNCTIONS {{{
 "_______________________________________________________________________________________________________
 
-	" Code Generation
+	" Generation
 	" {{{
 		:function! MakeGetter_Cpp()
 		" {{{
@@ -562,6 +566,47 @@
 		:endfunction
 		" }}}
 
+		function! MakeRect(arglist)
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+		
+		:  normal! `>
+		:  let col1 = col('.')
+		:  let row1 = line('.')
+		:  normal! `<
+		:  let col2 = col('.')
+		:  let row2 = line('.')
+
+		:  let highcol = col1 > col2 ? col1 : col2
+		:  let highrow = row1 > row2 ? row1 : row2
+		:  let lowcol  = col1 < col2 ? col1 : col2
+		:  let lowrow  = row1 < row2 ? row1 : row2
+
+		:  let line = getline(lowrow)
+		" May need to subtract one from lowcol in next line
+		:  let line = line[:lowcol] . repeat(a:arglist[0], highcol-lowcol)
+		:  setline(lowrow, line)
+
+
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
+
+		function! MakeEllipse()
+		" {{{
+		:  normal! mq
+		:  normal! H
+		:  normal! mm
+
+		:  normal! `m
+		:  normal! zt
+		:  normal! `q
+		:endfunction
+		" }}}
 	" }}}
 
 	" C Style Function
