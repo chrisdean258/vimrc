@@ -47,7 +47,7 @@ This section contains mappings available in every file opened in vim
 - s to insert single character
 - S (capital S) to append single character
 - j and k set to viually move by line rather than by absolute line
-- - (minus) moves a line down
+- \- (minus) moves a line down
 - _ (underscore) moves a line up
 - \<leader\>g Indent an entire file
 - \<leader\>ev edit vimrc file
