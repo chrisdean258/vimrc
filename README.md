@@ -35,6 +35,9 @@ This section contains more settings but I cannot gaurantee they will be as stabl
 ### UNIVERSAL MAPPINGS
 This section contains mappings available in every file opened in vim
 
+- Mapleader is set to space
+- Localmapleader set to backslash
+
 #### Insert Mode
 - jk set to a version of escape
   - Actually a function because it makes more sense
@@ -42,8 +45,6 @@ This section contains mappings available in every file opened in vim
 - \<S-tab\> (shift-tab) filename autocomplete
 
 #### Normal Mode
-- Mapleader is set to space
-- Localmapleader set to backslash
 - s to insert single character
 - S (capital S) to append single character
 - j and k set to viually move by line rather than by absolute line
