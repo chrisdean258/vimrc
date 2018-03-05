@@ -5,11 +5,6 @@
 	:set number
 	:set relativenumber
 	:colorscheme elflord
-	:highlight LongLine guifg=Red ctermfg=Red
-
-	" :highlight Folded ctermbg=black guisp=black ctermbg=black
- 	:highlight Folded None
-	:highlight Folded ctermfg=Black guifg=Black
 
 	" Set line buffer at top and bottom of screen
 	:set scrolloff=5
@@ -24,6 +19,11 @@
 
 " UNIVERSAL SETTINGS {{{
 "_______________________________________________________________________________________________________
+
+	" Some higlight settings
+	:highlight LongLine guifg=Red ctermfg=Red
+ 	:highlight Folded None
+	:highlight Folded ctermfg=Black guifg=Black
 
 	:try
 	:  execute pathogen#infect()
@@ -66,7 +66,7 @@
 
 	"mapleader
 	:let mapleader = " "
-	:let maplocalleader = "\\"
+	:let maplocalleader = '\'
 
 	" insert a single char
 	:nnoremap s i <esc>r
@@ -99,17 +99,6 @@
 	:nnoremap <leader>O O<esc>
 
 
-	" capitalize and lowercase a word
-	:nnoremap <c-u> viw~
-	:inoremap <c-u> <esc>viw~i
-
-	" For external clipboard use
-	"may not work if you arent on vim-gnome
-	:nnoremap <leader>p "+p
-	:nnoremap <leader>P "+P
-	:nnoremap <leader>d "+dd
-	:nnoremap <leader>y "+yy
-
 	" clear higlighting from search
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
@@ -132,13 +121,6 @@
 
 	" Window Compatibility
 	" :inoremap <BS> <Left><Del>
-
-	" Operator Pending
-	" selects the line
-	:onoremap . V
-
-	" Get rid of annoying history popup
-	:nnoremap ; :
 
 " }}}
 
