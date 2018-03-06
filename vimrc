@@ -119,6 +119,15 @@
 	:nnoremap <S-up> :resize +5 <CR>
 	:nnoremap <S-down> :resize -5 <CR>
 
+	" Jumping splits and tabs
+	:nnoremap <leader>h <c-w>h
+	:nnoremap <leader>j <c-w>j
+	:nnoremap <leader>k <c-w>k
+	:nnoremap <leader>l <c-w>l
+	:nnoremap <tab> :tabnext<CR>
+	:nnoremap <S-tab> :tabprev<CR>
+	:nnoremap <leader><tab> :tabnew<CR>
+
 	" Window Compatibility
 	" :inoremap <BS> <Left><Del>
 
@@ -139,6 +148,9 @@
 	:cabbrev jk SyntasticReset
 
 	:command! MakeTags !ctags -R
+	:command! Unicode set encoding=utf-8
+	
+	:cabbrev unicode Unicode
 
 " }}}
 
