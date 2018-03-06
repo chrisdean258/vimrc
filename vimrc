@@ -24,6 +24,14 @@
 	:highlight LongLine guifg=Red ctermfg=Red
  	:highlight Folded None
 	:highlight Folded ctermfg=Black guifg=Black
+	:highlight tablinefill None
+	:highlight tablinesel None
+	:highlight tabline None
+	:highlight tablinesel ctermfg=DarkGrey guifg=DarkGrey
+	:highlight tabline ctermfg=black guifg=black
+	" Unhighlight the next two lines if you cant see your tabline
+	" :highlight tabline ctermfg=DarkGrey guifg=DarkGrey
+	" :highlight tablinesel ctermfg=Grey guifg=Grey
 
 	:try
 	:  execute pathogen#infect()
