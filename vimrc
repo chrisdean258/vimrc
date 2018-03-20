@@ -139,6 +139,9 @@
 	" Window Compatibility
 	" :inoremap <BS> <Left><Del>
 
+	" Getting rid of pesky popup window
+	:nnoremap q: :
+
 " }}}
 
 " UNIVERSAL ABBREVIATIONS {{{
@@ -205,13 +208,13 @@
 	" {{{
 	:augroup web
 	:  autocmd!
-	:  autocmd FileType javascript,js,html :setlocal tabstop=2
-	:  autocmd FileType javascript,js,html :setlocal softtabstop=0
-	:  autocmd FileType javascript,js,html :setlocal shiftwidth=2
-	:  autocmd FileType javascript,js,html :setlocal expandtab
-	:  autocmd FileType javascript,js,html :setlocal wrap
-	:  autocmd FileType javascript,js,html :setlocal linebreak
-	:  autocmd FileType javascript,js,html :setlocal breakindent
+	:  autocmd FileType html,php :setlocal tabstop=2
+	:  autocmd FileType html,php :setlocal softtabstop=0
+	:  autocmd FileType html,php :setlocal shiftwidth=2
+	:  autocmd FileType html,php :setlocal expandtab
+	:  autocmd FileType html,php :setlocal wrap
+	:  autocmd FileType html,php :setlocal linebreak
+	:  autocmd FileType html,php :setlocal breakindent
 	:  autocmd FileType html,php :nnoremap <silent><buffer><localleader>\ :call CommentBL('\<!--', '-->')<CR>
 	:  autocmd FileType html,php :inoremap <buffer>> <esc>:call EndTagHTML()<CR>a
 	:  autocmd FileType html,php :inoremap <buffer><CR> <esc>:call HTMLCarriageReturn()<CR>i_<esc>==a<BS>
