@@ -20,19 +20,6 @@
 " UNIVERSAL SETTINGS {{{
 "_______________________________________________________________________________________________________
 
-	" Some higlight settings
-	:highlight LongLine guifg=Red ctermfg=Red
- 	:highlight Folded None
-	:highlight Folded ctermfg=Black guifg=Black
-	:highlight tablinefill None
-	:highlight tablinesel None
-	:highlight tabline None
-	:highlight tablinesel ctermfg=DarkGrey guifg=DarkGrey
-	:highlight tabline ctermfg=black guifg=black
-	" Unhighlight the next two lines if you cant see your tabline
-	" :highlight tabline ctermfg=DarkGrey guifg=DarkGrey
-	" :highlight tablinesel ctermfg=Grey guifg=Grey
-
 	:try
 	:  execute pathogen#infect()
 	:catch
@@ -58,15 +45,30 @@
 
 
 	" Comment out this group for auto commenting
-	:augroup commenting
-	:autocmd!
 	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
-	:augroup END
 	:set foldtext=MyFold()
 
 	:let g:syntastic_check_on_wq = 0
         :let g:syntastic_cpp_compiler = "g++"
         :let g:syntastic_cpp_compiler_options = "-std=c++1z"
+
+" }}}
+
+" HIGHLIGHT SETTINGS {{{
+"_______________________________________________________________________________________________________
+ 
+	" Some higlight settings
+	:highlight LongLine guifg=Red ctermfg=Red
+ 	:highlight Folded None
+	:highlight Folded ctermfg=Black guifg=Black
+	:highlight tablinefill None
+	:highlight tablinesel None
+	:highlight tabline None
+	:highlight tablinesel ctermfg=DarkGrey guifg=DarkGrey
+	:highlight tabline ctermfg=black guifg=black
+	" Unhighlight the next two lines if you cant see your tabline
+	" :highlight tabline ctermfg=DarkGrey guifg=DarkGrey
+	" :highlight tablinesel ctermfg=Grey guifg=Grey
 
 " }}}
 
@@ -168,6 +170,13 @@
 
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
+
+	" Option Autocmds
+	:augroup Options
+	:autocmd!
+	:autocmd OptionSet relativenumber :let &number=&relativenumber
+	:autocmd OptionSet wrap           :let &linebreak=&wrap
+	:augroup END
 
 	" C style formatting
 	" {{{
@@ -293,7 +302,6 @@
 	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
 	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
-	" :autocmd BufWrite *.notes.md :call NotesMDFormat()
 	:autocmd BufRead,BufNewFile *.notes.md :cabbrev md call NotesMDFormat()
 	:augroup END
 	" }}}
