@@ -20,13 +20,6 @@
 " UNIVERSAL SETTINGS {{{
 "_______________________________________________________________________________________________________
 
-	:try
-	:  execute pathogen#infect()
-	:catch
-	:  silent !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
-	:  silent !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
-	:  execute pathogen#infect()
-	:endtry
 
 	:set nocompatible
 	:set autoindent
@@ -72,12 +65,36 @@
 
 " }}}
 
+" PLUGIN INSTALL {{{
+"_______________________________________________________________________________________________________
+
+	:function! SourceOrInstallSyntastic()
+	:  try
+	:    execute pathogen#infect()
+	:  catch
+	:    if executable("curl") != 1 || executable("git") != 1
+	:      echom "You must have git and curl installed"
+	:      return
+	:    endif
+	:    silent !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
+	:    silent !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
+	:    execute pathogen#infect()
+	:  endtry
+	:endfunction()
+
+	:call SourceOrInstallSyntastic()
+" }}}
+
 " UNVIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
 
-	"mapleader
+	" mapleader
 	:let mapleader = " "
 	:let maplocalleader = '\'
+
+	" paste toggle
+	:set pastetoggle = <space>
+	:nnoremap <silent><leader>p :set paste<CR>
 
 	" insert a single char
 	:nnoremap s i <esc>r
@@ -87,9 +104,9 @@
 	:nnoremap j gj
 	:nnoremap k gk
 
-	:inoremap jk <C-R>=CleverEsc()<CR>
-	:inoremap Jk <C-R>=CleverEsc()<CR>
-	:inoremap JK <C-R>=CleverEsc()<CR>
+	:inoremap <expr>jk CleverEsc()
+	:imap Jk jk
+	:imap JK jk
 	:noremap <space> <nop>
 
 	" move lines up and down
@@ -97,12 +114,12 @@
 	:nnoremap _ ddkP
 
 	" indent file
-	:nnoremap <leader>g :call Indent()<CR>
+	:nnoremap <silent><leader>g :call Indent()<CR>
 
 	" edit and reload vimrc
-	:nnoremap <leader>ev :vsplit $MYVIMRC<CR>
-	:nnoremap <leader>sv :silent source $MYVIMRC<CR>
-	:nnoremap <leader>s% :source %<CR>
+	:nnoremap <silent><leader>ev :vsplit $MYVIMRC<CR>
+	:nnoremap <silent><leader>sv :silent source $MYVIMRC<CR>
+	:nnoremap <silent><leader>s% :source %<CR>
 
 
 	" add an empty line right above or below current line
@@ -114,8 +131,8 @@
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
 
 	" mapping for jumping to error
-	:nnoremap <A-up> :lnext<CR>
-	:nnoremap <A-down> :lprev<CR>
+	:nnoremap <silent><A-up> :lnext<CR>
+	:nnoremap <silent><A-down> :lprev<CR>
 
 	" Clever Tab
 	:inoremap <S-tab> <c-x><c-f>
@@ -125,19 +142,19 @@
 	:vnoremap <silent><leader>w :call Wrap("visual")
 
 	" Resizing split
-	:nnoremap <S-right> :vertical resize +5 <CR>
-	:nnoremap <S-left> :vertical resize -5 <CR>
-	:nnoremap <S-up> :resize +5 <CR>
-	:nnoremap <S-down> :resize -5 <CR>
+	:nnoremap <silent><S-right> :vertical resize +5 <CR>
+	:nnoremap <silent><S-left>  :vertical resize -5 <CR>
+	:nnoremap <silent><S-up>    :resize +5 <CR>
+	:nnoremap <silent><S-down>  :resize -5 <CR>
 
 	" Jumping splits and tabs
 	:nnoremap <leader>h <c-w>h
 	:nnoremap <leader>j <c-w>j
 	:nnoremap <leader>k <c-w>k
 	:nnoremap <leader>l <c-w>l
-	:nnoremap <tab> :tabnext<CR>
-	:nnoremap <S-tab> :tabprev<CR>
-	:nnoremap <leader><tab> :tabnew<CR>
+	:nnoremap <silent><tab> :tabnext<CR>
+	:nnoremap <silent><S-tab> :tabprev<CR>
+	:nnoremap <silent><leader><tab> :tabnew<CR>
 
 	" Window Compatibility
 	" :inoremap <BS> <Left><Del>
@@ -147,24 +164,24 @@
 
 " }}}
 
-" UNIVERSAL ABBREVIATIONS {{{
+" UNIVERSAL ABBREVIATIONS AND COMMANDS {{{
 "_______________________________________________________________________________________________________
 
 	:cabbrev help vert help
 	:cabbrev sp vs
 	:cabbrev help vert help
 
-	" Quitting cause Im bad at typing
 	:cabbrev W w
 	:cabbrev Q q
 	:cabbrev Wq wq
 	:cabbrev WQ wq
+
 	:cabbrev jk SyntasticReset
+	:cabbrev unicode Unicode
 
 	:command! MakeTags !ctags -R
 	:command! Unicode set encoding=utf-8
 	
-	:cabbrev unicode Unicode
 
 " }}}
 
@@ -172,11 +189,15 @@
 "_______________________________________________________________________________________________________
 
 	" Option Autocmds
+	" {{{
 	:augroup Options
 	:autocmd!
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
 	:autocmd OptionSet wrap           :let &linebreak=&wrap
+	:autocmd OptionSet paste          :let &relativenumber=!&paste
+	:autocmd OptionSet paste          :let &number=!&paste
 	:augroup END
+	" }}}
 
 	" C style formatting
 	" {{{
