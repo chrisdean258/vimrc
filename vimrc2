@@ -326,118 +326,53 @@
 
 	" Helpers
 	" {{{
+		:function! Strip(str)
+		:  return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
+		:endfunction
+		
+		:function! Line()
+		:  return getline('.')
+		:endfunction
+
+		:function! LineText()
+		:  return Strip(Line())
+		:endfunction
+
+		:function! LineFromCursor()
+		:  return Line()[col('.')-1:]
+		:endfunction
+
+		:function! LineUntilCursor()
+		:  return Line()[:col('.')-1]
+		:endfunction
+
+		:function! LineAfterCursor()
+		:  return LineFromCursor()[1:]
+		:endfunction
+
+		:function! LineBeforeCursor()
+		:  return LineUntilCursor()[:-2]
+		:endfunction
+
+		:function! LineTextFromCursor()
+		:  return Strip(LineFromCursor())
+		:endfunction
+
+		:function! LineTextAfterCursor()
+		:  return Strip(LineAfterCursor())
+		:endfunction
+
+		:function! LineTextUntilCursor()
+		:  return Strip(LineUntilCursor())
+		:endfunction
+
+		:function! LineTextBeforeCursor()
+		:  return Strip(LineBeforeCursor())
+		:endfunction
 	" }}}
 
 	" Generation
 	" {{{
-		:function! MakeGetter_Cpp()
-		" {{{
-		:  normal! mq
-		:  let list = split(getline('.'))
-		:  let type = list[0]
-		:  let varlist = split(list[1],';')
-		:  let var = varlist[0]
-		:  execute "normal! ?\\v(class|struct)\<CR>"
-		:  let list = split(getline('.'))
-		:  let clst = list[0]
-		:  let class = list[1]
-		:  if clst ==# 'class'
-		:    execute "normal!/public\<CR>"
-		:  else
-		:    execute "normal!/{\<CR>"
-		:  endif
-		:  normal! o
-		:  execute "normal! i".type." get_".var."();"
-		:  execute "normal! =="
-		:  execute "normal!/};\<CR>o"
-		:  execute "normal! o".type." ".class."::get_".var."()"
-		:  execute "normal! o{"
-		:  execute "normal! oreturn ".var.";"
-		:  execute "normal! o}"
-		:  normal! `q
-		:endfunction
-		" }}}
-
-		:function! MakeSetter_Cpp()
-		" {{{
-		:  normal! mq
-		:  let list = split(getline('.'))
-		:  let type = list[0]
-		:  let varList = split(list[1],';')
-		:  let var = varList[0]
-		:  execute "normal! ?\\v(class|struct)\<CR>"
-		:  let list = split(getline('.'))
-		:  let clst = list[0]
-		:  let class = list[1]
-		:  if clst ==# 'class'
-		:    execute "normal!/public\<CR>"
-		:  else
-		:    execute "normal!/{\<CR>"
-		:  endif
-		:  normal! o
-		:  execute "normal! ivoid set_".var."(".type.");"
-		:  execute "normal! =="
-		:  execute "normal!/};\<CR>o"
-		:  execute "normal! ovoid ".class."::set_".var."(".type." ".var."_)"
-		:  execute "normal! o{"
-		:  execute "normal! o".var." = ".var."_;"
-		:  execute "normal! o}"
-		:  normal! `q
-		:endfunction
-		" }}}
-
-		:function! MakeClassFunction_old_Cpp()
-		"  {{{
-		:  let line = substitute(getline('.'), ";", "", "")
-		:  execute "normal! ?\\v(class|struct)\<CR>"
-		:  let class = substitute(split(getline('.'))[1], " {", "" , "")
-		:  let linesplit = split(line)
-		:  let linesplit[1] = class."::".linesplit[1]
-		:  let line = join(linesplit)
-		:  execute "normal! /};\<CR>"
-		:  normal! o
-		:  execute "normal! o".line
-		:  execute "normal! o{"
-		:  execute "normal! o}"
-		:endfunction
-		" }}}
-
-		:function! MakeClassFunction_Cpp()
-		"  {{{
-		:  let funcline = substitute(getline('.'), ";", "", "")
-		:  execute "normal! ?\\v(class|struct)\<CR>"
-		:  let classname = substitute(split(getline('.'))[1], " {", "" , "")
-		:  let splitLine = split(funcline, '(')
-		:  let splitSignature = split(splitLine[0], " ")
-		:  let splitSignature[-1] = classname . "::" . splitSignature[-1]
-		:  let splitLine[0] = join(splitSignature, ' ')
-		:  let line = substitute(join(splitLine, '('), "\t*","","")
-		:  execute "normal! /};\<CR>"
-		:  normal! o
-		:  execute "normal! o".line
-		:  execute "normal! o{"
-		:  execute "normal! o}"
-		:endfunction
-		" }}}
-
-		:function! MakeConstructor_Cpp()
-		" {{{
-		:  execute "normal! ?\\v(class|struct)\<CR>"
-		:  let list = split(getline('.'))
-		:  let clst = list[0]
-		:  let class = list[1]
-		:  if clst ==# 'class'
-		:    execute "normal!/public\<CR>"
-		:  else
-		:    execute "normal!/{\<CR>"
-		:  endif
-		:  execute "normal! o".class."();"
-		:  execute "normal!/};\<CR>o"
-		:  execute "normal! o".class."::".class."()"
-		:  execute "normal! o{"
-		:  execute "normal! o}"
-		:endfunction
-		" }}}
 
 		:function! EndTagHTML()
 		" {{{
