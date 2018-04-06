@@ -1,5 +1,6 @@
 " NORMAL CONFIGURATION SETTINGS {{{
 "_______________________________________________________________________________________________________
+
 	:syntax on
 	:set nowrap
 	:set number
@@ -261,6 +262,7 @@
 	:autocmd!
 	:autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ', "")<CR>
 	:autocmd FileType vim :setlocal foldmethod=marker
+	:autocmd FileType vim :setlocal foldenable
 	:autocmd FileType vim :inoremap <expr><buffer><tab> CleverTab()
 	:augroup END
 	" }}}
@@ -611,12 +613,16 @@
 		:  echom a:type
 		:  if a:type ==# "line"
 		:    silent execute "normal! '[V`]$V"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>la".l:ending
 		:  elseif a:type ==# "char"
-		:    silent execute "normal! `[v`]v"
+		:    silent execute "normal! `[v`]lv"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  elseif a:type ==# "block"
 		:    silent execute "normal! `[\<C-V>`]\<C-V>"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:  elseif a:type ==# "visual"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  endif
-		:  silent execute "normal! `<i".l:begin."\<esc>`>la".l:ending
 		:  let &selection = sel_save
 		:endfunction
 		" }}}
