@@ -344,27 +344,21 @@
 		:endfunction
 		" }}}
 		
-		:function! Line()
+		:function! Text(line)
 		" {{{
-		:  return getline('.')
-		:endfunction
-		" }}}
-
-		:function! LineText()
-		" {{{
-		:  return Strip(Line())
+		:  return Strip(getline(a:line))
 		:endfunction
 		" }}}
 
 		:function! LineFromCursor()
 		" {{{
-		:  return Line()[col('.')-1:]
+		:  return getline('.')[col('.')-1:]
 		:endfunction
 		" }}}
 
 		:function! LineUntilCursor()
 		" {{{
-		:  return Line()[:col('.')-1]
+		:  return getline('.')[:col('.')-1]
 		:endfunction
 		" }}}
 
@@ -380,60 +374,39 @@
 		:endfunction
 		" }}}
 
-		:function! LineTextFromCursor()
+		:function! TextFromCursor()
 		" {{{
 		:  return Strip(LineFromCursor())
 		:endfunction
 		" }}}
 
-		:function! LineTextAfterCursor()
+		:function! TextAfterCursor()
 		" {{{
 		:  return Strip(LineAfterCursor())
 		:endfunction
 		" }}}
 
-		:function! LineTextUntilCursor()
+		:function! TextUntilCursor()
 		" {{{
 		:  return Strip(LineUntilCursor())
 		:endfunction
 		" }}}
 
-		:function! LineTextBeforeCursor()
+		:function! TextBeforeCursor()
 		" {{{
 		:  return Strip(LineBeforeCursor())
 		:endfunction
 		" }}}
 	" }}}
 
-	" Generation
+	" HTML/Markdown
 	" {{{
-
-		:function! EndTagHTML()
+		:function! GetEndTagHTML()
 		" {{{
-		:  let line = getline('.')
-		:  let line = line[0:col('.')-1]
-		:  echom line
-		:  let unclosed = [ "area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr" ]
-		:  if line =~ '^\s*<.*'
-		:    try
-		:      let tag = substitute(split(split(line, "<")[-1], " ")[0], ">", "", "g")
-		:      for item in unclosed
-		:        if item == tolower(tag)
-		:          normal! a>
-		:          return
-		:        endif
-		:      endfor
-		:      execute 'normal! a></'.tag.">"
-		:      normal! %h
-		:      return
-		:    catch
-		:      normal! a>
-		:      return
-		:    endtry
-		:  else
-		:    normal! a>
-		:    return
-		:  endif
+		:  let l:unclosed = [ "area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr" ]
+		:  let l:line = LineTextBeforeCursor()
+		:  if l:line =~ "<\w\+.*>$"
+
 		:endfunction
 		" }}}
 
