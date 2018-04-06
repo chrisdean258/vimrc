@@ -191,7 +191,7 @@
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
 	:autocmd OptionSet wrap           :let &linebreak=&wrap
 	:autocmd OptionSet paste          :let &relativenumber=!&paste
-	:autocmd OptionSet spell l        :setlocal spelllang=en_u
+	:autocmd OptionSet spell          :setlocal spelllang=en_u
 	:augroup END
 	" }}}
 
@@ -266,8 +266,8 @@
 	:augroup Markdown
 	:autocmd!
 	:autocmd Filetype markdown  :imap <buffer><tab> <C-R>=MDTabReplacement()<CR>
-	:autocmd Filetype markdown  :nnoremap <silent><buffer>o :execute "normal! " . MDNewlineReplacement("o")<CR>a
-	:autocmd Filetype markdown  :inoremap <silent><buffer><CR> MDNewlineReplacement("\r")
+	:autocmd Filetype markdown  :nnoremap <expr><silent><buffer>o :execute "normal! " . MDNewlineReplacement("o")<CR>a
+	:autocmd Filetype markdown  :inoremap <expr><silent><buffer><CR> MDNewlineReplacement("\r")
 	:autocmd Filetype markdown  :setlocal wrap
 	:autocmd Filetype markdown  :setlocal breakindent
 	" :autocmd Filetype markdown  :setlocal spell spelllang=en_u
@@ -326,49 +326,83 @@
 
 	" Helpers
 	" {{{
+		:function! LeftStrip(str)
+		" {{{
+		:  return substitute(a:str, '^\s*\(.\{-}\s*\)$', '\1', '')
+		:endfunction
+		" }}}
+
+		:function! RightStrip(str)
+		" {{{
+		:  return substitute(a:str, '^\(\s*.\{-}\)\s*$', '\1', '')
+		:endfunction
+		" }}}
+
 		:function! Strip(str)
+		" {{{
 		:  return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 		:endfunction
+		" }}}
 		
 		:function! Line()
+		" {{{
 		:  return getline('.')
 		:endfunction
+		" }}}
 
 		:function! LineText()
+		" {{{
 		:  return Strip(Line())
 		:endfunction
+		" }}}
 
 		:function! LineFromCursor()
+		" {{{
 		:  return Line()[col('.')-1:]
 		:endfunction
+		" }}}
 
 		:function! LineUntilCursor()
+		" {{{
 		:  return Line()[:col('.')-1]
 		:endfunction
+		" }}}
 
 		:function! LineAfterCursor()
+		" {{{
 		:  return LineFromCursor()[1:]
 		:endfunction
+		" }}}
 
 		:function! LineBeforeCursor()
+		" {{{
 		:  return LineUntilCursor()[:-2]
 		:endfunction
+		" }}}
 
 		:function! LineTextFromCursor()
+		" {{{
 		:  return Strip(LineFromCursor())
 		:endfunction
+		" }}}
 
 		:function! LineTextAfterCursor()
+		" {{{
 		:  return Strip(LineAfterCursor())
 		:endfunction
+		" }}}
 
 		:function! LineTextUntilCursor()
+		" {{{
 		:  return Strip(LineUntilCursor())
 		:endfunction
+		" }}}
 
 		:function! LineTextBeforeCursor()
+		" {{{
 		:  return Strip(LineBeforeCursor())
 		:endfunction
+		" }}}
 	" }}}
 
 	" Generation
