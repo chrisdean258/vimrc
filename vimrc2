@@ -266,15 +266,16 @@
 	" {{{
 	:augroup Markdown
 	:autocmd!
-	:autocmd Filetype markdown  :inoremap <expr><buffer><tab> MDTab(CleverTab())
-	:autocmd Filetype markdown  :nnoremap <expr><silent><buffer>o MDNewline("o")
-	:autocmd Filetype markdown  :inoremap <expr><silent><buffer><CR> MDNewline("\r")
-	:autocmd Filetype markdown  :setlocal wrap
-	:autocmd Filetype markdown  :setlocal breakindent
-	" :autocmd Filetype markdown  :setlocal spell spelllang=en_u
-	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>sp mq[s1z=`q
-	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h1 "qyy"qpVr=
-	" :autocmd Filetype markdown  :nnoremap <buffer><localleader>h2 "qyy"qpVr-
+	:autocmd Filetype markdown :inoremap <expr><buffer><tab> MDTab(CleverTab())
+	:autocmd Filetype markdown :inoremap <expr><silent><buffer><CR> MDNewline("\r")
+	:autocmd Filetype markdown :inoremap <silent><buffer><localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd Filetype markdown :nnoremap <expr><silent><buffer>o MDNewline("o")
+	:autocmd Filetype markdown :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
+	:autocmd Filetype markdown :setlocal wrap
+	:autocmd Filetype markdown :setlocal breakindent
+	:autocmd Filetype markdown :setlocal spell
+	:autocmd Filetype markdown :setlocal spelllang=en
+	:autocmd Filetype markdown :cabbrev markdown call NotesMDFormat()
 	:augroup END
 	" }}}
 
@@ -282,8 +283,16 @@
 	" {{{
 	:augroup Text
 	:autocmd!
-	:autocmd BufRead,BufNewFile *.txt :setlocal wrap
-	:autocmd BufRead,BufNewFile *.txt :setlocal encoding=utf-8
+	:autocmd FileType text :setlocal wrap
+	:autocmd FileType text :setlocal encoding=utf-8
+	:autocmd FileType text :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
+	:autocmd FileType text :inoremap <silent><buffer><localleader>s <esc>:call SpellReplace()<CR>a
+	:autocmd FileType text :inoremap <expr><buffer><tab> CleverTab()
+	:autocmd FileType text :setlocal spell
+	:autocmd FileType text :setlocal wrap
+	:autocmd FileType text :setlocal linebreak
+	:autocmd FileType text :setlocal breakindent
+	:autocmd FileType text :setlocal syntax=
 	:augroup END
 	" }}}
 
@@ -292,32 +301,6 @@
 	:augroup Assembly
 	:autocmd!
 	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
-	:augroup END
-	" }}}
-
-	" Notes
-	" {{{
-	:augroup Notes
-	:autocmd!
-	:autocmd BufRead,BufNewFile *.notes* :nnoremap <buffer><localleader>s :call SpellReplace()<CR>
-	:autocmd BufRead,BufNewFile *.notes* :inoremap <buffer><localleader>s <esc>:call SpellReplace()<CR>a
-	:autocmd BufRead,BufNewFile *.notes* :iabbrev <buffer>w/ with
-	:autocmd BufRead,BufNewFile *.notes* :setlocal spell
-	:autocmd BufRead,BufNewFile *.notes* :setlocal spelllang=en
-	:autocmd BufRead,BufNewFile *.notes.md :cabbrev markdown call NotesMDFormat()
-	:augroup END
-	" }}}
-
-	" Homework
-	" {{{
-	:augroup hw
-	:autocmd!
-	:autocmd BufRead,BufNewFile *.hw :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
-	:autocmd BufRead,BufNewFile *.hw :inoremap <silent><buffer><localleader>s <esc>:call SpellReplace()<CR>a
-	:autocmd BufRead,BufNewFile *.hw :inoremap <expr><buffer><tab> CleverTab()
-	:autocmd BufRead,BufNewFile *.hw :setlocal spell
-	:autocmd BufRead,BufNewFile *.hw :setlocal wrap
-	:autocmd BufRead,BufNewFile *.hw :setlocal syntax=
 	:augroup END
 	" }}}
 " }}}
@@ -524,11 +507,11 @@
 
 		:function! CFoldText()
 		" {{{
-		:  let tablen = &l:shiftwidth
-		:  let lines = v:foldend - v:foldstart - 1
-		:  let line = getline(v:foldstart)
-		:  let endline = getline(v:foldend)
-		:  return substitute(line[0:index(line,'{')], "\t", repeat(" ", tablen), "g").' '. lines .' lines '. endline
+		:  let l:tablen = &l:shiftwidth
+		:  let l:lines = v:foldend - v:foldstart - 1
+		:  let l:line = getline(v:foldstart)
+		:  let l:endline = getline(v:foldend)
+		:  return substitute(l:line[0:index(l:line,'{')], "\t", repeat(" ", l:tablen), "g").' '. l:lines .' lines '. l:endline
 		:endfunction
 		" }}}
 
@@ -578,25 +561,20 @@
 	" {{{
 		:function! CommentBL(start, end) range
 		" {{{
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
-		:  normal! `q
+		:  let l:window = winsaveview()
 		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:start.'\2/e'
 		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:start.a:start.'/\1/e'
 		:  execute "silent ".a:firstline.",".a:lastline.'s/$/'. a:end
 		:  execute "silent ".a:firstline.",".a:lastline.'s/'. a:end . a:end . '$//e'
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
+		:  call winrestview(l:window)
 		:  nohlsearch
 		:endfunction
 		" }}}
 
 		:function! CleverTab()
 		" {{{
-		:   let str =  strpart( getline('.'), 0, col('.')-1 )
-		:   if str =~ '^\s*$' || str =~ '\s$'
+		:   let l:str =  strpart( getline('.'), 0, col('.')-1 )
+		:   if l:str =~ '^\s*$' || l:str =~ '\s$'
 		:      return "\<Tab>"
 		:   else
 		:      return "\<C-P>"
@@ -662,48 +640,13 @@
 
 		:function! RemoveTrailingWhitespace()
 		" {{{
-		:  let line = line('.')
-		:  let ll = line-1
-		:  let end = line('$')
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
-		:  if line != 1
-		:    try
-		:      silent execute "1,".ll.'s/\s*$//g'
-		:    catch
-		:    endtry
-		:  endif
-		:  if line != end
-		:    try
-		:      silent execute line+1.',$s/\s*$//g'
-		:    catch
-		:    endtry
-		:  endif
+		:  let l:window = winsaveview()
+		:  let l:line = getline('.')
+		:  %s/\s*\+//g
+		:  call winrestview(l:window)
+		:  setline('.', l:line)
+		:  call winrestview(l:window)
 		:  nohlsearch
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
-		:endfunction
-		" }}}
-
-		:function! FormatCommas_AU()
-		" {{{
-		" :  autocmd BufRead,BufWrite * :silent call FormatCommas()
-		:endfunction
-		" }}}
-
-		:function! FormatCommas()
-		" {{{
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
-		:  %s/ *, */,/g
-		:  %s/,/, /g
-		:  nohlsearch
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
 		:endfunction
 		" }}}
 
@@ -729,40 +672,18 @@
 
 		:function! Indent()
 		" {{{
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
+		:  let l:window = winsaveview()
 		:  normal! gg=G
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
+		:  call winrestview(l:window)
 		:endfunction
 		" }}}
 
 		:function! SpellReplace()
 		" {{{
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
+		:  let l:window = winsaveview()
 		:  normal! [s1z=
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
+		:  call winrestview(l:window)
 		:endfunction
 		" }}}
-
-		:function! ExpandedTabBackSpace()
-		" {{{
-		:  let tablen = &l:shiftwidth
-		:  let line = getline('.')
-		:  let column = col('.')
-		:  let line = line[0:column-2]
-		:  if line =~ '^\s*$' && column > tablen
-		:    return repeat("\b", tablen)
-		:  endif
-		:  return "\b"
-		:endfunction
-		"}}}
-
 	" }}}
 " }}}
