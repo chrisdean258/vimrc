@@ -25,7 +25,7 @@
 	:set smartindent
 	:set showcmd
 	:set wildmenu
-	:set hlsearch incsearch
+	:set incsearch
 	:set backspace=eol,indent,start
 	:filetype plugin indent on
 	:filetype plugin on
@@ -36,7 +36,7 @@
 	:set omnifunc=syntaxcomplete#Complete
 
 	" Comment out this group for auto commenting
-	:autocmd FileType,BufNewFile,BufRead * :setlocal formatoptions-=cro
+	:setlocal formatoptions-=cro
 	:setlocal nofoldenable
 	:setlocal foldtext=MyFold()
 
@@ -45,9 +45,12 @@
 " HIGHLIGHT SETTINGS {{{
 "_______________________________________________________________________________________________________
  
+	" Setting for using Highlight after function
 	:highlight LongLine guifg=Red ctermfg=Red
  	:highlight Folded None
 	:highlight Folded ctermfg=Black guifg=Black
+
+	" Settings for tabline
 	:highlight tablinefill None
 	:highlight tablinesel None
 	:highlight tabline None
@@ -102,7 +105,7 @@
 	:inoremap <expr> jk CleverEsc()
 	:imap Jk jk
 	:imap JK jk
-	:noremap <space> <nop>jk
+	:noremap <space> <nop>
 
 	" move lines up and down
 	:nnoremap - ddp
@@ -134,7 +137,7 @@
 
 	" Wrapping
 	:nnoremap <silent><leader>w :set opfunc=Wrap<CR>g@
-	:vnoremap <silent><leader>w :call Wrap("visual")
+	:vnoremap <silent><leader>w :call Wrap("visual")<CR>
 
 	" Resizing split
 	:nnoremap <silent><S-right> :vertical resize +5 <CR>
@@ -592,43 +595,29 @@
 		:endfunction
 		" }}}
 
-		:function! Wrap(type)
+		:function! Wrap(type) range
 		" {{{
-		:  let sel_save = &selection
+		:  let l:sel_save = &selection
 		:  let &selection = "inclusive"
-		:  let input  = nr2char(getchar())
-		:  let forward = {"<" : ">", "[" : "]", " {" : " }", "(" : ")",}
-		:  let backward = {">" : "<", "]" : "[", " }" : " {", ")" : "(",}
-		:  if has_key(forward, input)
-		:    let begin = input
-		:    let ending = forward[input]
-		:  elseif has_key(backward, input)
-		:    let ending = input
-		:    let begin = backward[input]
-		:   else
-		:    let ending = input
-		:    let begin = input
+		:  let l:input = nr2char(getchar())
+		:  let l:ending = l:input
+		:  let l:begin = l:input
+		:  let l:first = {"<" : "<", "[" : "[", "{" : "{", "(" : "(", ">" : "<", "]" : "[", "}" : "{", ")" : "(",}
+		:  let l:last  = {"<" : ">", "[" : "]", "{" : "}", "(" : ")", ">" : ">", "]" : "]", "}" : "}", ")" : ")",}
+		:  if has_key(l:first, input)
+		:    let l:begin  = l:first[l:input]
+		:    let l:ending = l:last[l:input]
 		:  endif
+		:  echom a:type
 		:  if a:type ==# "line"
-		:    echom "help"
-		:    let deref = "\'"
-		:    let jump = "$"
-		:  else
-		:    let deref = "`"
-		:    let jump = ""
+		:    silent execute "normal! '[V`]$V"
+		:  elseif a:type ==# "char"
+		:    silent execute "normal! `[v`]v"
+		:  elseif a:type ==# "block"
+		:    silent execute "normal! `[\<C-V>`]\<C-V>"
 		:  endif
-		:  if a:type !=# "visual"
-		:    silent exe "normal! ".deref."[v".deref."]".jump."d"
-		:    let @@ = begin.@@.ending
-		:    if col('.') == strlen(getline('.'))
-		:      normal! p
-		:    else
-		:      normal! P
-		:    endif
-		:    let &selection = sel_save
-		:  else
-		:    execute "normal! `<i".begin."\<esc>`>a".ending
-		:  endif
+		:  silent execute "normal! `<i".l:begin."\<esc>`>la".l:ending
+		:  let &selection = sel_save
 		:endfunction
 		" }}}
 
@@ -687,3 +676,52 @@
 		" }}}
 	" }}}
 " }}}
+ 
+" TMUX Terminal Split {{{
+"_______________________________________________________________________________________________________
+
+	:cabbrev t T
+	:command! T call Terminal()
+
+	:function! Terminal()
+	" {{{
+	:  let aucmd = ' ''autocmd VimLeave :!tmux kill-session -t vim '' '
+	:  let tmuxSession = 'tmux new-session -s "vim" "vim -S session.vim -c '.aucmd .'"'
+	:  echo tmuxSession
+	:  call getchar()
+	:  let split = '\; split-window -v -p 40 \;'
+	:  mksession session.vim
+	:  set noswapfile
+	:  silent execute '!' . tmuxSession . split
+	:  silent execute '!rm session.vim'
+	" :  q!
+	:endfunction
+	" }}}
+
+	:function! TestSuspend()
+	" {{{
+	: silent execute '!sleep 3 && echo hi &'
+	:endfunction
+	" }}}
+
+" }}}
+
+" AUTO UPDATE SCRIPT {{{
+"_______________________________________________________________________________________________________
+	:function Update_Vimrc()
+	" {{{
+	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
+	:  silent execute "! " . update_script . " &> /dev/null"
+	:  if v:shell_error != 0
+	:    silent !mkdir -p $HOME/.vim/auto_update
+	:    silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
+	:    silent execute "! " . update_script . " &>/dev/null"
+	:  endif
+	:endfunction
+	" }}}
+	:call Update_Vimrc()
+	:command! Update call Update_Vimrc()
+" }}}
+
+" If you cannot see anything but this message uncomment the next line
+" :highlight Folded ctermfg=DarkGrey guifg=DarkGrey
