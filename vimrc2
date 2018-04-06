@@ -201,6 +201,7 @@
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer>; :call AppendSemicolon()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <buffer>{} {<CR>}<esc>O
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <expr><buffer><tab> CleverTab()
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :setlocal cindent
@@ -487,22 +488,14 @@
 		" {{{
 		" The \{-} is the non greedy version of *
 		" Honestly there should be a *? but that who am I to judge
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
-
+		:  let l:window = winsaveview()
 		:  %s/__\(.\{-}\)__/<u>\1<\/u>/ge
-
 		:  %s/_\(.\{-}\)_\^\(.\{-}\)\^/<sup>\2<\/sup><sub style='position: relative; left: -.5em;'>\1<\/sub> /ge
 		:  %s/\^\(.\{-}\)\^_\(.\{-}\)_/<sup>\1<\/sup><sub style='position: relative; left: -.5em;'>\2<\/sub> /ge
-
 		:  %s/_\(.\{-}\)_/<sub>\1<\/sub>/ge
 		:  %s/\^\(.\{-}\)\^/<sup>\1<\/sup>/ge
-
+		:  call winrestview(l:window)
 		:  nohlsearch
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
 		:endfunction
 		" }}}
 
@@ -547,10 +540,13 @@
 
 		:function! AppendSemicolon()
 		" {{{
-		:  if getline('.') =~ ';\s*$'
-		:    return "\<bs>"
+		:  let l:window = winsaveview()
+		:  if Text('.') =~ ';$'
+		:    execute "normal! A\b"
+		:  else
+		:    execute "normal! A;"
 		:  endif
-		:  return ';'
+		:  call winrestview(l:window)
 		:endfunction
 		" }}}
 
@@ -566,24 +562,12 @@
 
 		:function! SplitIf()
 		" {{{
-		:  normal! mq
-		:  normal! H
-		:  normal! mm
-		:  normal! `q
+		:  let l:window = winsaveview()
 		:  execute "normal! 0f(%l"
-		:  if !(getline('.') =~ ".*(.*)\s*.*;$")
-		:    return
-		:    echom "No split found"
-		:    normal! `m
-		:    normal! zt
-		:    normal! `q
-		:    return
-		:  else
-		:    execute "normal! i\<CR>{\<CR>\<esc>$a\<CR>}"
+		:  if getline('.') =~ ".*(.*)\s*.*;$"
+		:    execute "normal! i\<CR>{\<CR>\<esc>o}"
 		:  endif
-		:  normal! `m
-		:  normal! zt
-		:  normal! `q
+		:  call winrestview(l:window)
 		:  normal! 2j^
 		:endfunction
 		" }}}
