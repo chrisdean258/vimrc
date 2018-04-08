@@ -637,7 +637,7 @@
 		" {{{
 		:  let l:window = winsaveview()
 		:  let l:line = getline('.')
-		:  %s/\s*\+//g
+		:  %s/\s\+$//g
 		:  call winrestview(l:window)
 		:  setline('.', l:line)
 		:  call winrestview(l:window)
