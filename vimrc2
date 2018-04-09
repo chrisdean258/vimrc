@@ -45,7 +45,7 @@
 
 " HIGHLIGHT SETTINGS {{{
 "_______________________________________________________________________________________________________
- 
+
 	" Setting for using Highlight after function
 	:highlight LongLine guifg=Red ctermfg=Red
  	:highlight Folded None
@@ -195,7 +195,7 @@
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
 	:autocmd OptionSet wrap           :let &linebreak=&wrap
 	:autocmd OptionSet paste          :let &relativenumber=!&paste
-	:autocmd OptionSet spell          :setlocal spelllang=en_u
+	:autocmd OptionSet spell          :setlocal spelllang=en
 	:augroup END
 	" }}}
 
@@ -278,8 +278,6 @@
 	:autocmd Filetype markdown :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd Filetype markdown :setlocal wrap
 	:autocmd Filetype markdown :setlocal breakindent
-	:autocmd Filetype markdown :setlocal spell
-	:autocmd Filetype markdown :setlocal spelllang=en
 	:autocmd Filetype markdown :cabbrev markdown call NotesMDFormat()
 	:augroup END
 	" }}}
@@ -338,7 +336,7 @@
 		:  return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 		:endfunction
 		" }}}
-		
+
 		:function! Text(line)
 		" {{{
 		:  return Strip(getline(a:line))
@@ -443,7 +441,7 @@
 		:      return a:in.l:line[:stridx(l:line, " ")]
 		:    endif
 		:  endfor
-		:  if l:line =~ '^\d\+.\s*$' || l:line =~ '\d\+)\s*'
+		:  if l:line =~ '^\d\+.\s*$' || l:line =~ '^\d\+)\s*'
 		:    return "\<esc>^C"
 		:  elseif l:line =~ '^\d\+. '
 		:    return a:in.(l:line + 1).'. '
@@ -453,7 +451,7 @@
 		:  return a:in
 		endfunction
 		" }}}
-		
+
 		function! MDTab(default)
 		"  {{{
 		:  let l:allowable_starts = [ '>', '\*', '-', '+', '|' , '\d\+.', '\d\+)' ]
@@ -637,9 +635,9 @@
 		" {{{
 		:  let l:window = winsaveview()
 		:  let l:line = getline('.')
-		:  %s/\s\+$//g
+		:  %s/\s\+$//ge
 		:  call winrestview(l:window)
-		:  setline('.', l:line)
+		:  call setline('.', l:line)
 		:  call winrestview(l:window)
 		:  nohlsearch
 		:endfunction
@@ -682,7 +680,7 @@
 		" }}}
 	" }}}
 " }}}
- 
+
 " TMUX Terminal Split {{{
 "_______________________________________________________________________________________________________
 
