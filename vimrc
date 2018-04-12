@@ -724,7 +724,7 @@
 	:  endif
 	:endfunction
 	" }}}
-	:call Update_Vimrc()
+	" :call Update_Vimrc()
 	:command! Update call Update_Vimrc()
 " }}}
 
