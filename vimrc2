@@ -35,6 +35,7 @@
 	:set path+=**
 
 	:set omnifunc=syntaxcomplete#Complete
+	:set laststatus=1
 
 	" Comment out this group for auto commenting
 	:setlocal formatoptions-=cro
@@ -712,7 +713,7 @@
 
 " AUTO UPDATE SCRIPT {{{
 "_______________________________________________________________________________________________________
-	:function Update_Vimrc()
+	:function! Update_Vimrc()
 	" {{{
 	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
 	:  silent execute "! " . update_script . " &> /dev/null"
