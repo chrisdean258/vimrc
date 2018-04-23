@@ -229,6 +229,15 @@
 	:augroup END
 	" }}}
 
+	" Java
+	" {{{
+	:augroup java
+	:  autocmd!
+	:  autocmd FileType java  :SyntasticToggle
+	:  autocmd FileType java  :nnoremap <localleader>c :SyntasticCheck<CR>
+	:augroup END
+	" }}}
+
 	" Web
 	" {{{
 	:augroup web
@@ -254,6 +263,9 @@
 	:autocmd FileType python  :setlocal tabstop=4
 	:autocmd FileType python  :setlocal expandtab
 	:autocmd FileType python  :call RemoveTrailingWhitespace_AU()
+	:autocmd BufNewFile *.py   :autocmd VimLeave <buffer> :!chmod +x %
+	:autocmd BufNewFile *.sh   :autocmd VimLeave <buffer> :!chmod +x %
+	:autocmd BufNewFile *.bash :autocmd VimLeave <buffer> :!chmod +x %
 	:augroup END
 	" }}}
 
@@ -264,6 +276,7 @@
 	:autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ', "")<CR>
 	:autocmd FileType vim :setlocal foldmethod=marker
 	:autocmd FileType vim :setlocal foldenable
+	:autocmd FileType vim :setlocal foldtext=MyFold()
 	:autocmd FileType vim :inoremap <expr><buffer><tab> CleverTab()
 	:augroup END
 	" }}}
@@ -272,7 +285,7 @@
 	" {{{
 	:augroup Markdown
 	:autocmd!
-	:autocmd Filetype markdown :inoremap <expr><buffer><tab> MDTab(CleverTab())
+	:autocmd Filetype markdown :inoremap <buffer><tab> <c-r>=MDTab(CleverTab())<CR>
 	:autocmd Filetype markdown :inoremap <expr><silent><buffer><CR> MDNewline("\r")
 	:autocmd Filetype markdown :inoremap <silent><buffer><localleader>s <esc>:call SpellReplace()<CR>a
 	:autocmd Filetype markdown :nnoremap <expr><silent><buffer>o MDNewline("o")
@@ -461,10 +474,14 @@
 		:    return a:default
 		:  endif
 		:  let lineabove = Text(linenum)
-		:  let line = Text('.')
+		:  let line = TextBeforeCursor()
 		:  for starting in allowable_starts
 		:    if line =~ '^\s*' . starting .'\s*$'
-		:      return "\<esc>I".repeat(" ", stridx(l:lineabove, " ") + 1) . "\<esc>A"
+		:      let l:window = winsaveview()
+		:      let l:repeat =  stridx(l:lineabove, " ") + 1
+		:      call setline('.', repeat(" ", l:repeat) . getline('.'))
+		:      call winrestview(l:window)
+		:      return repeat("\<right>", l:repeat)
 		:    endif
 		:  endfor
 		:  return a:default
@@ -679,6 +696,18 @@
 		:  call winrestview(l:window)
 		:endfunction
 		" }}}
+
+		:function! SingleInsert()
+		:  let l:char = GetChar()
+		:  execute "normal! a\b\ea" . l:char
+		:endfunction
+
+		:function! GetChar()
+		:  while getchar(1) == 0
+		:  endwhile
+		:  return nr2char(getchar())
+		:endfunction
+
 	" }}}
 " }}}
 
