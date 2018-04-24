@@ -191,6 +191,7 @@
 
 	" Option Autocmds
 	" {{{
+	:if has("OptionSet")
 	:augroup Options
 	:autocmd!
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
@@ -198,6 +199,7 @@
 	:autocmd OptionSet paste          :let &relativenumber=!&paste
 	:autocmd OptionSet spell          :setlocal spelllang=en
 	:augroup END
+	:endif
 	" }}}
 
 	" C style formatting
