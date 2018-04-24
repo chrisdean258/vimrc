@@ -248,7 +248,9 @@
 	:  autocmd FileType html,php :setlocal expandtab
 	:  autocmd FileType html,php :setlocal wrap
 	:  autocmd FileType html,php :setlocal linebreak
-	:  autocmd FileType html,php :setlocal breakindent
+	:  if has("breakindent")
+	:    autocmd FileType html,php :setlocal breakindent
+	:  endif
 	:  autocmd FileType html,php :nnoremap <silent><buffer><localleader>\ :call CommentBL('\<!--', '-->')<CR>
 	:  autocmd FileType html,php :inoremap <silent><buffer>> ><esc>:call EndTagHTML()<CR>a
 	:  autocmd FileType html,php :inoremap <expr><buffer><CR> HTMLCarriageReturn()
@@ -293,7 +295,9 @@
 	:autocmd Filetype markdown :nnoremap <expr><silent><buffer>o MDNewline("o")
 	:autocmd Filetype markdown :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd Filetype markdown :setlocal wrap
-	:autocmd Filetype markdown :setlocal breakindent
+	:if has("breakindent")
+	:  autocmd Filetype markdown :setlocal breakindent
+	:endif
 	:autocmd Filetype markdown :cabbrev markdown call NotesMDFormat()
 	:augroup END
 	" }}}
@@ -310,7 +314,9 @@
 	:autocmd FileType text :setlocal spell
 	:autocmd FileType text :setlocal wrap
 	:autocmd FileType text :setlocal linebreak
-	:autocmd FileType text :setlocal breakindent
+	:if has("breakindent")
+	:  autocmd FileType text :setlocal breakindent
+	:endif
 	:autocmd FileType text :setlocal syntax=
 	:augroup END
 	" }}}
