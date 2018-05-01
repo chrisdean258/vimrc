@@ -191,7 +191,7 @@
 
 	" Option Autocmds
 	" {{{
-	:if has("OptionSet")
+	:if exists("#OptionSet")
 	:augroup Options
 	:autocmd!
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
@@ -248,7 +248,7 @@
 	:  autocmd FileType html,php :setlocal expandtab
 	:  autocmd FileType html,php :setlocal wrap
 	:  autocmd FileType html,php :setlocal linebreak
-	:  if has("breakindent")
+	:  if exits("+breakindent")
 	:    autocmd FileType html,php :setlocal breakindent
 	:  endif
 	:  autocmd FileType html,php :nnoremap <silent><buffer><localleader>\ :call CommentBL('\<!--', '-->')<CR>
@@ -295,7 +295,7 @@
 	:autocmd Filetype markdown :nnoremap <expr><silent><buffer>o MDNewline("o")
 	:autocmd Filetype markdown :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd Filetype markdown :setlocal wrap
-	:if has("breakindent")
+	:if exists("+breakindent")
 	:  autocmd Filetype markdown :setlocal breakindent
 	:endif
 	:autocmd Filetype markdown :cabbrev markdown call NotesMDFormat()
@@ -311,10 +311,9 @@
 	:autocmd FileType text :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd FileType text :inoremap <silent><buffer><localleader>s <esc>:call SpellReplace()<CR>a
 	:autocmd FileType text :inoremap <expr><buffer><tab> CleverTab()
-	:autocmd FileType text :setlocal spell
 	:autocmd FileType text :setlocal wrap
 	:autocmd FileType text :setlocal linebreak
-	:if has("breakindent")
+	:if exists("+breakindent")
 	:  autocmd FileType text :setlocal breakindent
 	:endif
 	:autocmd FileType text :setlocal syntax=
