@@ -59,6 +59,11 @@
 	:highlight tablinesel ctermfg=DarkGrey guifg=DarkGrey
 	:highlight tabline ctermfg=black guifg=black
 
+	" Settings for spell
+	:highlight spellrare None
+	:highlight spellcap None
+	:highlight spelllocal None
+
 	" Unhighlight the next two lines if you cant see your tabline
 	" :highlight tabline ctermfg=DarkGrey guifg=DarkGrey
 	" :highlight tablinesel ctermfg=Grey guifg=Grey
@@ -87,14 +92,18 @@
 	:let g:syntastic_check_on_wq = 0
         :let g:syntastic_cpp_compiler = "g++"
         :let g:syntastic_cpp_compiler_options = "-std=c++98 -Wall -Wextra"
-	:let g:syntastic_cpp_include_dirs = [ "../../include", "../../include/utils/" , "../../eo/include" ]
+	:let g:syntastic_cpp_include_dirs = [ "../../include", "../../include/utils/" , "../../eo/include", "../../eo/gengraph/include" ]
 
-	" :let g:syntastic_python_checkers = [ 'python' ]
-	let g:syntastic_quiet_messages = { "type": "style" }
+	:let g:syntastic_python_checkers = [ 'python' ]
+	:let g:syntastic_always_populate_loc_list = 1
+	" :let g:syntastic_auto_loc_list = 1
+	:let g:syntastic_loc_list_height= 3
+	:let g:syntastic_quiet_messages = { "type": "style" }
+
 
 " }}}
 
-" UNVIVERSAL MAPPINGS {{{
+" UNIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
 
 	"mapleader
@@ -136,12 +145,21 @@
 	:nnoremap <leader>O O<esc>
 
 
-	" clear higlighting from search
+	" clear highlighting from search
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
+	:nnoremap n :set hlsearch<cr>n
+	:nnoremap N :set hlsearch<cr>N
+	:nnoremap / :set hlsearch<cr>/
+	:nnoremap ? :set hlsearch<cr>?
+	:nnoremap # :set hlsearch<cr>#
+	:nnoremap * :set hlsearch<cr>*
 
 	" mapping for jumping to error
-	:nnoremap <silent><A-up>   :lnext<CR>
-	:nnoremap <silent><A-down> :lprev<CR>
+	:nnoremap <silent><A-up>    :lnext<CR>
+	:nnoremap <silent><A-down>  :lprev<CR>
+	:nnoremap <silent><A-left>  :lfirst<CR>
+	:nnoremap <silent><A-right> :llast<CR>
+
 
 	" Clever Tab
 	:inoremap <S-tab> <c-x><c-f>
@@ -171,6 +189,13 @@
 	" Getting rid of pesky popup window
 	:nnoremap q: :
 
+	" Pasting from clipboard
+	:nnoremap <leader>p "+p
+	:nnoremap <leader>P "+P
+
+	" TODO The yanking operations
+	:nnoremap Y y$
+
 " }}}
 
 " UNIVERSAL ABBREVIATIONS AND COMMANDS {{{
@@ -187,10 +212,16 @@
 	:cabbrev WQ wq
 	:cabbrev jk SyntasticReset
 	:cabbrev unicode Unicode
+	:cabbrev S %s
+	:cabbrev a 'a,.s
+	:cabbrev $ .,$s
 
 	:command! MakeTags !ctags -R
 	:command! Unicode set encoding=utf-8
-	:command! S %s
+	:command! Net :call ProcessNetwork()
+	:command! Fold :setlocal foldenable | setlocal foldmethod=syntax
+	:command! SError let g:syntastic_auto_loc_list = 1 | SyntasticCheck
+
 " }}}
 
 " AUTOCMD GROUPS  {{{
@@ -205,12 +236,13 @@
 	:autocmd!
 	:autocmd BufNewFile * :autocmd BufWritePost * :call IfScript()
 	:autocmd BufRead *    :setlocal formatoptions-=cro
+	:autocmd cursorhold * set nohlsearch
 	:augroup END
 	" }}}
 
 	" Option Autocmds
 	" {{{
-	:if exists("#OptionSet")
+	:if exists("##OptionSet")
 	:augroup Options
 	:autocmd!
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
@@ -247,7 +279,7 @@
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp  :iabbrev <buffer> main <C-R>=MainAbbrev()<CR>
 	:  autocmd FileType c      :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
-	:  autocmd FileType cpp    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
+	:  autocmd FileType cpp    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(100)
 	:augroup END
 	" }}}
 
@@ -316,6 +348,7 @@
 	:autocmd Filetype markdown :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
 	:autocmd FileType markdown :nnoremap <silent><buffer><localleader>\ :call CommentBL('- ')<CR>
 	:autocmd Filetype markdown :setlocal wrap
+	:autocmd Filetype markdown :setlocal linebreak
 	:if exists("+breakindent")
 	:  autocmd Filetype markdown :setlocal breakindent
 	:endif
@@ -348,6 +381,12 @@
 	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:augroup END
 	" }}}
+
+	" Make
+	:augroup c_style
+	:  autocmd FileType make :inoremap <expr><buffer><tab> CleverTab()
+	:  autocmd FileType make :nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:augroup END
 
 " {{{
 :endif
@@ -479,7 +518,7 @@
 
 		function! MDNewline(in)
 		"  {{{
-		:  let l:allowable_starts = [ '>', '\*', '-', '+', '|' ]
+		:  let l:allowable_starts = [ '>', '\*', '-', '+', ]
 		:  let l:line = Text('.')
 		:  for starting in l:allowable_starts
 		:    if l:line =~ '^' . starting . '\s*$'
@@ -571,7 +610,7 @@
 
 		:function! HighlightAfterColumn(col)
 		" {{{
-		:  if getline('.') !~ 'printf'
+		:  if getline('.') !~ 'printf' && getline('.') !~ '[^=]*<<[^=]*'
 		:    exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
 		:  else
 		:    exe 'match LongLine /\%'.line('.').'l\%>'.(500).'v./'
@@ -630,6 +669,22 @@
 		:endfunction
 		" }}}
 
+		:function! Comment() range
+		" {{{
+		:  let l:window = winsaveview()
+		:  let l:row = line(a:firstline)
+		:  let l:comments = split(&commentstring, "%s")
+		:  let l:begin = l:comments[0]
+		:  let l:end = len(l:comments) > 2 ? l:comments[1] : ""
+		:  while l:row <= line(a:lastline)
+		:    let l:line = getline(l:row)
+		:    let l:row += 1
+		:  endwhile
+		:  call winrestview(l:window)
+		:  nohlsearch
+		:endfunction
+		" }}}
+
 		:function! CleverTab()
 		" {{{
 		:   let l:str =  strpart( getline('.'), 0, col('.')-1 )
@@ -683,7 +738,7 @@
 
 		:function! RemoveTrailingWhitespace_AU()
 		" {{{
-		:  autocmd BufRead,BufWrite * :silent call RemoveTrailingWhitespace()
+		:  autocmd BufRead,BufWrite <buffer> :silent call RemoveTrailingWhitespace()
 		:endfunction
 		" }}}
 
@@ -758,8 +813,15 @@
 		:  endif
 		:endfunction
 		" }}}
+	" }}}
 
-
+	" Process Network
+	" {{{
+	:function! ProcessNetwork()
+	:  w! temp
+	:  g/^N/:let a = join(split(getline('.'))[6:]) | execute ':%s/'.a.'/'.join(split(getline('.'))[1:3]).'/g'
+	:  g/^N/:call setline('.',join(split(getline('.'))[0:5]))
+	:endfunction
 	" }}}
 " }}}
 
