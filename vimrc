@@ -41,7 +41,12 @@
 	:setlocal nofoldenable
 	:setlocal foldtext=MyFold()
 
+	:set splitright
+	:set splitbelow
+
 	:set tag=./tags,./TAGS,tags,TAGSs,../tags,../../tags
+	set tags+=./tags;$HOME
+	set tags+=./.tags;$HOME
 " }}}
 
 " HIGHLIGHT SETTINGS {{{
@@ -117,6 +122,11 @@
 	:nnoremap <silent><expr>S SingleInsert("a")
 	:nnoremap <silent>s<F12> <nop>
 	:nnoremap <silent>S<F12> <nop>
+
+	" Repeat mappings
+	:nnoremap <silent>. :call RepeatFunc()<CR>.
+	:let g:repeat = ""
+	:let g:repeatstack = ""
 
 	" key mapping
 	:nnoremap j gj
@@ -214,9 +224,9 @@
 	:cabbrev unicode Unicode
 	:cabbrev S %s
 	:cabbrev a 'a,.s
-	:cabbrev $ .,$s
+	:cabbrev $$ .,$s
 
-	:command! MakeTags !ctags -R
+	:command! MakeTags !ctags -Rf .tags
 	:command! Unicode set encoding=utf-8
 	:command! Net :call ProcessNetwork()
 	:command! Fold :setlocal foldenable | setlocal foldmethod=syntax
@@ -476,6 +486,12 @@
 		:endfunction
 		" }}}
 
+		:function! RepeatFunc()
+		" {{{
+		:  let g:repeat = g:repeatstack
+		:  let g:repeatstack = ""
+		:endfunction
+		" }}}
 	" }}}
 
 	" HTML/Markdown
@@ -621,8 +637,11 @@
 		:function! AppendSemicolon()
 		" {{{
 		:  let l:window = winsaveview()
-		:  if Text('.') =~ ';$'
-		" :    execute "normal! A\b"
+		:  let l:text = Text('.')
+		:  if l:text =~ ';$'
+		:    if l:text =~ '^if\s*(.*)\s*;$' || l:text =~ '^for\s*(.*)\s*;$' 
+		:      execute "normal! A\b"
+		:    endif
 		:  else
 		:    execute "normal! A;"
 		:  endif
@@ -708,9 +727,16 @@
 
 		:function! Wrap(type) range
 		" {{{
+		:  let l:window = winsaveview()
 		:  let l:sel_save = &selection
 		:  let &selection = "inclusive"
-		:  let l:input = nr2char(getchar())
+		:  if g:repeat != "wrap"
+		:    let l:input = nr2char(getchar())
+		:  else
+		:    let l:input = g:wrapinput
+		:  endif
+		:  let g:repeatstack = "wrap"
+		:  let g:wrapinput = l:input
 		:  let l:ending = l:input
 		:  let l:begin = l:input
 		:  let l:first = {"<" : "<", "[" : "[", "{" : "{", "(" : "(", ">" : "<", "]" : "[", "}" : "{", ")" : "(",}
@@ -719,7 +745,6 @@
 		:    let l:begin  = l:first[l:input]
 		:    let l:ending = l:last[l:input]
 		:  endif
-		:  echom a:type
 		:  if a:type ==# "line"
 		:    silent execute "normal! '[V`]$V"
 		:    silent execute "normal! `<i".l:begin."\<esc>`>la".l:ending
@@ -732,7 +757,8 @@
 		:  elseif a:type ==# "visual"
 		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  endif
-		:  let &selection = sel_save
+		:  let &selection = l:sel_save
+		:  call winrestview(l:window)
 		:endfunction
 		" }}}
 
