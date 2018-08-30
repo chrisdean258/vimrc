@@ -26,7 +26,7 @@
 	:set smartindent
 	:set showcmd
 	:set wildmenu
-	:set incsearch
+	:set incsearch hlsearch
 	:set backspace=eol,indent,start
 	:filetype plugin indent on
 	:filetype plugin on
@@ -38,9 +38,32 @@
 	:set laststatus=1
 
 	" Comment out this group for auto commenting
-	:setlocal formatoptions-=cro
+	:if &filetype !~ "vim"
 	:setlocal nofoldenable
+	:endif
 	:setlocal foldtext=MyFold()
+
+	:set splitright
+	:set splitbelow
+
+	:set tag=./tags,./TAGS,tags,TAGSs,../tags,../../tags
+	:set tags+=./tags;$HOME
+	:set tags+=./.tags;$HOME
+	:set tags+=~/.vim/systags
+
+	:set wildignore=*.o,*~,*.pyc
+	:if has("win16") || has("win32")
+	:  set wildignore+=.git\*,.hg\*,.svn\*
+	:else
+	:  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+	:endif
+
+	:set infercase
+	:set complete-=i
+	:set autoread
+	:set switchbuf=usetab
+	:set hidden
+	:set tabpagemax=1000
 
 " }}}
 
@@ -59,6 +82,11 @@
 	:highlight tablinesel ctermfg=DarkGrey guifg=DarkGrey
 	:highlight tabline ctermfg=black guifg=black
 
+	" Settings for spell
+	:highlight spellrare None
+	:highlight spellcap None
+	:highlight spelllocal None
+
 	" Unhighlight the next two lines if you cant see your tabline
 	" :highlight tabline ctermfg=DarkGrey guifg=DarkGrey
 	" :highlight tablinesel ctermfg=Grey guifg=Grey
@@ -76,8 +104,8 @@
 	:      echom "You need git and curl installed for the Syntastic auto install"
 	:      return
 	:    endif
-	:    silent !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
-	:    silent !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
+	:    silent! !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
+	:    silent! !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
 	:    execute pathogen#infect()
 	:  endtry
 	:endfunction
@@ -86,10 +114,19 @@
 
 	:let g:syntastic_check_on_wq = 0
         :let g:syntastic_cpp_compiler = "g++"
-        :let g:syntastic_cpp_compiler_options = "-std=c++1z"
+        :let g:syntastic_cpp_compiler_options = "-std=c++98 -Wall -Wextra"
+	:let g:syntastic_cpp_include_dirs = [ "../../include", "../../include/utils/" , "../../eo/include", "../../eo/gengraph/include" ]
+
+	:let g:syntastic_python_checkers = [ 'python' ]
+	:let g:syntastic_always_populate_loc_list = 1
+	" :let g:syntastic_auto_loc_list = 1
+	:let g:syntastic_loc_list_height= 3
+	:let g:syntastic_quiet_messages = { "type": "style" }
+
+
 " }}}
 
-" UNVIVERSAL MAPPINGS {{{
+" UNIVERSAL MAPPINGS {{{
 "_______________________________________________________________________________________________________
 
 	"mapleader
@@ -97,8 +134,17 @@
 	:let maplocalleader = '\'
 
 	" insert a single char
-	:nnoremap s i <esc>r
-	:nnoremap S a <esc>r
+	" :nnoremap s i <esc>r
+	" :nnoremap S a <esc>r
+	:nnoremap <silent><expr>s SingleInsert("i")
+	:nnoremap <silent><expr>S SingleInsert("a")
+	:nnoremap <silent>s<F12> <nop>
+	:nnoremap <silent>S<F12> <nop>
+
+	" Repeat mappings
+	:nnoremap <silent>. .:let g:repeat = g:repeatstack<CR>
+	:let g:repeat = ""
+	:let g:repeatstack = ""
 
 	" key mapping
 	:nnoremap j gj
@@ -118,7 +164,7 @@
 
 	" edit and reload vimrc
 	:nnoremap <silent><leader>ev :vsplit $MYVIMRC<CR>
-	:nnoremap <silent><leader>sv :silent source $MYVIMRC<CR>
+	:nnoremap <silent><leader>sv :silent! source $MYVIMRC<CR>
 	:nnoremap <silent><leader>s% :source %<CR>
 
 
@@ -127,12 +173,21 @@
 	:nnoremap <leader>O O<esc>
 
 
-	" clear higlighting from search
+	" clear highlighting from search
 	:nnoremap <silent><c-L> :nohlsearch<CR><c-L>
+	:nnoremap n :set hlsearch<cr>nzz
+	:nnoremap N :set hlsearch<cr>Nzz
+	:nnoremap / :set hlsearch<cr>/
+	:nnoremap ? :set hlsearch<cr>?
+	:nnoremap # :set hlsearch<cr>#zz
+	:nnoremap * :set hlsearch<cr>*zz
 
 	" mapping for jumping to error
-	:nnoremap <silent><A-up>   :lnext<CR>
-	:nnoremap <silent><A-down> :lprev<CR>
+	:nnoremap <silent><A-up>    :lnext<CR>
+	:nnoremap <silent><A-down>  :lprev<CR>
+	:nnoremap <silent><A-left>  :lfirst<CR>
+	:nnoremap <silent><A-right> :llast<CR>
+
 
 	" Clever Tab
 	:inoremap <S-tab> <c-x><c-f>
@@ -162,6 +217,16 @@
 	" Getting rid of pesky popup window
 	:nnoremap q: :
 
+	" Pasting from clipboard
+	:nnoremap <leader>p "+p
+	:nnoremap <leader>P "+P
+
+	" TODO The yanking operations
+	:nnoremap Y y$
+
+	" VisualBlock
+	:nnoremap <C-c> <C-v>
+
 " }}}
 
 " UNIVERSAL ABBREVIATIONS AND COMMANDS {{{
@@ -178,20 +243,40 @@
 	:cabbrev WQ wq
 	:cabbrev jk SyntasticReset
 	:cabbrev unicode Unicode
+	:cabbrev S %s
+	:cabbrev a 'a,.s
+	:cabbrev $$ .,$s
+	:cabbrev w!! %!sudo tee > /dev/null %
 
-	:command! MakeTags !ctags -R
+	:command! MakeTags !ctags -Rf .tags
 	:command! Unicode set encoding=utf-8
-	:command! S %s
-	:command! A 'a,.s
+	:command! Net :call ProcessNetwork()
+	:command! Fold :setlocal foldenable | setlocal foldmethod=syntax
 
 " }}}
 
 " AUTOCMD GROUPS  {{{
 "_______________________________________________________________________________________________________
+ " {{{
+:if has("autocmd")
+" }}}
+
+	" Universal
+	" {{{
+	:augroup Universal
+	:autocmd!
+	:autocmd BufNewFile * :autocmd BufWritePost * :call IfScript()
+	:autocmd BufRead *    :setlocal formatoptions-=cro
+	:autocmd cursorhold * :set nohlsearch
+	:autocmd BufEnter * :if &filetype !~ "help" | setlocal nu rnu
+	:autocmd BufLeave * :setlocal nornu
+	:autocmd InsertLeave * setlocal nopaste
+	:augroup END
+	" }}}
 
 	" Option Autocmds
 	" {{{
-	:if exists("#OptionSet")
+	:if exists("##OptionSet")
 	:augroup Options
 	:autocmd!
 	:autocmd OptionSet relativenumber :let &number=&relativenumber
@@ -203,11 +288,11 @@
 	" }}}
 
 	" C style formatting
-	" {{{
+	" {{{ 
 	:augroup c_style
 	:  autocmd!
-	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>s :silent! call SplitIf()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer>; :call AppendSemicolon()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <buffer>{} {<CR>}<esc>O
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <expr><buffer><tab> CleverTab()
@@ -223,11 +308,12 @@
 	:  autocmd!
 	:  autocmd FileType cpp    :iabbrev <buffer> nstd using namespace std;<CR>
 	:  autocmd FileType c,cpp  :iabbrev <buffer> #i #include
+	:  autocmd FileType c,cpp  :iabbrev <buffer> #I #include
 	:  autocmd FileType c,cpp  :iabbrev <buffer> cahr char
 	:  autocmd FileType cpp    :iabbrev <buffer> enld endl
 	:  autocmd FileType c,cpp  :iabbrev <buffer> main <C-R>=MainAbbrev()<CR>
 	:  autocmd FileType c      :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
-	:  autocmd FileType cpp    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(80)
+	:  autocmd FileType cpp    :autocmd CursorMoved,CursorMovedI <buffer> call HighlightAfterColumn(100)
 	:augroup END
 	" }}}
 
@@ -248,6 +334,7 @@
 	:  autocmd FileType html,php :setlocal expandtab
 	:  autocmd FileType html,php :setlocal wrap
 	:  autocmd FileType html,php :setlocal linebreak
+	:  autocmd FileType html,php :setlocal matchpairs+=<:>
 	:  if exists("+breakindent")
 	:    autocmd FileType html,php :setlocal breakindent
 	:  endif
@@ -262,14 +349,15 @@
 	" {{{
 	:augroup python_
 	:autocmd!
-	:autocmd FileType python,matlab,shell,sh,bash  :nnoremap <silent><buffer><localleader>\ :call CommentBL('#', '')<CR>
+	:autocmd FileType python,matlab,shell,sh,bash  :nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
 	:autocmd FileType python,matlab,shell,sh,bash  :inoremap <expr><buffer><tab> CleverTab()
 	:autocmd FileType python  :setlocal tabstop=4
 	:autocmd FileType python  :setlocal expandtab
 	:autocmd FileType python  :call RemoveTrailingWhitespace_AU()
-	:autocmd BufNewFile *.py   :autocmd VimLeave <buffer> :!chmod +x %
-	:autocmd BufNewFile *.sh   :autocmd VimLeave <buffer> :!chmod +x %
-	:autocmd BufNewFile *.bash :autocmd VimLeave <buffer> :!chmod +x %
+	:autocmd FileType python  :let g:pyindent_open_paren = '&sw'
+	:autocmd FileType python  :let g:pyindent_nested_paren = '&sw'
+	:autocmd FileType python  :let g:pyindent_continue = '0'
+	:autocmd FileType python  :autocmd BufEnter <buffer> :if getline(1) !~ '^#' | call append(0, "#!/usr/bin/env python3") | endif
 	:augroup END
 	" }}}
 
@@ -277,11 +365,12 @@
 	" {{{
 	:augroup vim_
 	:autocmd!
-	:autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ', "")<CR>
+	:autocmd FileType vim :nnoremap <silent><buffer><localleader>\ :call CommentBL('" ')<CR>
 	:autocmd FileType vim :setlocal foldmethod=marker
 	:autocmd FileType vim :setlocal foldenable
 	:autocmd FileType vim :setlocal foldtext=MyFold()
 	:autocmd FileType vim :inoremap <expr><buffer><tab> CleverTab()
+	:autocmd BufWritePost .vimrc :source %
 	:augroup END
 	" }}}
 
@@ -294,7 +383,9 @@
 	:autocmd Filetype markdown :inoremap <silent><buffer><localleader>s <esc>:call SpellReplace()<CR>a
 	:autocmd Filetype markdown :nnoremap <expr><silent><buffer>o MDNewline("o")
 	:autocmd Filetype markdown :nnoremap <silent><buffer><localleader>s :call SpellReplace()<CR>
+	:autocmd FileType markdown :nnoremap <silent><buffer><localleader>\ :call CommentBL('- ')<CR>
 	:autocmd Filetype markdown :setlocal wrap
+	:autocmd Filetype markdown :setlocal linebreak
 	:if exists("+breakindent")
 	:  autocmd Filetype markdown :setlocal breakindent
 	:endif
@@ -324,9 +415,21 @@
 	" {{{
 	:augroup Assembly
 	:autocmd!
-	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/', '')<CR>
+	:autocmd BufRead,BufNewFile *.S :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
 	:augroup END
 	" }}}
+
+	" Make
+	" {{{
+	:augroup make_
+	:  autocmd FileType make :inoremap <expr><buffer><tab> CleverTab()
+	:  autocmd FileType make :nnoremap <silent><buffer><localleader>\ :call CommentBL('#')<CR>
+	:augroup END
+	" }}}
+
+" {{{
+:endif
+" }}}
 " }}}
 
 " FUNCTIONS {{{
@@ -453,7 +556,7 @@
 
 		function! MDNewline(in)
 		"  {{{
-		:  let l:allowable_starts = [ '>', '\*', '-', '+', '|' ]
+		:  let l:allowable_starts = [ '>', '\*', '-', '+', ]
 		:  let l:line = Text('.')
 		:  for starting in l:allowable_starts
 		:    if l:line =~ '^' . starting . '\s*$'
@@ -545,15 +648,22 @@
 
 		:function! HighlightAfterColumn(col)
 		" {{{
-		:  exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
+		:  if getline('.') !~ 'printf' && getline('.') !~ '[^=]*<<[^=]*'
+		:    exe 'match LongLine /\%'.line('.').'l\%>'.(a:col).'v./'
+		:  else
+		:    exe 'match LongLine /\%'.line('.').'l\%>'.(500).'v./'
+		:  endif
 		:endfunction
 		" }}}
 
 		:function! AppendSemicolon()
 		" {{{
 		:  let l:window = winsaveview()
-		:  if Text('.') =~ ';$'
-		:    execute "normal! A\b"
+		:  let l:text = Text('.')
+		:  if l:text =~ ';$'
+		:    if l:text =~ '^if\s*(.*)\s*;$' || l:text =~ '^for\s*(.*)\s*;$' 
+		:      execute "normal! A\b"
+		:    endif
 		:  else
 		:    execute "normal! A;"
 		:  endif
@@ -574,12 +684,16 @@
 		:function! SplitIf()
 		" {{{
 		:  let l:window = winsaveview()
-		:  execute "normal! 0f(%l"
-		:  if getline('.') =~ ".*(.*)\s*.*;$"
-		:    execute "normal! i\<CR>{\<CR>\<esc>o}"
+		:  let l:split = 0
+		:  execute "normal! 0f(%"
+		:  if getline('.') =~ ".*(.*)..*"
+		:    execute "normal! a\<CR>{\<CR>\<esc>o}"
+		:    let l:split = 1
 		:  endif
 		:  call winrestview(l:window)
-		:  normal! 2j^
+		:  if l:split
+		:    normal! 2j^
+		:  endif
 		:endfunction
 		" }}}
 
@@ -587,13 +701,30 @@
 
 	" Universally used function
 	" {{{
-		:function! CommentBL(start, end) range
+		:function! CommentBL(start,...) range
+		" {{{
+		:  let a:end = get(a:, 1, "")
+		:  let l:window = winsaveview()
+		:  execute "silent! ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:start.'\2/e'
+		:  execute "silent! ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:start.a:start.'/\1/e'
+		:  execute "silent! ".a:firstline.",".a:lastline.'s/$/'. a:end
+		:  execute "silent! ".a:firstline.",".a:lastline.'s/'. a:end . a:end . '$//e'
+		:  call winrestview(l:window)
+		:  nohlsearch
+		:endfunction
+		" }}}
+
+		:function! Comment() range
 		" {{{
 		:  let l:window = winsaveview()
-		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:start.'\2/e'
-		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:start.a:start.'/\1/e'
-		:  execute "silent ".a:firstline.",".a:lastline.'s/$/'. a:end
-		:  execute "silent ".a:firstline.",".a:lastline.'s/'. a:end . a:end . '$//e'
+		:  let l:row = line(a:firstline)
+		:  let l:comments = split(&commentstring, "%s")
+		:  let l:begin = l:comments[0]
+		:  let l:end = len(l:comments) > 2 ? l:comments[1] : ""
+		:  while l:row <= line(a:lastline)
+		:    let l:line = getline(l:row)
+		:    let l:row += 1
+		:  endwhile
 		:  call winrestview(l:window)
 		:  nohlsearch
 		:endfunction
@@ -601,12 +732,16 @@
 
 		:function! CleverTab()
 		" {{{
-		:   let l:str =  strpart( getline('.'), 0, col('.')-1 )
-		:   if l:str =~ '^\s*$' || l:str =~ '\s$'
-		:      return "\<Tab>"
-		:   else
-		:      return "\<C-P>"
-		:   endif
+		:  let l:str =  strpart( getline('.'), 0, col('.')-1 )
+		:  let l:words = split(l:str, " ")
+		:  let l:last_word = len(l:words) > 0 ? l:words[-1] : ""
+		:  if l:str =~ '^\s*$' || l:str =~ '\s$'
+		:    return "\<Tab>"
+		:  elseif l:last_word =~ "\/"
+		:    return "\<C-X>\<C-F>"
+		:  else
+		:    return "\<C-P>"
+		:  endif
 		:endfunction
 		" }}}
 
@@ -622,9 +757,16 @@
 
 		:function! Wrap(type) range
 		" {{{
+		:  let l:window = winsaveview()
 		:  let l:sel_save = &selection
 		:  let &selection = "inclusive"
-		:  let l:input = nr2char(getchar())
+		:  if g:repeat == "wrap"
+		:    let l:input = nr2char(getchar())
+		:  else
+		:    let l:input = g:wrapinput
+		:  endif
+		:  let g:repeatstack = "wrap"
+		:  let g:wrapinput = l:input
 		:  let l:ending = l:input
 		:  let l:begin = l:input
 		:  let l:first = {"<" : "<", "[" : "[", "{" : "{", "(" : "(", ">" : "<", "]" : "[", "}" : "{", ")" : "(",}
@@ -633,26 +775,26 @@
 		:    let l:begin  = l:first[l:input]
 		:    let l:ending = l:last[l:input]
 		:  endif
-		:  echom a:type
 		:  if a:type ==# "line"
-		:    silent execute "normal! '[V`]$V"
-		:    silent execute "normal! `<i".l:begin."\<esc>`>la".l:ending
+		:    silent! execute "normal! '[V`]$V"
+		:    silent! execute "normal! `<i".l:begin."\<esc>`>la".l:ending
 		:  elseif a:type ==# "char"
-		:    silent execute "normal! `[v`]lv"
-		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:    silent! execute "normal! `[v`]lv"
+		:    silent! execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  elseif a:type ==# "block"
-		:    silent execute "normal! `[\<C-V>`]\<C-V>"
-		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:    silent! execute "normal! `[\<C-V>`]\<C-V>"
+		:    silent! execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  elseif a:type ==# "visual"
-		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:    silent! execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  endif
-		:  let &selection = sel_save
+		:  let &selection = l:sel_save
+		:  call winrestview(l:window)
 		:endfunction
 		" }}}
 
 		:function! RemoveTrailingWhitespace_AU()
 		" {{{
-		:  autocmd BufRead,BufWrite * :silent call RemoveTrailingWhitespace()
+		:  autocmd BufRead,BufWrite <buffer> :silent! call RemoveTrailingWhitespace()
 		:endfunction
 		" }}}
 
@@ -704,18 +846,54 @@
 		:endfunction
 		" }}}
 
-		:function! SingleInsert()
-		:  let l:char = GetChar()
-		:  execute "normal! a\b\ea" . l:char
+		:function! SingleInsert(how)
+		" {{{
+		:  return a:how . GetChar() . CleverEsc()
 		:endfunction
+		"}}}
 
 		:function! GetChar()
+		" {{{
 		:  while getchar(1) == 0
 		:  endwhile
 		:  return nr2char(getchar())
 		:endfunction
+		" }}}
 
+		:function! IfScript()
+		" {{{
+		:  if getline(1) =~ '^#!/'
+		:    let perm = getfperm(expand("%"))
+		:    let perm = perm[:1] . "x" . perm[3:]
+		:    call setfperm(expand("%"), perm)
+		:  endif
+		:endfunction
+		" }}}
 	" }}}
+
+	" Process Network
+	" {{{
+	:function! ProcessNetwork()
+	:  w! temp
+	:  g/^N/:let a = join(split(getline('.'))[6:]) | execute ':%s/'.a.'/'.join(split(getline('.'))[1:3]).'/g'
+	:  g/^N/:call setline('.',join(split(getline('.'))[0:5]))
+	:endfunction
+	" }}}
+" }}}
+
+" VIMRC SOURCING {{{
+"_______________________________________________________________________________________________________
+	
+	:function! UpwardVimrcSource()
+	:  let l:dir = getcwd()
+	:  while l:dir =~ "\/" && l:dir != $HOME
+	:    if findfile(l:dir . "/.vimrc") != ""
+	:      execute "source " . l:dir . "/.vimrc"
+	:    endif
+	:    let l:dir = fnamemodify(l:dir, ":p:h:h")
+	:  endwhile
+	:endfunction
+
 " }}}
 
 " TMUX Terminal Split {{{
@@ -728,20 +906,18 @@
 	" {{{
 	:  let aucmd = ' ''autocmd VimLeave :!tmux kill-session -t vim '' '
 	:  let tmuxSession = 'tmux new-session -s "vim" "vim -S session.vim -c '.aucmd .'"'
-	:  echo tmuxSession
-	:  call getchar()
-	:  let split = '\; split-window -v -p 40 \;'
+	:  let split_ = '\; split-window -v -p 40 \;'
 	:  mksession session.vim
 	:  set noswapfile
-	:  silent execute '!' . tmuxSession . split
-	:  silent execute '!rm session.vim'
-	" :  q!
+	:  silent! execute '!' . tmuxSession . split_
+	:  silent! execute '!rm session.vim'
+	:  q!
 	:endfunction
 	" }}}
 
 	:function! TestSuspend()
 	" {{{
-	: silent execute '!sleep 3 && echo hi &'
+	: silent! execute '!sleep 3 && echo hi &'
 	:endfunction
 	" }}}
 
@@ -752,11 +928,11 @@
 	:function! Update_Vimrc()
 	" {{{
 	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
-	:  silent execute "! " . update_script . " &> /dev/null"
+	:  silent! execute "! " . update_script . " &> /dev/null"
 	:  if v:shell_error != 0
-	:    silent !mkdir -p $HOME/.vim/auto_update
-	:    silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
-	:    silent execute "! " . update_script . " &>/dev/null"
+	:    silent! !mkdir -p $HOME/.vim/auto_update
+	:    silent! !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
+	:    silent! execute "! " . update_script . " &>/dev/null"
 	:  endif
 	:endfunction
 	" }}}
