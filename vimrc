@@ -730,6 +730,22 @@
 		:endfunction
 		" }}}
 
+		:function! Comment() range
+		" {{{
+		:  let l:window = winsaveview()
+		:  let l:row = line(a:firstline)
+		:  let l:comments = split(&commentstring, "%s")
+		:  let l:begin = l:comments[0]
+		:  let l:end = len(l:comments) > 2 ? l:comments[1] : ""
+		:  while l:row <= line(a:lastline)
+		:    let l:line = getline(l:row)
+		:    let l:row += 1
+		:  endwhile
+		:  call winrestview(l:window)
+		:  nohlsearch
+		:endfunction
+		" }}}
+
 		:function! CleverTab()
 		" {{{
 		:  let l:str =  strpart( getline('.'), 0, col('.')-1 )
