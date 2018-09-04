@@ -104,8 +104,8 @@
 	:      echom "You need git and curl installed for the Syntastic auto install"
 	:      return
 	:    endif
-	:    silent! !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
-	:    silent! !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
+	:    silent !mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &> /dev/null
+	:    silent !cd ~/.vim/bundle && git clone --depth=1 https://github.com/vim-syntastic/syntastic.git &> /dev/null
 	:    execute pathogen#infect()
 	:  endtry
 	:endfunction
@@ -164,7 +164,7 @@
 
 	" edit and reload vimrc
 	:nnoremap <silent><leader>ev :vsplit $MYVIMRC<CR>
-	:nnoremap <silent><leader>sv :silent! source $MYVIMRC<CR>
+	:nnoremap <silent><leader>sv :silent source $MYVIMRC<CR>
 	:nnoremap <silent><leader>s% :source %<CR>
 
 
@@ -265,12 +265,13 @@
 	" {{{
 	:augroup Universal
 	:autocmd!
-	:autocmd BufNewFile * :autocmd BufWritePost * :call IfScript()
-	:autocmd BufRead *    :setlocal formatoptions-=cro
-	:autocmd cursorhold * :set nohlsearch
-	:autocmd BufEnter * :if &filetype !~ "help" | setlocal nu rnu
-	:autocmd BufLeave * :setlocal nornu
-	:autocmd InsertLeave * setlocal nopaste
+	:autocmd BufNewFile *  :autocmd BufWritePost * :call IfScript()
+	:autocmd BufRead *     :setlocal formatoptions-=cro
+	:autocmd CursorHold *  :set nohlsearch
+	:autocmd BufEnter *    :if &filetype !~ "help" | setlocal nu rnu
+	:autocmd BufLeave *    :setlocal nornu
+	:autocmd InsertLeave * :setlocal nopaste
+	:autocmd BufReadPost * :if line("'\"") > 0 && line ("'\"") <= line("$") | exe "normal! g'\"" | endif
 	:augroup END
 	" }}}
 
@@ -292,7 +293,7 @@
 	:augroup c_style
 	:  autocmd!
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>\ :call CommentBL('\/\/')<CR>
-	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>s :silent! call SplitIf()<CR>
+	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer><localleader>s :silent call SplitIf()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :nnoremap <silent><buffer>; :call AppendSemicolon()<CR>
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <buffer>{} {<CR>}<esc>O
 	:  autocmd FileType c,cpp,javascript,java,perl,cs :inoremap <expr><buffer><tab> CleverTab()
@@ -705,26 +706,10 @@
 		" {{{
 		:  let a:end = get(a:, 1, "")
 		:  let l:window = winsaveview()
-		:  execute "silent! ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:start.'\2/e'
-		:  execute "silent! ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:start.a:start.'/\1/e'
-		:  execute "silent! ".a:firstline.",".a:lastline.'s/$/'. a:end
-		:  execute "silent! ".a:firstline.",".a:lastline.'s/'. a:end . a:end . '$//e'
-		:  call winrestview(l:window)
-		:  nohlsearch
-		:endfunction
-		" }}}
-
-		:function! Comment() range
-		" {{{
-		:  let l:window = winsaveview()
-		:  let l:row = line(a:firstline)
-		:  let l:comments = split(&commentstring, "%s")
-		:  let l:begin = l:comments[0]
-		:  let l:end = len(l:comments) > 2 ? l:comments[1] : ""
-		:  while l:row <= line(a:lastline)
-		:    let l:line = getline(l:row)
-		:    let l:row += 1
-		:  endwhile
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)(.)/\1'.a:start.'\2/e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/\v^(\s*)'.a:start.a:start.'/\1/e'
+		:  execute "silent ".a:firstline.",".a:lastline.'s/$/'. a:end
+		:  execute "silent ".a:firstline.",".a:lastline.'s/'. a:end . a:end . '$//e'
 		:  call winrestview(l:window)
 		:  nohlsearch
 		:endfunction
@@ -771,12 +756,13 @@
 		:endfunction
 		" }}}
 
+
 		:function! Wrap(type) range
 		" {{{
 		:  let l:window = winsaveview()
 		:  let l:sel_save = &selection
 		:  let &selection = "inclusive"
-		:  if g:repeat == "wrap"
+		:  if g:repeat != "wrap"
 		:    let l:input = nr2char(getchar())
 		:  else
 		:    let l:input = g:wrapinput
@@ -792,16 +778,16 @@
 		:    let l:ending = l:last[l:input]
 		:  endif
 		:  if a:type ==# "line"
-		:    silent! execute "normal! '[V`]$V"
-		:    silent! execute "normal! `<i".l:begin."\<esc>`>la".l:ending
+		:    silent execute "normal! '[V`]$V"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>la".l:ending
 		:  elseif a:type ==# "char"
-		:    silent! execute "normal! `[v`]lv"
-		:    silent! execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:    silent execute "normal! `[v`]lv"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  elseif a:type ==# "block"
-		:    silent! execute "normal! `[\<C-V>`]\<C-V>"
-		:    silent! execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:    silent execute "normal! `[\<C-V>`]\<C-V>"
+		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  elseif a:type ==# "visual"
-		:    silent! execute "normal! `<i".l:begin."\<esc>`>a".l:ending
+		:    silent execute "normal! `<i".l:begin."\<esc>`>a".l:ending
 		:  endif
 		:  let &selection = l:sel_save
 		:  call winrestview(l:window)
@@ -810,7 +796,7 @@
 
 		:function! RemoveTrailingWhitespace_AU()
 		" {{{
-		:  autocmd BufRead,BufWrite <buffer> :silent! call RemoveTrailingWhitespace()
+		:  autocmd BufRead,BufWrite <buffer> :silent call RemoveTrailingWhitespace()
 		:endfunction
 		" }}}
 
@@ -925,15 +911,15 @@
 	:  let split_ = '\; split-window -v -p 40 \;'
 	:  mksession session.vim
 	:  set noswapfile
-	:  silent! execute '!' . tmuxSession . split_
-	:  silent! execute '!rm session.vim'
+	:  silent execute '!' . tmuxSession . split_
+	:  silent execute '!rm session.vim'
 	:  q!
 	:endfunction
 	" }}}
 
 	:function! TestSuspend()
 	" {{{
-	: silent! execute '!sleep 3 && echo hi &'
+	: silent execute '!sleep 3 && echo hi &'
 	:endfunction
 	" }}}
 
@@ -944,11 +930,11 @@
 	:function! Update_Vimrc()
 	" {{{
 	:let update_script= "sh $HOME/.vim/auto_update/fetch_vimrc.sh auto"
-	:  silent! execute "! " . update_script . " &> /dev/null"
+	:  silent execute "! " . update_script . " &> /dev/null"
 	:  if v:shell_error != 0
-	:    silent! !mkdir -p $HOME/.vim/auto_update
-	:    silent! !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
-	:    silent! execute "! " . update_script . " &>/dev/null"
+	:    silent !mkdir -p $HOME/.vim/auto_update
+	:    silent !wget https://raw.githubusercontent.com/chrisdean258/vimrc/master/fetch_vimrc.sh -O $HOME/.vim/auto_update/fetch_vimrc.sh &>/dev/null
+	:    silent execute "! " . update_script . " &>/dev/null"
 	:  endif
 	:endfunction
 	" }}}
