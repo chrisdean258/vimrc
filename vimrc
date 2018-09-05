@@ -65,6 +65,19 @@
 	:set hidden
 	:set tabpagemax=1000
 
+	:if !isdirectory($HOME . "/.vim/backup")
+	:  call mkdir($HOME . "/.vim/backup", "p")
+	:endif
+	:if !isdirectory($HOME . "/.vim/undo")
+	:  call mkdir($HOME . "/.vim/undo", "p")
+	:endif
+	:set undofile
+	:set undodir=~/.vim/undo//
+	:set undolevels=1000
+	:set undoreload=10000
+	:set backupdir=~/.vim/backup//
+
+
 " }}}
 
 " HIGHLIGHT SETTINGS {{{
@@ -213,9 +226,6 @@
 
 	" Window Compatibility
 	" :inoremap <BS> <Left><Del>
-
-	" Getting rid of pesky popup window
-	:nnoremap q: :
 
 	" Pasting from clipboard
 	:nnoremap <leader>p "+p
